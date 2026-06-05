@@ -53,7 +53,7 @@ export default function PricingSection() {
           </p>
         </motion.div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(340px, 1fr))', gap: 28 }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 28 }}>
           {tiers.map((tier, idx) => (
             <motion.div
               key={tier.name}

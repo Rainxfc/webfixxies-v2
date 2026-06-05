@@ -48,7 +48,7 @@ function TeamCard({ member, index }: { member: TeamMember; index: number }) {
           <div style={{ position: 'absolute', top: -40, right: -40, width: 180, height: 180, borderRadius: '50%', background: `radial-gradient(circle, ${member.glow} 0%, transparent 70%)`, filter: 'blur(30px)', pointerEvents: 'none', opacity: 0.6 }} />
           <div style={{ position: 'absolute', bottom: -40, left: -40, width: 140, height: 140, borderRadius: '50%', background: `radial-gradient(circle, ${member.glowSoft} 0%, transparent 70%)`, filter: 'blur(40px)', pointerEvents: 'none' }} />
 
-          <div style={{ position: 'relative', zIndex: 1, display: 'flex', gap: 28, alignItems: 'flex-start' }}>
+          <div className="team-card-inner" style={{ position: 'relative', zIndex: 1 }}>
             <div style={{ flexShrink: 0 }}>
               <div style={{ width: 100, height: 100, borderRadius: 16, border: `2px solid ${member.accent}33`, overflow: 'hidden', background: '#0d001f', boxShadow: `0 0 30px ${member.glow}`, position: 'relative' }}>
                 <img src={member.img} alt={member.name} style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'grayscale(0.2) saturate(1.1)' }}
@@ -61,7 +61,7 @@ function TeamCard({ member, index }: { member: TeamMember; index: number }) {
             </div>
 
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ marginBottom: 6, display: 'flex', alignItems: 'baseline', gap: 10 }}>
+              <div className="team-member-name-row">
                 <h3 className="font-display" style={{ fontSize: 32, fontWeight: 800, letterSpacing: '-0.02em', color: '#f5f0ff', lineHeight: 1 }}>{member.name}</h3>
                 <span className="font-mono" style={{ fontSize: 11, color: '#4d3a6e', letterSpacing: '0.05em' }}>{member.realName}</span>
               </div>

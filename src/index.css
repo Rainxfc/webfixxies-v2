@@ -398,3 +398,89 @@ html { scroll-behavior: smooth; }
 /* Misc utility */
 .no-select { user-select: none; }
 .pointer-none { pointer-events: none; }
+
+/* Responsive navigation and layout overrides */
+.nav-desktop {
+  display: flex !important;
+  gap: 36px;
+  align-items: center;
+}
+
+.nav-contact-desktop {
+  display: inline-flex !important;
+}
+
+.nav-toggle-mobile {
+  display: none !important;
+}
+
+/* Responsive inner layout for team card */
+.team-card-inner {
+  display: flex;
+  gap: 28px;
+  align-items: flex-start;
+  flex-direction: row;
+}
+
+.team-member-name-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+@media (max-width: 850px) {
+  .nav-desktop {
+    display: none !important;
+  }
+  .nav-contact-desktop {
+    display: none !important;
+  }
+  .nav-toggle-mobile {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-primary);
+    padding: 8px;
+    transition: color 0.3s;
+  }
+  .nav-toggle-mobile:hover {
+    color: var(--violet-glow);
+  }
+}
+
+@media (max-width: 768px) {
+  .hud-element {
+    display: none !important;
+  }
+}
+
+@media (max-width: 680px) {
+  .team-card-inner {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+  
+  .team-card-inner > div {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .team-member-name-row {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+  }
+  
+  .team-member-name-row h3 {
+    text-align: center;
+  }
+}
+

@@ -54,12 +54,12 @@ function Navbar() {
 
   return (
     <>
-      <header style={{ position: 'fixed', top: 0, left: 0, right: 0, height: 72, zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 32px', background: scrolled ? 'rgba(4,0,13,0.85)' : 'transparent', backdropFilter: scrolled ? 'blur(24px)' : 'none', borderBottom: scrolled ? '1px solid rgba(139,92,246,0.12)' : '1px solid transparent', transition: 'all 0.4s ease' }}>
+      <header style={{ position: 'fixed', top: 0, left: 0, right: 0, height: 72, zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 clamp(16px, 4vw, 32px)', background: scrolled ? 'rgba(4,0,13,0.85)' : 'transparent', backdropFilter: scrolled ? 'blur(24px)' : 'none', borderBottom: scrolled ? '1px solid rgba(139,92,246,0.12)' : '1px solid transparent', transition: 'all 0.4s ease' }}>
         <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} style={{ background: 'none', border: 'none', cursor: 'pointer', fontFamily: 'Outfit, sans-serif', fontWeight: 900, fontSize: 18, letterSpacing: '-0.02em', textTransform: 'uppercase', backgroundImage: 'linear-gradient(135deg, #c4b5fd, #a78bfa, #e879f9)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', filter: 'drop-shadow(0 0 12px rgba(167,139,250,0.4))' }}>
           WEB FIXXIES
         </button>
 
-        <nav style={{ display: 'flex', gap: 36, alignItems: 'center' }}>
+        <nav className="nav-desktop">
           {navItems.map(item => (
             <button key={item} onClick={() => scrollTo(item)} className="font-mono" style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 9, letterSpacing: '0.25em', textTransform: 'uppercase', color: activeSection === item ? '#a78bfa' : 'rgba(124,92,200,0.55)', padding: '4px 0', position: 'relative', transition: 'color 0.3s' }}
               onMouseEnter={e => (e.currentTarget.style.color = '#a78bfa')}
@@ -70,9 +70,17 @@ function Navbar() {
           ))}
         </nav>
 
-        <a href="mailto:webfixxies@gmail.com" className="btn-primary" style={{ textDecoration: 'none', fontSize: 9, padding: '10px 22px', letterSpacing: '0.18em' }}>
+        <a href="mailto:webfixxies@gmail.com" className="btn-primary nav-contact-desktop" style={{ textDecoration: 'none', fontSize: 9, padding: '10px 22px', letterSpacing: '0.18em' }}>
           Contact Us
         </a>
+
+        <button className="nav-toggle-mobile" onClick={() => setMenuOpen(true)}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
       </header>
 
       {menuOpen && (

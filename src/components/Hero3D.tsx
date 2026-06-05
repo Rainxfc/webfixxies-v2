@@ -191,7 +191,7 @@ export default function Hero3D() {
           className="font-display glitch no-select"
           data-text="WEB FIXXIES"
           style={{
-            fontSize: 'clamp(52px, 12vw, 130px)', fontWeight: 900,
+            fontSize: 'clamp(38px, 10vw, 120px)', fontWeight: 900,
             lineHeight: 0.9, letterSpacing: '-0.03em', textTransform: 'uppercase',
             background: 'linear-gradient(135deg, #f5f0ff 0%, #c4b5fd 35%, #e879f9 65%, #818cf8 100%)',
             WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
