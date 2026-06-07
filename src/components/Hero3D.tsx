@@ -1,22 +1,17 @@
 import { useRef, Suspense, useMemo, useEffect, useState } from 'react';
 import { Canvas, useFrame, addEffect } from '@react-three/fiber';
-import { OrbitControls, Float, useGLTF, Torus, Octahedron } from '@react-three/drei';
+import { OrbitControls, Float, MeshDistortMaterial, Sphere, Torus, Octahedron } from '@react-three/drei';
 import { motion, useInView } from 'framer-motion';
 import * as THREE from 'three';
 
 // ─── 90fps cap for the 3D canvas only ────────────────────────────────────────
-// addEffect runs inside R3F's own RAF loop. Returning false tells R3F to skip
-// the GL render for that tick, capping GPU work at 90fps on high-refresh screens.
 const TARGET_MS = 1000 / 90;
 let _last = 0;
 function use90fps() {
   useEffect(() => {
     const unsub = addEffect((time: number) => {
-      if (time - _last >= TARGET_MS) {
-        _last = time;
-        return true;   // allow render
-      }
-      return false;    // skip GL render this tick
+      if (time - _last >= TARGET_MS) { _last = time; return true; }
+      return false;
     });
     return unsub;
   }, []);
@@ -40,67 +35,44 @@ function WebfixxiesLogo({ size = 48, style }: { size?: number; style?: React.CSS
   );
 }
 
-// ─── GLB robot model — replaces the procedural crystal ───────────────────────
-function NexbotModel() {
-  const groupRef = useRef<THREE.Group>(null);
-  const { scene } = useGLTF('/nexbot_robot_character_concept.glb');
+// ─── Crystal core ─────────────────────────────────────────────────────────────
+function CrystalCore() {
+  const meshRef = useRef<THREE.Mesh>(null);
+  const innerRef = useRef<THREE.Mesh>(null);
 
-  // Clone so the original scene graph isn't mutated
-  const model = useMemo(() => {
-    const cloned = scene.clone(true);
-    // Make every mesh slightly transparent + emissive purple tint
-    cloned.traverse((child) => {
-      if ((child as THREE.Mesh).isMesh) {
-        const mesh = child as THREE.Mesh;
-        const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
-        mats.forEach((m) => {
-          const mat = m as THREE.MeshStandardMaterial;
-          mat.transparent = true;
-          mat.opacity = 0.82;
-          // Subtle purple emissive tint — keeps the model's original colours
-          // but gives it the glowing vibe
-          if (!mat.emissive) mat.emissive = new THREE.Color('#4c1d95');
-          mat.emissive.lerp(new THREE.Color('#7c3aed'), 0.25);
-          mat.emissiveIntensity = 0.35;
-          mat.needsUpdate = true;
-        });
-      }
-    });
-    return cloned;
-  }, [scene]);
-
-  // Pointer-reactive tilt — same feel as the old crystal
-  useFrame((state) => {
-    if (groupRef.current) {
-      groupRef.current.rotation.y = THREE.MathUtils.lerp(
-        groupRef.current.rotation.y,
-        state.pointer.x * 0.4,
-        0.05
-      );
-      groupRef.current.rotation.x = THREE.MathUtils.lerp(
-        groupRef.current.rotation.x,
-        -state.pointer.y * 0.25,
-        0.05
-      );
+  useFrame((state, delta) => {
+    if (meshRef.current) {
+      meshRef.current.rotation.y = THREE.MathUtils.lerp(meshRef.current.rotation.y, state.pointer.x * 0.5, 0.05);
+      meshRef.current.rotation.x = THREE.MathUtils.lerp(meshRef.current.rotation.x, -state.pointer.y * 0.5, 0.05);
+    }
+    if (innerRef.current) {
+      innerRef.current.rotation.y -= delta * 0.3;
+      innerRef.current.rotation.z += delta * 0.2;
     }
   });
 
   return (
-    <group ref={groupRef}>
-      {/* Scale/position the robot to sit nicely in the hero viewport */}
-      <primitive object={model} scale={1.65} position={[0, -1.6, 0]} />
-      {/* Keep the same lights as before */}
-      <pointLight color="#7c3aed" intensity={6} distance={7} position={[0, 2, 2]} />
-      <pointLight color="#c026d3" intensity={3} distance={5} position={[0, 0, -2]} />
+    <group>
+      <Sphere ref={meshRef} args={[1.8, 48, 48]}>
+        <MeshDistortMaterial
+          color="#8b5cf6" distort={0.38} speed={2.2}
+          roughness={0} metalness={0.1}
+          transparent opacity={0.45} envMapIntensity={0.8}
+        />
+      </Sphere>
+      <Octahedron ref={innerRef} args={[0.9, 0]}>
+        <meshStandardMaterial
+          color="#c026d3" emissive="#9333ea" emissiveIntensity={2.2}
+          metalness={0.9} roughness={0.05} transparent opacity={0.92}
+        />
+      </Octahedron>
+      <pointLight color="#7c3aed" intensity={6} distance={6} />
+      <pointLight color="#c026d3" intensity={3} distance={4} position={[0, 1, 0]} />
     </group>
   );
 }
 
-// Preload so there's no pop-in
-useGLTF.preload('/nexbot_robot_character_concept.glb');
-
-// ─── Orbit rings ─────────────────────────────────────────────────────────────
-
+// ─── Orbit rings ──────────────────────────────────────────────────────────────
 function OrbitRings() {
   const r1 = useRef<THREE.Mesh>(null);
   const r2 = useRef<THREE.Mesh>(null);
@@ -127,6 +99,7 @@ function OrbitRings() {
   );
 }
 
+// ─── Floating shards ──────────────────────────────────────────────────────────
 function CrystalShard({ position, scale, speed, rotAxis }: {
   position: [number, number, number]; scale: number; speed: number; rotAxis: [number, number, number];
 }) {
@@ -142,8 +115,7 @@ function CrystalShard({ position, scale, speed, rotAxis }: {
     <Octahedron ref={ref} args={[1, 0]} position={position} scale={scale}>
       <meshStandardMaterial
         color="#a78bfa" emissive="#7c3aed" emissiveIntensity={0.9}
-        metalness={0.8} roughness={0.1}
-        transparent opacity={0.75}
+        metalness={0.8} roughness={0.1} transparent opacity={0.75}
       />
     </Octahedron>
   );
@@ -151,13 +123,12 @@ function CrystalShard({ position, scale, speed, rotAxis }: {
 
 function CrystalShards() {
   const shards = useMemo(() => [
-    { position: [4.2, 1.5, -1]    as [number,number,number], scale: 0.20, speed: 0.40, rotAxis: [1, 0.5, 0.2] as [number,number,number] },
-    { position: [-3.8, 2, 0.5]    as [number,number,number], scale: 0.15, speed: 0.55, rotAxis: [0.3, 1, 0.5] as [number,number,number] },
-    { position: [2, -3.2, -2]     as [number,number,number], scale: 0.24, speed: 0.35, rotAxis: [0.5, 0.3, 1] as [number,number,number] },
-    { position: [-3.2, -2, 1]     as [number,number,number], scale: 0.11, speed: 0.75, rotAxis: [1, 1, 0.2]   as [number,number,number] },
-    { position: [0.5, 3.8, -1.5]  as [number,number,number], scale: 0.16, speed: 0.50, rotAxis: [0.2, 0.5, 1] as [number,number,number] },
+    { position: [4.2, 1.5, -1]   as [number,number,number], scale: 0.20, speed: 0.40, rotAxis: [1, 0.5, 0.2] as [number,number,number] },
+    { position: [-3.8, 2, 0.5]   as [number,number,number], scale: 0.15, speed: 0.55, rotAxis: [0.3, 1, 0.5] as [number,number,number] },
+    { position: [2, -3.2, -2]    as [number,number,number], scale: 0.24, speed: 0.35, rotAxis: [0.5, 0.3, 1] as [number,number,number] },
+    { position: [-3.2, -2, 1]    as [number,number,number], scale: 0.11, speed: 0.75, rotAxis: [1, 1, 0.2]   as [number,number,number] },
+    { position: [0.5, 3.8, -1.5] as [number,number,number], scale: 0.16, speed: 0.50, rotAxis: [0.2, 0.5, 1] as [number,number,number] },
   ], []);
-
   return (
     <>
       {shards.map((s, i) => (
@@ -169,6 +140,7 @@ function CrystalShards() {
   );
 }
 
+// ─── Scene ────────────────────────────────────────────────────────────────────
 function Scene() {
   use90fps();
   return (
@@ -178,9 +150,8 @@ function Scene() {
       <directionalLight position={[-5, -3, -5]} intensity={0.5} color="#c026d3" />
       <pointLight position={[0, 6, 0]} intensity={2} color="#7c3aed" distance={12} />
       <Suspense fallback={null}>
-        {/* GLB robot model — pointer interactive */}
-        <Float speed={0.8} rotationIntensity={0} floatIntensity={0.3} floatingRange={[-0.08, 0.08]}>
-          <NexbotModel />
+        <Float speed={1.2} rotationIntensity={0.1} floatIntensity={0.5} floatingRange={[-0.15, 0.15]}>
+          <CrystalCore />
         </Float>
         <OrbitRings />
         <CrystalShards />
@@ -204,20 +175,12 @@ export default function Hero3D() {
 
   return (
     <div ref={heroRef} style={{
-      position: 'relative',
-      width: '100vw',
-      minHeight: '100vh',
-      overflow: 'hidden',
+      position: 'relative', width: '100vw', minHeight: '100vh', overflow: 'hidden',
       background: 'radial-gradient(ellipse 120% 80% at 50% -10%, #1e0047 0%, #0a0018 40%, #04000d 100%)',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      paddingTop: 90,
-      paddingBottom: 60,
+      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+      paddingTop: 90, paddingBottom: 60,
     }}>
-
-      {/* Full-screen 3D canvas — fills the whole hero, sits behind text */}
+      {/* Full-screen 3D canvas */}
       <div style={{ position: 'absolute', inset: 0, zIndex: 1 }}>
         <Canvas
           camera={{ position: [0, 0, 9], fov: 42 }}
@@ -234,7 +197,7 @@ export default function Hero3D() {
       <div style={{ position: 'absolute', left: '55%', top: '50%', transform: 'translate(-50%,-50%)', width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, rgba(124,58,237,0.25) 0%, rgba(192,38,211,0.08) 40%, transparent 70%)', filter: 'blur(60px)', pointerEvents: 'none', zIndex: 0 }} />
       <div style={{ position: 'absolute', right: '8%', bottom: '15%', width: 300, height: 300, borderRadius: '50%', background: 'radial-gradient(circle, rgba(192,38,211,0.14) 0%, transparent 70%)', filter: 'blur(50px)', pointerEvents: 'none', zIndex: 0 }} />
 
-      {/* ── Two-column layout — text left, crystal floats right ── */}
+      {/* Two-column layout */}
       <div style={{
         position: 'relative', zIndex: 2,
         width: '100%', maxWidth: 1200,
@@ -243,11 +206,8 @@ export default function Hero3D() {
         alignItems: 'center', justifyContent: 'center',
         gap: '40px 60px',
       }}>
-
         {/* LEFT — text */}
         <div style={{ flex: '1 1 320px', maxWidth: 540, textAlign: 'left' }}>
-
-          {/* Logo + tag */}
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -266,7 +226,6 @@ export default function Hero3D() {
             </div>
           </motion.div>
 
-          {/* Headline */}
           <motion.h1
             className="font-display glitch no-select"
             data-text="WEB FIXXIES"
@@ -285,7 +244,6 @@ export default function Hero3D() {
             WEB FIXXIES
           </motion.h1>
 
-          {/* Subtext */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -300,7 +258,6 @@ export default function Hero3D() {
             designed to command market attention.
           </motion.p>
 
-          {/* CTAs */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -318,18 +275,13 @@ export default function Hero3D() {
             </a>
           </motion.div>
 
-          {/* Stats */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={inView ? { opacity: 1 } : {}}
             transition={{ duration: 0.8, delay: 0.65 }}
             style={{ display: 'flex', gap: 32, marginTop: 48, flexWrap: 'wrap' }}
           >
-            {[
-              { value: '3D', label: 'Immersive UI' },
-              { value: '<2ms', label: 'Latency' },
-              { value: '100%', label: 'Custom Built' },
-            ].map(stat => (
+            {[{ value: '3D', label: 'Immersive UI' }, { value: '<2ms', label: 'Latency' }, { value: '100%', label: 'Custom Built' }].map(stat => (
               <div key={stat.label}>
                 <div className="font-display" style={{ fontSize: 26, fontWeight: 800, background: 'linear-gradient(135deg, #a78bfa, #e879f9)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>{stat.value}</div>
                 <div className="font-mono" style={{ fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(124,58,237,0.6)', marginTop: 2 }}>{stat.label}</div>
@@ -338,9 +290,7 @@ export default function Hero3D() {
           </motion.div>
         </div>
 
-        {/* RIGHT — empty column so the crystal (behind, in the Canvas) is
-            visually in this space. The canvas is full-screen so it shows
-            through naturally. We just need the layout space. */}
+        {/* RIGHT — empty space for the crystal (canvas is full-screen behind) */}
         <div style={{ flex: '1 1 340px', maxWidth: 580, minHeight: 400, pointerEvents: 'none' }} />
       </div>
 
