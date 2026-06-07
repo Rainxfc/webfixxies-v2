@@ -1,6 +1,6 @@
 import { useRef, Suspense, useMemo, useEffect, useState } from 'react';
 import { Canvas, useFrame, addEffect } from '@react-three/fiber';
-import { OrbitControls, Float, MeshDistortMaterial, Sphere, Torus, Octahedron } from '@react-three/drei';
+import { OrbitControls, Float, useGLTF, Torus, Octahedron } from '@react-three/drei';
 import { motion, useInView } from 'framer-motion';
 import * as THREE from 'three';
 
@@ -40,54 +40,66 @@ function WebfixxiesLogo({ size = 48, style }: { size?: number; style?: React.CSS
   );
 }
 
-// ─── 3D scene ─────────────────────────────────────────────────────────────────
-function CrystalCore() {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const innerRef = useRef<THREE.Mesh>(null);
+// ─── GLB robot model — replaces the procedural crystal ───────────────────────
+function NexbotModel() {
+  const groupRef = useRef<THREE.Group>(null);
+  const { scene } = useGLTF('/nexbot_robot_character_concept.glb');
 
-  useFrame((state, delta) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.y = THREE.MathUtils.lerp(meshRef.current.rotation.y, state.pointer.x * 0.5, 0.05);
-      meshRef.current.rotation.x = THREE.MathUtils.lerp(meshRef.current.rotation.x, -state.pointer.y * 0.5, 0.05);
-    }
-    if (innerRef.current) {
-      innerRef.current.rotation.y -= delta * 0.3;
-      innerRef.current.rotation.z += delta * 0.2;
+  // Clone so the original scene graph isn't mutated
+  const model = useMemo(() => {
+    const cloned = scene.clone(true);
+    // Make every mesh slightly transparent + emissive purple tint
+    cloned.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        const mesh = child as THREE.Mesh;
+        const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+        mats.forEach((m) => {
+          const mat = m as THREE.MeshStandardMaterial;
+          mat.transparent = true;
+          mat.opacity = 0.82;
+          // Subtle purple emissive tint — keeps the model's original colours
+          // but gives it the glowing vibe
+          if (!mat.emissive) mat.emissive = new THREE.Color('#4c1d95');
+          mat.emissive.lerp(new THREE.Color('#7c3aed'), 0.25);
+          mat.emissiveIntensity = 0.35;
+          mat.needsUpdate = true;
+        });
+      }
+    });
+    return cloned;
+  }, [scene]);
+
+  // Pointer-reactive tilt — same feel as the old crystal
+  useFrame((state) => {
+    if (groupRef.current) {
+      groupRef.current.rotation.y = THREE.MathUtils.lerp(
+        groupRef.current.rotation.y,
+        state.pointer.x * 0.4,
+        0.05
+      );
+      groupRef.current.rotation.x = THREE.MathUtils.lerp(
+        groupRef.current.rotation.x,
+        -state.pointer.y * 0.25,
+        0.05
+      );
     }
   });
 
   return (
-    <group>
-      {/* Outer distorted sphere — transparent so the inner core shows through */}
-      <Sphere ref={meshRef} args={[1.8, 48, 48]}>
-        <MeshDistortMaterial
-          color="#8b5cf6"
-          distort={0.38}
-          speed={2.2}
-          roughness={0}
-          metalness={0.1}
-          transparent
-          opacity={0.45}
-          envMapIntensity={0.8}
-        />
-      </Sphere>
-      {/* Inner glowing octahedron core */}
-      <Octahedron ref={innerRef} args={[0.9, 0]}>
-        <meshStandardMaterial
-          color="#c026d3"
-          emissive="#9333ea"
-          emissiveIntensity={2.2}
-          metalness={0.9}
-          roughness={0.05}
-          transparent
-          opacity={0.92}
-        />
-      </Octahedron>
-      <pointLight color="#7c3aed" intensity={6} distance={6} />
-      <pointLight color="#c026d3" intensity={3} distance={4} position={[0, 1, 0]} />
+    <group ref={groupRef}>
+      {/* Scale/position the robot to sit nicely in the hero viewport */}
+      <primitive object={model} scale={1.65} position={[0, -1.6, 0]} />
+      {/* Keep the same lights as before */}
+      <pointLight color="#7c3aed" intensity={6} distance={7} position={[0, 2, 2]} />
+      <pointLight color="#c026d3" intensity={3} distance={5} position={[0, 0, -2]} />
     </group>
   );
 }
+
+// Preload so there's no pop-in
+useGLTF.preload('/nexbot_robot_character_concept.glb');
+
+// ─── Orbit rings ─────────────────────────────────────────────────────────────
 
 function OrbitRings() {
   const r1 = useRef<THREE.Mesh>(null);
@@ -166,8 +178,9 @@ function Scene() {
       <directionalLight position={[-5, -3, -5]} intensity={0.5} color="#c026d3" />
       <pointLight position={[0, 6, 0]} intensity={2} color="#7c3aed" distance={12} />
       <Suspense fallback={null}>
-        <Float speed={1.2} rotationIntensity={0.1} floatIntensity={0.5} floatingRange={[-0.15, 0.15]}>
-          <CrystalCore />
+        {/* GLB robot model — pointer interactive */}
+        <Float speed={0.8} rotationIntensity={0} floatIntensity={0.3} floatingRange={[-0.08, 0.08]}>
+          <NexbotModel />
         </Float>
         <OrbitRings />
         <CrystalShards />
