@@ -133,15 +133,10 @@ function App() {
       smoothWheel: true,
     });
 
-    // Cap scroll RAF at 90fps — no point running Lenis faster than the screen
-    const TARGET = 1000 / 90;
-    let last = 0;
+    // Lenis MUST run every single RAF tick — throttling it causes choppy scroll
     let rafId = 0;
     function raf(time: number) {
-      if (time - last >= TARGET) {
-        last = time;
-        lenis.raf(time);
-      }
+      lenis.raf(time);
       rafId = requestAnimationFrame(raf);
     }
     rafId = requestAnimationFrame(raf);
