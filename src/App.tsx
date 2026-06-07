@@ -4,6 +4,7 @@ import ParticleField from './components/ParticleField';
 import Hero3D from './components/Hero3D';
 import MissionSection from './components/MissionSection';
 import AboutSection from './components/AboutSection';
+import ProjectsSection from './components/ProjectsSection';
 import PricingSection from './components/PricingSection';
 import ContactSection from './components/ContactSection';
 
@@ -36,7 +37,7 @@ function Navbar() {
   }, []);
 
   useEffect(() => {
-    const sections = ['mission', 'about', 'pricing', 'contact'];
+  const sections = ['mission', 'about', 'projects', 'pricing', 'contact'];
     const observer = new IntersectionObserver(
       (entries) => { entries.forEach(entry => { if (entry.isIntersecting) setActiveSection(entry.target.id); }); },
       { threshold: 0.3 }
@@ -50,7 +51,7 @@ function Navbar() {
     setMenuOpen(false);
   };
 
-  const navItems = ['mission', 'about', 'pricing', 'contact'];
+  const navItems = ['mission', 'about', 'projects', 'pricing', 'contact'];
 
   return (
     <>
@@ -139,6 +140,7 @@ function App() {
         <Hero3D />
         <MissionSection />
         <AboutSection />
+        <ProjectsSection />
         <PricingSection />
         <ContactSection />
       </main>

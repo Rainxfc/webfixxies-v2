@@ -1,175 +1,167 @@
-import { useState, useRef, useEffect } from 'react';
-import { motion, AnimatePresence, useInView } from 'framer-motion';
+import { useRef } from 'react';
+import { motion, useInView } from 'framer-motion';
 
-function InteractiveTerminal() {
-  const [view, setView] = useState<'legacy' | 'premium'>('legacy');
-  const [animating, setAnimating] = useState(false);
-  const [selectedTool, setSelectedTool] = useState('diagnose');
-  const [selectedDevice, setSelectedDevice] = useState('');
-  const [logs, setLogs] = useState<string[]>([]);
-  const [isRunning, setIsRunning] = useState(false);
-  const logEndRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    logEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [logs]);
-
-  const handleTransform = () => {
-    if (animating) return;
-    setAnimating(true);
-    setTimeout(() => {
-      setView(v => v === 'legacy' ? 'premium' : 'legacy');
-      setLogs([]);
-      setAnimating(false);
-    }, 400);
-  };
-
-  const handleRun = () => {
-    if (isRunning) return;
-    if (!selectedDevice) {
-      setLogs(['⚠ E_NO_DEVICE: Select a target device first.']);
-      return;
-    }
-    
-    setIsRunning(true);
-    setLogs([]);
-
-    const lines = [
-      `[SYS] Initializing ${selectedTool} pipeline...`,
-      `[SYS] Querying active device connection [${selectedDevice}]...`,
-      `[SYS] Analysing hardware acceleration context...`,
-      `[SYS] Rebuilding vertex indices & buffer streams...`,
-      `[SUCCESS] ${selectedTool.toUpperCase()} complete. Status: OPTIMAL`
-    ];
-
-    lines.forEach((line, index) => {
-      setTimeout(() => {
-        setLogs(prev => [...prev, line]);
-        if (index === lines.length - 1) {
-          setIsRunning(false);
-        }
-      }, (index + 1) * 350);
-    });
+// ─── Live site browser mockup with animated mouse ─────────────────────────────
+function WebUpgradeMockup() {
+  // Mouse path: starts centre, drifts to upgrade button area, clicks, moves away
+  const mousePath = {
+    x: ['50%', '72%', '74%', '74%', '40%', '35%'],
+    y: ['48%', '82%', '84%', '84%', '60%', '55%'],
   };
 
   return (
-    <div style={{
-      width: '100%', overflow: 'hidden',
-      background: 'rgba(8, 0, 22, 0.9)', backdropFilter: 'blur(20px)',
-      borderRadius: '8px 8px 0 0',
-    }}>
-      {/* Terminal bar */}
+    <div style={{ width: '100%', marginTop: 36, position: 'relative' }}>
+      {/* Screen bezel */}
       <div style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '10px 16px', borderBottom: '1px solid rgba(139,92,246,0.15)',
-        background: 'rgba(20,0,50,0.8)',
+        borderRadius: 14,
+        overflow: 'hidden',
+        border: '1.5px solid rgba(139,92,246,0.3)',
+        background: 'linear-gradient(180deg, #04000d 0%, #1e0047 50%, #04000d 100%)',
+        boxShadow: '0 0 0 1px rgba(192,38,211,0.1), inset 0 0 30px rgba(124,58,237,0.08), 0 24px 60px rgba(0,0,0,0.7)',
+        position: 'relative',
       }}>
-        <div style={{ display: 'flex', gap: 6 }}>
-          {['#ef4444','#f59e0b','#10b981'].map((c,i) => (
-            <span key={i} style={{ width: 10, height: 10, borderRadius: '50%', background: c, opacity: 0.8 }} />
-          ))}
-        </div>
-        <div className="font-mono" style={{ fontSize: 9, color: 'rgba(167,139,250,0.6)', letterSpacing: '0.2em' }}>
-          webfixxies.dev/optimize/{view}
-        </div>
-        <motion.button whileTap={{ scale: 0.95 }} onClick={handleTransform} style={{
-          padding: '3px 10px', borderRadius: 6, border: '1px solid rgba(124,58,237,0.4)',
-          background: 'rgba(124,58,237,0.15)', color: '#a78bfa', fontSize: 9,
-          fontFamily: 'Space Mono, monospace', letterSpacing: '0.1em', cursor: 'pointer',
+        {/* Browser chrome */}
+        <div style={{
+          display: 'flex', alignItems: 'center', gap: 10,
+          padding: '9px 14px',
+          background: 'rgba(4,0,12,0.95)',
+          borderBottom: '1px solid rgba(139,92,246,0.15)',
         }}>
-          {view === 'legacy' ? '⚡ UPGRADE' : '← REVERT'}
-        </motion.button>
+          <div style={{ display: 'flex', gap: 5, flexShrink: 0 }}>
+            {['#ef4444', '#f59e0b', '#10b981'].map((c, i) => (
+              <div key={i} style={{ width: 9, height: 9, borderRadius: '50%', background: c, opacity: 0.8 }} />
+            ))}
+          </div>
+          <div style={{
+            flex: 1, display: 'flex', alignItems: 'center', gap: 7,
+            background: 'rgba(8,0,20,0.8)',
+            border: '1px solid rgba(139,92,246,0.2)',
+            borderRadius: 6, padding: '3px 10px', overflow: 'hidden',
+          }}>
+            <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#10b981', flexShrink: 0 }} />
+            <span className="font-mono" style={{ fontSize: 8, color: 'rgba(139,92,246,0.7)', letterSpacing: '0.1em' }}>
+              mcethereal.github.io/webfixxies
+            </span>
+          </div>
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="rgba(139,92,246,0.4)" strokeWidth="2" style={{ flexShrink: 0 }}>
+            <path d="M1 4v6h6M23 20v-6h-6" /><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15" />
+          </svg>
+        </div>
+
+        {/* Iframe viewport */}
+        <div style={{ position: 'relative', paddingBottom: '62%', overflow: 'hidden' }}>
+          <iframe
+            src="https://mcethereal.github.io/webfixxies/"
+            title="Webfixxies V1 Live Preview"
+            style={{
+              position: 'absolute', top: 0, left: 0,
+              width: '100%', height: '100%',
+              border: 'none', pointerEvents: 'none',
+            }}
+            loading="lazy"
+            sandbox="allow-scripts allow-same-origin"
+          />
+          {/* gradient fade */}
+          <div style={{
+            position: 'absolute', inset: 0,
+            background: 'linear-gradient(to bottom, transparent 55%, rgba(4,0,13,0.85) 100%)',
+            pointerEvents: 'none',
+          }} />
+          {/* scan line */}
+          <motion.div
+            animate={{ y: ['-5%', '110%'] }}
+            transition={{ duration: 4, repeat: Infinity, ease: 'linear', repeatDelay: 3 }}
+            style={{
+              position: 'absolute', left: 0, right: 0, height: 1.5,
+              background: 'linear-gradient(90deg, transparent, rgba(139,92,246,0.5), rgba(192,38,211,0.4), transparent)',
+              pointerEvents: 'none',
+            }}
+          />
+
+          {/* ── Animated mouse cursor ── */}
+          <motion.div
+            animate={mousePath}
+            transition={{
+              duration: 6, repeat: Infinity, ease: 'easeInOut', repeatDelay: 1,
+              times: [0, 0.3, 0.45, 0.55, 0.8, 1],
+            }}
+            style={{
+              position: 'absolute', pointerEvents: 'none', zIndex: 10,
+              transform: 'translate(-50%, -50%)',
+            }}
+          >
+            {/* Cursor shape */}
+            <motion.div
+              animate={{ scale: [1, 1, 0.85, 0.85, 1, 1] }}
+              transition={{ duration: 6, repeat: Infinity, times: [0, 0.3, 0.45, 0.55, 0.8, 1], repeatDelay: 1 }}
+            >
+              <svg width="18" height="22" viewBox="0 0 18 22" fill="none">
+                <path d="M1 1L1 17L5.5 13L8.5 20L11 19L8 12L14 12L1 1Z" fill="white" stroke="rgba(124,58,237,0.8)" strokeWidth="1.2"/>
+              </svg>
+            </motion.div>
+            {/* Click ripple */}
+            <motion.div
+              animate={{ scale: [0, 0, 1.8, 0, 0], opacity: [0, 0, 0.6, 0, 0] }}
+              transition={{ duration: 6, repeat: Infinity, times: [0, 0.43, 0.5, 0.57, 1], repeatDelay: 1 }}
+              style={{
+                position: 'absolute', top: '50%', left: '50%',
+                transform: 'translate(-50%, -50%)',
+                width: 28, height: 28, borderRadius: '50%',
+                border: '2px solid rgba(167,139,250,0.7)',
+                pointerEvents: 'none',
+              }}
+            />
+          </motion.div>
+        </div>
+
+        {/* Status bar */}
+        <div style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+          padding: '5px 14px',
+          background: 'rgba(4,0,12,0.95)',
+          borderTop: '1px solid rgba(139,92,246,0.1)',
+        }}>
+          <span className="font-mono" style={{ fontSize: 7.5, color: 'rgba(124,58,237,0.5)', letterSpacing: '0.18em' }}>LIVE PREVIEW</span>
+          <div style={{ height: 1.5, flex: 1, margin: '0 10px', background: 'rgba(139,92,246,0.08)', borderRadius: 1, overflow: 'hidden' }}>
+            <motion.div
+              animate={{ x: ['-100%', '100%'] }}
+              transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }}
+              style={{ height: '100%', width: '35%', background: 'linear-gradient(90deg, transparent, rgba(167,139,250,0.5), transparent)' }}
+            />
+          </div>
+          <span className="font-mono" style={{ fontSize: 7.5, color: 'rgba(192,38,211,0.4)', letterSpacing: '0.18em' }}>WF.V1</span>
+        </div>
       </div>
 
-      {/* Content */}
-      <AnimatePresence mode="wait">
-        {view === 'legacy' ? (
-          <motion.div key="legacy" initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }} transition={{ duration: 0.3 }} style={{ padding: 20, fontFamily: 'Space Mono, monospace', fontSize: 11 }}>
-            <div style={{ color: '#6b7280', fontSize: 10, marginBottom: 12, letterSpacing: '0.15em' }}>
-              // LEGACY SYSTEM — PERFORMANCE DEGRADED
-            </div>
-            {[
-              { k: 'sched_rt_runtime_us', v: '950000', note: '⚠ deprecated' },
-              { k: 'vm.swappiness', v: '10', note: '⚠ memory pressure' },
-              { k: 'cpu.max', v: 'max 100000', note: '⚠ nested group' },
-            ].map((row) => (
-              <div key={row.k} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 12px', marginBottom: 6, background: 'rgba(239,68,68,0.05)', border: '1px solid rgba(239,68,68,0.15)', borderRadius: 6 }}>
-                <span style={{ color: '#9ca3af' }}>{row.k}</span>
-                <span style={{ color: '#ef4444', fontSize: 10 }}>{row.v}</span>
-                <span style={{ color: '#6b7280', fontSize: 9 }}>{row.note}</span>
-              </div>
-            ))}
-            <div style={{ marginTop: 16, color: '#4b5563', fontSize: 10 }}>→ Manual review required. System unstable.</div>
-          </motion.div>
-        ) : (
-          <motion.div key="premium" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.3 }} style={{ padding: 20, fontFamily: 'Space Mono, monospace', fontSize: 11 }}>
-            <div style={{ color: '#a78bfa', fontSize: 10, marginBottom: 12, letterSpacing: '0.15em' }}>// PREMIUM INTERFACE — FULLY OPTIMIZED ✓</div>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginBottom: 12 }}>
-              {[{ label: 'RUNTIME', value: '95%', color: '#a78bfa' }, { label: 'MEMORY', value: 'STABLE', color: '#10b981' }].map(s => (
-                <div key={s.label} style={{ padding: '10px 12px', background: 'rgba(124,58,237,0.08)', border: '1px solid rgba(124,58,237,0.2)', borderRadius: 8 }}>
-                  <div style={{ color: '#6b7280', fontSize: 9, letterSpacing: '0.2em', marginBottom: 4 }}>{s.label}</div>
-                  <div style={{ color: s.color, fontSize: 14, fontWeight: 700 }}>{s.value}</div>
-                </div>
-              ))}
-            </div>
-            <div style={{ display: 'flex', gap: 6, marginBottom: 10 }}>
-              {['diagnose','refactor','deploy'].map(t => (
-                <button key={t} onClick={() => setSelectedTool(t)} style={{ flex: 1, padding: '6px 4px', borderRadius: 6, border: selectedTool === t ? '1px solid rgba(167,139,250,0.5)' : '1px solid rgba(139,92,246,0.15)', background: selectedTool === t ? 'rgba(124,58,237,0.2)' : 'transparent', color: selectedTool === t ? '#a78bfa' : '#6b7280', fontSize: 9, letterSpacing: '0.12em', textTransform: 'uppercase' as const, cursor: 'pointer' }}>
-                  {t}
-                </button>
-              ))}
-            </div>
-            <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
-              <select value={selectedDevice} onChange={e => setSelectedDevice(e.target.value)} style={{ flex: 1, padding: '6px 10px', background: 'rgba(20,0,50,0.8)', border: '1px solid rgba(139,92,246,0.25)', borderRadius: 6, color: '#c4b5fd', fontSize: 11, fontFamily: 'Space Mono, monospace' }}>
-                <option value="">Select device...</option>
-                <option value="edge-01">edge-01</option>
-                <option value="node-22">node-22</option>
-                <option value="vm-prod-3">vm-prod-3</option>
-              </select>
-              <button onClick={handleRun} disabled={isRunning} style={{ padding: '6px 14px', background: 'linear-gradient(135deg, #7c3aed, #c026d3)', border: 'none', borderRadius: 6, color: '#fff', fontSize: 10, fontFamily: 'Space Mono, monospace', cursor: isRunning ? 'not-allowed' : 'pointer', opacity: isRunning ? 0.7 : 1, letterSpacing: '0.1em' }}>
-                {isRunning ? 'RUNNING' : 'RUN'}
-              </button>
-            </div>
-            
-            {/* Scrolling logs console */}
-            <div style={{
-              background: 'rgba(4,0,12,0.85)',
-              border: '1px solid rgba(139,92,246,0.12)',
-              borderRadius: 8,
-              padding: '12px 14px',
-              minHeight: 110,
-              maxHeight: 110,
-              overflowY: 'auto',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: 4,
-            }}>
-              {logs.length === 0 && (
-                <span style={{ color: '#5d4f70', fontSize: 10 }}>// Ready to run optimizer. Select options above.</span>
-              )}
-              {logs.map((log, idx) => (
-                <motion.div
-                  key={idx}
-                  initial={{ opacity: 0, y: 5 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.15 }}
-                  style={{
-                    color: log.includes('SUCCESS') ? '#10b981' : log.includes('⚠') ? '#ef4444' : '#a78bfa',
-                    fontSize: 10,
-                    fontFamily: 'Space Mono, monospace',
-                  }}
-                >
-                  {log}
-                </motion.div>
-              ))}
-              <div ref={logEndRef} />
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-      
-      <div style={{ height: 2, background: 'rgba(124,58,237,0.1)' }}>
-        <motion.div animate={{ x: ['-100%', '100%'] }} transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }} style={{ height: '100%', width: '40%', background: 'linear-gradient(90deg, transparent, #7c3aed, transparent)' }} />
+      {/* Monitor neck */}
+      <div style={{ width: 2, height: 18, background: 'linear-gradient(to bottom, rgba(139,92,246,0.4), rgba(80,50,160,0.2))', margin: '0 auto' }} />
+      {/* Monitor base */}
+      <div style={{
+        width: '40%', height: 8, margin: '0 auto',
+        background: 'linear-gradient(to bottom, #150825, #0a0214)',
+        borderRadius: '0 0 10px 10px',
+        border: '1px solid rgba(139,92,246,0.18)',
+        borderTop: '1.5px solid rgba(139,92,246,0.35)',
+        boxShadow: '0 6px 20px rgba(0,0,0,0.6)',
+      }} />
+
+      {/* Caption */}
+      <div style={{ textAlign: 'center', marginTop: 14 }}>
+        <a
+          href="https://mcethereal.github.io/webfixxies/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="font-mono"
+          style={{
+            fontSize: 9, letterSpacing: '0.22em', textTransform: 'uppercase',
+            color: 'rgba(139,92,246,0.55)', textDecoration: 'none',
+            transition: 'color 0.3s',
+          }}
+          onMouseEnter={e => (e.currentTarget.style.color = '#a78bfa')}
+          onMouseLeave={e => (e.currentTarget.style.color = 'rgba(139,92,246,0.55)')}
+        >
+          ↗ View Live Site
+        </a>
       </div>
     </div>
   );
@@ -217,7 +209,7 @@ export default function MissionSection() {
                 </span>
               ))}
             </div>
-            <InteractiveTerminal />
+            <WebUpgradeMockup />
           </motion.div>
 
           {/* Right */}

@@ -68,7 +68,7 @@ export default function ContactSection() {
             WEB FIXXIES
           </span>
           <div style={{ display: 'flex', gap: 32 }}>
-            {['Mission', 'About', 'Pricing', 'Contact'].map(item => (
+            {['Mission', 'About', 'Projects', 'Pricing', 'Contact'].map(item => (
               <a key={item} href={`#${item.toLowerCase()}`} className="font-mono" style={{ fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#3d3057', textDecoration: 'none', transition: 'color 0.3s' }}
                 onMouseEnter={e => (e.currentTarget.style.color = '#7c3aed')}
                 onMouseLeave={e => (e.currentTarget.style.color = '#3d3057')}>
