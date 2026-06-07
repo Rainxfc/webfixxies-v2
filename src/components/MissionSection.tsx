@@ -1,41 +1,62 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence, useInView } from 'framer-motion';
 
 function InteractiveTerminal() {
   const [view, setView] = useState<'legacy' | 'premium'>('legacy');
   const [animating, setAnimating] = useState(false);
   const [selectedTool, setSelectedTool] = useState('diagnose');
-  const [output, setOutput] = useState<string | null>(null);
   const [selectedDevice, setSelectedDevice] = useState('');
+  const [logs, setLogs] = useState<string[]>([]);
+  const [isRunning, setIsRunning] = useState(false);
+  const logEndRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    logEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [logs]);
 
   const handleTransform = () => {
     if (animating) return;
     setAnimating(true);
     setTimeout(() => {
       setView(v => v === 'legacy' ? 'premium' : 'legacy');
+      setLogs([]);
       setAnimating(false);
     }, 400);
   };
 
   const handleRun = () => {
+    if (isRunning) return;
     if (!selectedDevice) {
-      setOutput('⚠ E_NO_DEVICE: Select a target device first.');
-      setTimeout(() => setOutput(null), 3000);
+      setLogs(['⚠ E_NO_DEVICE: Select a target device first.']);
       return;
     }
-    setOutput(`↯ Running ${selectedTool} on ${selectedDevice}...`);
-    setTimeout(() => {
-      setOutput(`✓ ${selectedTool.toUpperCase()} completed on ${selectedDevice}. Status: OPTIMAL`);
-      setTimeout(() => setOutput(null), 3000);
-    }, 900);
+    
+    setIsRunning(true);
+    setLogs([]);
+
+    const lines = [
+      `[SYS] Initializing ${selectedTool} pipeline...`,
+      `[SYS] Querying active device connection [${selectedDevice}]...`,
+      `[SYS] Analysing hardware acceleration context...`,
+      `[SYS] Rebuilding vertex indices & buffer streams...`,
+      `[SUCCESS] ${selectedTool.toUpperCase()} complete. Status: OPTIMAL`
+    ];
+
+    lines.forEach((line, index) => {
+      setTimeout(() => {
+        setLogs(prev => [...prev, line]);
+        if (index === lines.length - 1) {
+          setIsRunning(false);
+        }
+      }, (index + 1) * 350);
+    });
   };
 
   return (
     <div style={{
-      width: '100%', maxWidth: 560, marginTop: 40, borderRadius: 16,
-      border: '1px solid rgba(139,92,246,0.2)', overflow: 'hidden',
+      width: '100%', overflow: 'hidden',
       background: 'rgba(8, 0, 22, 0.9)', backdropFilter: 'blur(20px)',
-      boxShadow: '0 0 60px rgba(124,58,237,0.2), 0 0 0 1px rgba(139,92,246,0.1)',
+      borderRadius: '8px 8px 0 0',
     }}>
       {/* Terminal bar */}
       <div style={{
@@ -105,21 +126,48 @@ function InteractiveTerminal() {
                 <option value="node-22">node-22</option>
                 <option value="vm-prod-3">vm-prod-3</option>
               </select>
-              <button onClick={handleRun} style={{ padding: '6px 14px', background: 'linear-gradient(135deg, #7c3aed, #c026d3)', border: 'none', borderRadius: 6, color: '#fff', fontSize: 10, fontFamily: 'Space Mono, monospace', cursor: 'pointer', letterSpacing: '0.1em' }}>
-                RUN
+              <button onClick={handleRun} disabled={isRunning} style={{ padding: '6px 14px', background: 'linear-gradient(135deg, #7c3aed, #c026d3)', border: 'none', borderRadius: 6, color: '#fff', fontSize: 10, fontFamily: 'Space Mono, monospace', cursor: isRunning ? 'not-allowed' : 'pointer', opacity: isRunning ? 0.7 : 1, letterSpacing: '0.1em' }}>
+                {isRunning ? 'RUNNING' : 'RUN'}
               </button>
             </div>
-            <AnimatePresence>
-              {output && (
-                <motion.div initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} style={{ padding: '8px 12px', borderRadius: 6, fontSize: 10, background: output.startsWith('✓') ? 'rgba(16,185,129,0.1)' : 'rgba(239,68,68,0.1)', border: `1px solid ${output.startsWith('✓') ? 'rgba(16,185,129,0.3)' : 'rgba(239,68,68,0.3)'}`, color: output.startsWith('✓') ? '#10b981' : '#ef4444' }}>
-                  {output}
-                </motion.div>
+            
+            {/* Scrolling logs console */}
+            <div style={{
+              background: 'rgba(4,0,12,0.85)',
+              border: '1px solid rgba(139,92,246,0.12)',
+              borderRadius: 8,
+              padding: '12px 14px',
+              minHeight: 110,
+              maxHeight: 110,
+              overflowY: 'auto',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: 4,
+            }}>
+              {logs.length === 0 && (
+                <span style={{ color: '#5d4f70', fontSize: 10 }}>// Ready to run optimizer. Select options above.</span>
               )}
-            </AnimatePresence>
+              {logs.map((log, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 5 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.15 }}
+                  style={{
+                    color: log.includes('SUCCESS') ? '#10b981' : log.includes('⚠') ? '#ef4444' : '#a78bfa',
+                    fontSize: 10,
+                    fontFamily: 'Space Mono, monospace',
+                  }}
+                >
+                  {log}
+                </motion.div>
+              ))}
+              <div ref={logEndRef} />
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
-
+      
       <div style={{ height: 2, background: 'rgba(124,58,237,0.1)' }}>
         <motion.div animate={{ x: ['-100%', '100%'] }} transition={{ duration: 2.5, repeat: Infinity, ease: 'easeInOut' }} style={{ height: '100%', width: '40%', background: 'linear-gradient(90deg, transparent, #7c3aed, transparent)' }} />
       </div>

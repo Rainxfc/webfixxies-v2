@@ -395,9 +395,23 @@ html { scroll-behavior: smooth; }
   to   { width: 100%; }
 }
 
-/* Misc utility */
-.no-select { user-select: none; }
-.pointer-none { pointer-events: none; }
+/* Hero layout responsiveness */
+@media (max-width: 900px) {
+  .hero-layout-left {
+    text-align: center !important;
+    align-items: center !important;
+  }
+  .hero-layout-left .hero-logo-row {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 600px) {
+  .monitor-keyboard {
+    display: none !important;
+  }
+}
+
 
 /* Responsive navigation and layout overrides */
 .nav-desktop {
