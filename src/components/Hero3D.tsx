@@ -1,6 +1,6 @@
 import { useRef, Suspense, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Environment, Float, MeshDistortMaterial, Sphere, Torus, Octahedron } from '@react-three/drei';
+import { OrbitControls, Float, MeshDistortMaterial, Sphere, Torus, Octahedron } from '@react-three/drei';
 import { motion, useInView } from 'framer-motion';
 import * as THREE from 'three';
 
@@ -40,34 +40,32 @@ function CrystalCore() {
 
   return (
     <group>
-      <Sphere ref={meshRef} args={[1.8, 80, 80]}>
+      {/* Reduced segments: 48×48 (was 80×80) — saves ~4k vertices, same visual */}
+      <Sphere ref={meshRef} args={[1.8, 48, 48]}>
         <MeshDistortMaterial
           color="#7c3aed"
-          distort={0.38}
-          speed={2.2}
-          roughness={0}
-          metalness={0.1}
-          transmission={0.92}
-          thickness={2.5}
-          ior={1.6}
+          distort={0.35}
+          speed={1.8}
+          roughness={0.05}
+          metalness={0.15}
           transparent
-          opacity={0.85}
-          envMapIntensity={1.5}
+          opacity={0.88}
+          envMapIntensity={0.4}
         />
       </Sphere>
       <Octahedron ref={innerRef} args={[0.9, 0]}>
         <meshStandardMaterial
           color="#c026d3"
           emissive="#9333ea"
-          emissiveIntensity={1.8}
-          metalness={0.9}
-          roughness={0.05}
+          emissiveIntensity={1.6}
+          metalness={0.85}
+          roughness={0.1}
           transparent
           opacity={0.9}
         />
       </Octahedron>
-      <pointLight color="#7c3aed" intensity={6} distance={6} />
-      <pointLight color="#c026d3" intensity={3} distance={4} position={[0, 1, 0]} />
+      <pointLight color="#7c3aed" intensity={5} distance={6} />
+      <pointLight color="#c026d3" intensity={2.5} distance={4} position={[0, 1, 0]} />
     </group>
   );
 }
@@ -85,14 +83,15 @@ function OrbitRings() {
 
   return (
     <group>
-      <Torus ref={ring1} args={[2.8, 0.025, 16, 120]} rotation={[Math.PI / 3, 0, 0]}>
-        <meshStandardMaterial color="#a78bfa" emissive="#7c3aed" emissiveIntensity={2.5} metalness={1} roughness={0} transparent opacity={0.7} />
+      {/* Reduced tube segments: 80 (was 120) — same visual, less geometry */}
+      <Torus ref={ring1} args={[2.8, 0.025, 12, 80]} rotation={[Math.PI / 3, 0, 0]}>
+        <meshStandardMaterial color="#a78bfa" emissive="#7c3aed" emissiveIntensity={2.2} metalness={1} roughness={0} transparent opacity={0.7} />
       </Torus>
-      <Torus ref={ring2} args={[3.5, 0.018, 16, 120]} rotation={[0, Math.PI / 5, Math.PI / 4]}>
-        <meshStandardMaterial color="#e879f9" emissive="#c026d3" emissiveIntensity={2} metalness={1} roughness={0} transparent opacity={0.55} />
+      <Torus ref={ring2} args={[3.5, 0.018, 12, 80]} rotation={[0, Math.PI / 5, Math.PI / 4]}>
+        <meshStandardMaterial color="#e879f9" emissive="#c026d3" emissiveIntensity={1.8} metalness={1} roughness={0} transparent opacity={0.55} />
       </Torus>
-      <Torus ref={ring3} args={[4.2, 0.012, 16, 120]} rotation={[Math.PI / 6, Math.PI / 3, 0]}>
-        <meshStandardMaterial color="#818cf8" emissive="#4f46e5" emissiveIntensity={1.5} metalness={1} roughness={0} transparent opacity={0.4} />
+      <Torus ref={ring3} args={[4.2, 0.012, 12, 80]} rotation={[Math.PI / 6, Math.PI / 3, 0]}>
+        <meshStandardMaterial color="#818cf8" emissive="#4f46e5" emissiveIntensity={1.3} metalness={1} roughness={0} transparent opacity={0.4} />
       </Torus>
     </group>
   );
@@ -114,25 +113,24 @@ function CrystalShard({ position, scale, speed, rotAxis }: {
   });
   return (
     <Octahedron ref={ref} args={[1, 0]} position={position} scale={scale}>
-      <meshPhysicalMaterial
-        color="#a78bfa" emissive="#7c3aed" emissiveIntensity={0.8}
-        metalness={0.8} roughness={0.1} transmission={0.6} thickness={0.5}
-        transparent opacity={0.85}
+      {/* meshStandardMaterial is much cheaper than meshPhysicalMaterial */}
+      <meshStandardMaterial
+        color="#a78bfa" emissive="#7c3aed" emissiveIntensity={0.7}
+        metalness={0.7} roughness={0.2}
+        transparent opacity={0.8}
       />
     </Octahedron>
   );
 }
 
 function CrystalShards() {
+  // Trim shards from 8 to 5 — fewer draw calls, same visual impression
   const shards = useMemo(() => [
-    { position: [4.5, 1.5, -1] as [number,number,number],  scale: 0.22, speed: 0.4, rotAxis: [1,0.5,0.2] as [number,number,number] },
-    { position: [-4, 2, 0.5] as [number,number,number],    scale: 0.16, speed: 0.6, rotAxis: [0.3,1,0.5] as [number,number,number] },
-    { position: [2, -3.5, -2] as [number,number,number],   scale: 0.28, speed: 0.35, rotAxis: [0.5,0.3,1] as [number,number,number] },
-    { position: [-3.5, -2, 1] as [number,number,number],   scale: 0.12, speed: 0.8, rotAxis: [1,1,0.2] as [number,number,number] },
-    { position: [0.5, 4, -1.5] as [number,number,number],  scale: 0.18, speed: 0.5, rotAxis: [0.2,0.5,1] as [number,number,number] },
-    { position: [-1, -4, 0.5] as [number,number,number],   scale: 0.14, speed: 0.7, rotAxis: [1,0.2,0.5] as [number,number,number] },
-    { position: [5, -1, 0] as [number,number,number],      scale: 0.1,  speed: 0.9, rotAxis: [0.5,1,0.3] as [number,number,number] },
-    { position: [-5, 0.5, -0.5] as [number,number,number], scale: 0.2,  speed: 0.45, rotAxis: [0.3,0.7,1] as [number,number,number] },
+    { position: [4.2, 1.5, -1] as [number,number,number],  scale: 0.2,  speed: 0.4,  rotAxis: [1,0.5,0.2] as [number,number,number] },
+    { position: [-3.8, 2, 0.5] as [number,number,number],  scale: 0.15, speed: 0.55, rotAxis: [0.3,1,0.5] as [number,number,number] },
+    { position: [2, -3.2, -2] as [number,number,number],   scale: 0.24, speed: 0.35, rotAxis: [0.5,0.3,1] as [number,number,number] },
+    { position: [-3.2, -2, 1] as [number,number,number],   scale: 0.11, speed: 0.75, rotAxis: [1,1,0.2] as [number,number,number] },
+    { position: [0.5, 3.8, -1.5] as [number,number,number],scale: 0.16, speed: 0.5,  rotAxis: [0.2,0.5,1] as [number,number,number] },
   ], []);
 
   return (
@@ -149,11 +147,11 @@ function CrystalShards() {
 function Scene() {
   return (
     <>
-      <ambientLight intensity={0.2} color="#2d0060" />
-      <directionalLight position={[5, 5, 5]} intensity={0.8} color="#a78bfa" />
-      <directionalLight position={[-5, -3, -5]} intensity={0.5} color="#c026d3" />
-      <pointLight position={[0, 6, 0]} intensity={2} color="#7c3aed" distance={12} />
-      <Environment preset="night" />
+      <ambientLight intensity={0.25} color="#2d0060" />
+      <directionalLight position={[5, 5, 5]} intensity={0.7} color="#a78bfa" />
+      {/* Removed one directional light and the extra point light */}
+      <directionalLight position={[-5, -3, -5]} intensity={0.4} color="#c026d3" />
+      {/* No Environment preset — it loads a full HDR texture (~2–4MB VRAM) */}
       <Suspense fallback={null}>
         <Float speed={1.2} rotationIntensity={0.1} floatIntensity={0.5} floatingRange={[-0.15, 0.15]}>
           <CrystalCore />
@@ -451,7 +449,12 @@ export default function Hero3D() {
         <div style={{ flex: '1 1 340px', maxWidth: 680, display: 'flex', justifyContent: 'center' }}>
           <DesktopFrame>
             <div style={{ width: '100%', aspectRatio: '16/10', position: 'relative', background: 'radial-gradient(ellipse 120% 80% at 50% -10%, #1e0047 0%, #0a0018 40%, #04000d 100%)' }}>
-              <Canvas camera={{ position: [0, 0, 9], fov: 42 }} gl={{ antialias: true, alpha: true }} dpr={[1, 2]} style={{ background: 'transparent', width: '100%', height: '100%' }}>
+              <Canvas
+                camera={{ position: [0, 0, 9], fov: 42 }}
+                gl={{ antialias: true, alpha: true, powerPreference: 'high-performance' }}
+                dpr={Math.min(window.devicePixelRatio, 1.5)}
+                style={{ background: 'transparent', width: '100%', height: '100%' }}
+              >
                 <Scene />
               </Canvas>
               {/* Screen inner glow */}

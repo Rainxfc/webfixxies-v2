@@ -13,15 +13,22 @@ function CursorGlow() {
   useEffect(() => {
     const move = (e: MouseEvent) => {
       if (ref.current) {
-        ref.current.style.left = e.clientX + 'px';
-        ref.current.style.top = e.clientY + 'px';
+        // transform instead of left/top — skips layout, goes straight to
+        // composite layer. Much cheaper on the main thread.
+        ref.current.style.transform = `translate(${e.clientX - 200}px, ${e.clientY - 200}px)`;
       }
     };
-    window.addEventListener('mousemove', move);
+    window.addEventListener('mousemove', move, { passive: true });
     return () => window.removeEventListener('mousemove', move);
   }, []);
   return (
-    <div ref={ref} style={{ position: 'fixed', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(124,58,237,0.09) 0%, rgba(192,38,211,0.04) 40%, transparent 70%)', transform: 'translate(-50%, -50%)', pointerEvents: 'none', zIndex: 1, willChange: 'left, top', transition: 'left 0.12s ease-out, top 0.12s ease-out' }} />
+    <div ref={ref} style={{
+      position: 'fixed', top: 0, left: 0,
+      width: 400, height: 400, borderRadius: '50%',
+      background: 'radial-gradient(circle, rgba(124,58,237,0.08) 0%, rgba(192,38,211,0.03) 40%, transparent 70%)',
+      pointerEvents: 'none', zIndex: 1,
+      willChange: 'transform',
+    }} />
   );
 }
 
