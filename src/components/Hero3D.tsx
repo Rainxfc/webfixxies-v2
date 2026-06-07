@@ -44,6 +44,8 @@ function WebfixxiesLogo({ size = 48, style }: { size?: number; style?: React.CSS
 function CrystalCore() {
   const meshRef = useRef<THREE.Mesh>(null);
   const innerRef = useRef<THREE.Mesh>(null);
+  // Pulsing glow light ref
+  const glowRef = useRef<THREE.PointLight>(null);
 
   useFrame((state, delta) => {
     if (meshRef.current) {
@@ -54,22 +56,60 @@ function CrystalCore() {
       innerRef.current.rotation.y -= delta * 0.3;
       innerRef.current.rotation.z += delta * 0.2;
     }
+    // Pulse the halo light — gives the "breathing glow" vibe
+    if (glowRef.current) {
+      glowRef.current.intensity = 8 + Math.sin(state.clock.elapsedTime * 1.4) * 3.5;
+    }
   });
 
   return (
     <group>
+      {/* Outer sphere — semi-transparent, distorted, brighter purple */}
       <Sphere ref={meshRef} args={[1.8, 48, 48]}>
         <MeshDistortMaterial
-          color="#7c3aed" distort={0.35} speed={1.8}
-          roughness={0.05} metalness={0.15}
-          transparent opacity={0.88} envMapIntensity={0.4}
+          color="#9d50ff"
+          distort={0.38}
+          speed={2.0}
+          roughness={0}
+          metalness={0.2}
+          transparent
+          opacity={0.75}
+          envMapIntensity={0.6}
         />
       </Sphere>
+
+      {/* Inner glowing core octahedron */}
       <Octahedron ref={innerRef} args={[0.9, 0]}>
-        <meshStandardMaterial color="#c026d3" emissive="#9333ea" emissiveIntensity={1.6} metalness={0.85} roughness={0.1} transparent opacity={0.9} />
+        <meshStandardMaterial
+          color="#d946ef"
+          emissive="#bf00ff"
+          emissiveIntensity={3.5}
+          metalness={1}
+          roughness={0}
+          transparent
+          opacity={0.95}
+        />
       </Octahedron>
-      <pointLight color="#7c3aed" intensity={5} distance={6} />
-      <pointLight color="#c026d3" intensity={2.5} distance={4} position={[0, 1, 0]} />
+
+      {/* Second smaller core for depth */}
+      <Octahedron args={[0.45, 0]}>
+        <meshStandardMaterial
+          color="#ffffff"
+          emissive="#e879f9"
+          emissiveIntensity={5}
+          metalness={1}
+          roughness={0}
+          transparent
+          opacity={0.9}
+        />
+      </Octahedron>
+
+      {/* Pulsing halo point light — the main glow source */}
+      <pointLight ref={glowRef} color="#a855f7" intensity={10} distance={8} />
+      {/* Secondary magenta fill */}
+      <pointLight color="#e040fb" intensity={6} distance={5} position={[0, 1.2, 0]} />
+      {/* Rim light from below — adds depth */}
+      <pointLight color="#7c3aed" intensity={4} distance={6} position={[0, -2, 0.5]} />
     </group>
   );
 }
@@ -79,22 +119,28 @@ function OrbitRings() {
   const r2 = useRef<THREE.Mesh>(null);
   const r3 = useRef<THREE.Mesh>(null);
 
-  useFrame((_, delta) => {
+  useFrame((state, delta) => {
     if (r1.current) { r1.current.rotation.x += delta * 0.25; r1.current.rotation.z += delta * 0.1; }
     if (r2.current) { r2.current.rotation.y += delta * 0.2;  r2.current.rotation.x -= delta * 0.15; }
     if (r3.current) { r3.current.rotation.z -= delta * 0.3;  r3.current.rotation.y += delta * 0.05; }
+    // Gentle pulse on ring opacity via emissive
+    if (r1.current) {
+      const mat = r1.current.material as THREE.MeshStandardMaterial;
+      mat.emissiveIntensity = 2.5 + Math.sin(state.clock.elapsedTime * 0.9) * 0.8;
+    }
   });
 
   return (
     <group>
-      <Torus ref={r1} args={[2.8, 0.025, 12, 80]} rotation={[Math.PI / 3, 0, 0]}>
-        <meshStandardMaterial color="#a78bfa" emissive="#7c3aed" emissiveIntensity={2.2} metalness={1} roughness={0} transparent opacity={0.7} />
+      {/* Brighter rings — higher emissive, more visible */}
+      <Torus ref={r1} args={[2.8, 0.028, 12, 80]} rotation={[Math.PI / 3, 0, 0]}>
+        <meshStandardMaterial color="#c4b5fd" emissive="#8b5cf6" emissiveIntensity={3} metalness={1} roughness={0} transparent opacity={0.85} />
       </Torus>
-      <Torus ref={r2} args={[3.5, 0.018, 12, 80]} rotation={[0, Math.PI / 5, Math.PI / 4]}>
-        <meshStandardMaterial color="#e879f9" emissive="#c026d3" emissiveIntensity={1.8} metalness={1} roughness={0} transparent opacity={0.55} />
+      <Torus ref={r2} args={[3.5, 0.020, 12, 80]} rotation={[0, Math.PI / 5, Math.PI / 4]}>
+        <meshStandardMaterial color="#f0abfc" emissive="#d946ef" emissiveIntensity={2.5} metalness={1} roughness={0} transparent opacity={0.7} />
       </Torus>
-      <Torus ref={r3} args={[4.2, 0.012, 12, 80]} rotation={[Math.PI / 6, Math.PI / 3, 0]}>
-        <meshStandardMaterial color="#818cf8" emissive="#4f46e5" emissiveIntensity={1.3} metalness={1} roughness={0} transparent opacity={0.4} />
+      <Torus ref={r3} args={[4.2, 0.014, 12, 80]} rotation={[Math.PI / 6, Math.PI / 3, 0]}>
+        <meshStandardMaterial color="#a5b4fc" emissive="#6366f1" emissiveIntensity={2} metalness={1} roughness={0} transparent opacity={0.55} />
       </Torus>
     </group>
   );
@@ -113,7 +159,14 @@ function CrystalShard({ position, scale, speed, rotAxis }: {
   });
   return (
     <Octahedron ref={ref} args={[1, 0]} position={position} scale={scale}>
-      <meshStandardMaterial color="#a78bfa" emissive="#7c3aed" emissiveIntensity={0.7} metalness={0.7} roughness={0.2} transparent opacity={0.8} />
+      <meshStandardMaterial
+        color="#d8b4fe"
+        emissive="#9333ea"
+        emissiveIntensity={1.8}
+        metalness={0.9}
+        roughness={0.05}
+        transparent opacity={0.85}
+      />
     </Octahedron>
   );
 }
@@ -142,9 +195,14 @@ function Scene() {
   use90fps();
   return (
     <>
-      <ambientLight intensity={0.25} color="#2d0060" />
-      <directionalLight position={[5, 5, 5]} intensity={0.7} color="#a78bfa" />
-      <directionalLight position={[-5, -3, -5]} intensity={0.4} color="#c026d3" />
+      {/* Dark ambient — keeps the background gloomy */}
+      <ambientLight intensity={0.08} color="#1a0030" />
+      {/* Strong purple key light from top-right */}
+      <directionalLight position={[6, 6, 4]} intensity={1.8} color="#c4b5fd" />
+      {/* Deep magenta fill from bottom-left */}
+      <directionalLight position={[-4, -4, -3]} intensity={1.2} color="#f0abfc" />
+      {/* Backlight rim — creates the "glowing from behind" halo */}
+      <pointLight position={[0, 0, -6]} color="#bf00ff" intensity={12} distance={14} />
       <Suspense fallback={null}>
         <Float speed={1.2} rotationIntensity={0.1} floatIntensity={0.5} floatingRange={[-0.15, 0.15]}>
           <CrystalCore />
@@ -197,9 +255,10 @@ export default function Hero3D() {
         </Canvas>
       </div>
 
-      {/* Radial glows */}
-      <div style={{ position: 'absolute', left: '55%', top: '50%', transform: 'translate(-50%,-50%)', width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, rgba(124,58,237,0.22) 0%, rgba(192,38,211,0.07) 40%, transparent 70%)', filter: 'blur(60px)', pointerEvents: 'none', zIndex: 0 }} />
-      <div style={{ position: 'absolute', right: '8%', bottom: '15%', width: 300, height: 300, borderRadius: '50%', background: 'radial-gradient(circle, rgba(192,38,211,0.14) 0%, transparent 70%)', filter: 'blur(50px)', pointerEvents: 'none', zIndex: 0 }} />
+      {/* Radial glows — stronger to match the brighter crystal */}
+      <div style={{ position: 'absolute', left: '55%', top: '50%', transform: 'translate(-50%,-50%)', width: 700, height: 700, borderRadius: '50%', background: 'radial-gradient(circle, rgba(168,85,247,0.35) 0%, rgba(192,38,211,0.15) 40%, transparent 68%)', filter: 'blur(55px)', pointerEvents: 'none', zIndex: 0 }} />
+      <div style={{ position: 'absolute', left: '55%', top: '50%', transform: 'translate(-50%,-50%)', width: 380, height: 380, borderRadius: '50%', background: 'radial-gradient(circle, rgba(232,121,249,0.25) 0%, transparent 70%)', filter: 'blur(30px)', pointerEvents: 'none', zIndex: 0 }} />
+      <div style={{ position: 'absolute', right: '8%', bottom: '15%', width: 320, height: 320, borderRadius: '50%', background: 'radial-gradient(circle, rgba(192,38,211,0.2) 0%, transparent 70%)', filter: 'blur(45px)', pointerEvents: 'none', zIndex: 0 }} />
 
       {/* ── Two-column layout — text left, crystal floats right ── */}
       <div style={{
