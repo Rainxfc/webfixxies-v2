@@ -82,14 +82,18 @@ export default function ParticleField() {
     const CONNECT_DIST_SQ = CONNECT_DIST * CONNECT_DIST;
     const MOUSE_DIST = 100; // was 120
 
-    let frameCount = 0;
+    // Cap at 90fps — on 60hz screens every frame fires anyway (no overhead)
+    const TARGET_MS = 1000 / 90;
+    let lastFrame = 0;
 
-    const draw = () => {
+    const draw = (now: number) => {
+      animRef.current = requestAnimationFrame(draw);
+      if (now - lastFrame < TARGET_MS) return; // skip if too soon
+      lastFrame = now;
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       const w = canvas.width, h = canvas.height;
       const pts = particles.current;
       const len = pts.length;
-
       for (let i = 0; i < len; i++) {
         const p = pts[i];
         const dx = p.x - mouseRef.current.x;
@@ -128,29 +132,23 @@ export default function ParticleField() {
         ctx.fill();
       }
 
-      // Draw connection lines only every other frame — halves line draw cost
-      // which is the most expensive part (O(n²) beginPath/stroke calls)
-      frameCount++;
-      if (frameCount % 2 === 0) {
-        for (let i = 0; i < len; i++) {
-          for (let j = i + 1; j < len; j++) {
-            const dx = pts[i].x - pts[j].x;
-            const dy = pts[i].y - pts[j].y;
-            const dSq = dx * dx + dy * dy;
-            if (dSq < CONNECT_DIST_SQ) {
-              const alpha = 0.055 * (1 - Math.sqrt(dSq) / CONNECT_DIST);
-              ctx.beginPath();
-              ctx.moveTo(pts[i].x, pts[i].y);
-              ctx.lineTo(pts[j].x, pts[j].y);
-              ctx.strokeStyle = `rgba(124, 58, 237, ${alpha.toFixed(3)})`;
-              ctx.lineWidth = 0.5;
-              ctx.stroke();
-            }
+      // Draw connection lines — with 80 particles max this is ~3k checks
+      for (let i = 0; i < len; i++) {
+        for (let j = i + 1; j < len; j++) {
+          const dx = pts[i].x - pts[j].x;
+          const dy = pts[i].y - pts[j].y;
+          const dSq = dx * dx + dy * dy;
+          if (dSq < CONNECT_DIST_SQ) {
+            const alpha = 0.055 * (1 - Math.sqrt(dSq) / CONNECT_DIST);
+            ctx.beginPath();
+            ctx.moveTo(pts[i].x, pts[i].y);
+            ctx.lineTo(pts[j].x, pts[j].y);
+            ctx.strokeStyle = `rgba(124, 58, 237, ${alpha.toFixed(3)})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
           }
         }
       }
-
-      animRef.current = requestAnimationFrame(draw);
     };
 
     animRef.current = requestAnimationFrame(draw);

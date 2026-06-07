@@ -132,9 +132,20 @@ function App() {
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
     });
-    function raf(time: number) { lenis.raf(time); requestAnimationFrame(raf); }
-    requestAnimationFrame(raf);
-    return () => { lenis.destroy(); };
+
+    // Cap scroll RAF at 90fps — no point running Lenis faster than the screen
+    const TARGET = 1000 / 90;
+    let last = 0;
+    let rafId = 0;
+    function raf(time: number) {
+      if (time - last >= TARGET) {
+        last = time;
+        lenis.raf(time);
+      }
+      rafId = requestAnimationFrame(raf);
+    }
+    rafId = requestAnimationFrame(raf);
+    return () => { lenis.destroy(); cancelAnimationFrame(rafId); };
   }, []);
 
   return (
