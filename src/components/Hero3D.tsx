@@ -197,7 +197,7 @@ export default function Hero3D() {
       <div style={{ position: 'absolute', left: '55%', top: '50%', transform: 'translate(-50%,-50%)', width: 600, height: 600, borderRadius: '50%', background: 'radial-gradient(circle, rgba(124,58,237,0.25) 0%, rgba(192,38,211,0.08) 40%, transparent 70%)', filter: 'blur(60px)', pointerEvents: 'none', zIndex: 0 }} />
       <div style={{ position: 'absolute', right: '8%', bottom: '15%', width: 300, height: 300, borderRadius: '50%', background: 'radial-gradient(circle, rgba(192,38,211,0.14) 0%, transparent 70%)', filter: 'blur(50px)', pointerEvents: 'none', zIndex: 0 }} />
 
-      {/* Two-column layout */}
+      {/* Two-column layout — pointer-none so right side doesn't block the canvas */}
       <div style={{
         position: 'relative', zIndex: 2,
         width: '100%', maxWidth: 1200,
@@ -205,9 +205,10 @@ export default function Hero3D() {
         display: 'flex', flexWrap: 'wrap',
         alignItems: 'center', justifyContent: 'center',
         gap: '40px 60px',
+        pointerEvents: 'none',
       }}>
-        {/* LEFT — text */}
-        <div style={{ flex: '1 1 320px', maxWidth: 540, textAlign: 'left' }}>
+        {/* LEFT — text: re-enable pointer events only here */}
+        <div style={{ flex: '1 1 320px', maxWidth: 540, textAlign: 'left', pointerEvents: 'auto' }}>
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
