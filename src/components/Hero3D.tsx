@@ -161,7 +161,7 @@ export default function Hero3D() {
     }}>
       {/* 3D Canvas */}
       <div style={{ position: 'absolute', inset: 0, zIndex: 1 }}>
-        <Canvas camera={{ position: [0, 0, 9], fov: 42 }} gl={{ antialias: true, alpha: true }} dpr={[1, 2]} style={{ background: 'transparent' }}>
+        <Canvas camera={{ position: [0, -1.2, 9], fov: 42 }} gl={{ antialias: true, alpha: true }} dpr={[1, 2]} style={{ background: 'transparent' }}>
           <Scene />
         </Canvas>
       </div>

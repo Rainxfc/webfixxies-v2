@@ -1,7 +1,10 @@
-import { useRef, useState } from 'react';
+import { useRef, useState, useCallback } from 'react';
 import { motion, useInView } from 'framer-motion';
 
-// ─── Webfixxies logo (reused from favicon) ───────────────────────────────────
+// ─── Types ────────────────────────────────────────────────────────────────────
+type IframeState = 'pending' | 'loaded' | 'blocked';
+
+// ─── Webfixxies logo ──────────────────────────────────────────────────────────
 function WFLogo({ size = 28 }: { size?: number }) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size * 46 / 48} viewBox="0 0 48 46" fill="none">
@@ -17,7 +20,312 @@ function WFLogo({ size = 28 }: { size?: number }) {
   );
 }
 
-// ─── NovaBites logo emoji card ────────────────────────────────────────────────
+// ─── Lock icon SVG ─────────────────────────────────────────────────────────────
+function LockIcon({ color = '#fff', size = 28 }: { color?: string; size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+      <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+    </svg>
+  );
+}
+
+// ─── GitHub icon ──────────────────────────────────────────────────────────────
+function GitHubIcon({ size = 12 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z" />
+    </svg>
+  );
+}
+
+// ─── Iframe fallback (shown when iframe is blocked) ───────────────────────────
+function IframeFallback({
+  name,
+  accent,
+  liveUrl,
+}: {
+  name: string;
+  accent: string;
+  liveUrl: string;
+}) {
+  return (
+    <div style={{
+      width: '100%',
+      height: '100%',
+      minHeight: 220,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: 14,
+      padding: '32px 20px',
+      background: `radial-gradient(ellipse 70% 60% at 50% 40%, ${accent}18 0%, transparent 70%), linear-gradient(135deg, #060010 0%, #0a0018 100%)`,
+      textAlign: 'center',
+    }}>
+      <LockIcon color={`${accent}99`} size={32} />
+      <div className="font-display" style={{
+        fontSize: 20,
+        fontWeight: 900,
+        letterSpacing: '-0.02em',
+        color: accent,
+      }}>
+        {name}
+      </div>
+      <div className="font-mono" style={{
+        fontSize: 9,
+        letterSpacing: '0.18em',
+        textTransform: 'uppercase',
+        color: 'rgba(255,255,255,0.4)',
+        maxWidth: 200,
+        lineHeight: 1.7,
+      }}>
+        Preview restricted by browser security
+      </div>
+      <a
+        href={liveUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: 6,
+          padding: '8px 18px',
+          borderRadius: 100,
+          background: `linear-gradient(135deg, ${accent}, ${accent}bb)`,
+          color: '#fff',
+          fontSize: 9,
+          fontFamily: 'Space Mono, monospace',
+          letterSpacing: '0.18em',
+          textTransform: 'uppercase',
+          textDecoration: 'none',
+          fontWeight: 700,
+          boxShadow: `0 0 20px ${accent}55`,
+          marginTop: 4,
+        }}
+      >
+        Open Live Site ↗
+      </a>
+    </div>
+  );
+}
+
+// ─── Iframe preview with browser chrome ───────────────────────────────────────
+function IframeBrowserFrame({
+  liveUrl,
+  accent,
+  glow,
+  isActive,
+  name,
+}: {
+  liveUrl: string;
+  accent: string;
+  accentAlt?: string;
+  glow: string;
+  isActive: boolean;
+  name: string;
+}) {
+  const [iframeState, setIframeState] = useState<IframeState>('pending');
+
+  // We use a timeout approach: if iframe doesn't load within 8s, mark as blocked.
+  // Also the onError handler catches frame errors.
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleIframeRef = useCallback((el: HTMLIFrameElement | null) => {
+    if (!el) return;
+    // Start a timeout — if load event doesn't fire, assume blocked
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => {
+      setIframeState((prev) => (prev === 'pending' ? 'blocked' : prev));
+    }, 8000);
+  }, []);
+
+  const handleLoad = useCallback(() => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    // Try to access contentDocument — if blocked by X-Frame-Options the browser
+    // still fires onLoad but the document is empty / cross-origin inaccessible.
+    // We mark as loaded and let the iframe render; fallback only triggers on error.
+    setIframeState('loaded');
+  }, []);
+
+  const handleError = useCallback(() => {
+    if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    setIframeState('blocked');
+  }, []);
+
+  return (
+    <div style={{
+      width: '100%',
+      borderRadius: 14,
+      overflow: 'hidden',
+      border: `1px solid ${isActive ? accent + '55' : 'rgba(139,92,246,0.15)'}`,
+      background: `linear-gradient(135deg, #060010 0%, #0a0018 100%)`,
+      boxShadow: isActive
+        ? `0 0 0 1px ${accent}22, 0 20px 60px rgba(0,0,0,0.7), 0 0 40px ${glow}`
+        : '0 8px 32px rgba(0,0,0,0.5)',
+      transition: 'box-shadow 0.4s, border-color 0.4s',
+      position: 'relative',
+    }}>
+      {/* Browser chrome bar */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 10,
+        padding: '9px 14px',
+        background: 'rgba(4,0,12,0.92)',
+        borderBottom: `1px solid ${accent}22`,
+      }}>
+        <div style={{ display: 'flex', gap: 5 }}>
+          {['#ef4444', '#f59e0b', '#10b981'].map((c, i) => (
+            <div key={i} style={{ width: 9, height: 9, borderRadius: '50%', background: c, opacity: 0.8 }} />
+          ))}
+        </div>
+        <div style={{
+          flex: 1,
+          display: 'flex',
+          alignItems: 'center',
+          gap: 7,
+          background: 'rgba(8,0,20,0.8)',
+          border: `1px solid ${accent}25`,
+          borderRadius: 6,
+          padding: '3px 10px',
+          overflow: 'hidden',
+        }}>
+          <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#10b981', flexShrink: 0 }} />
+          <span className="font-mono" style={{
+            fontSize: 8,
+            color: `${accent}99`,
+            letterSpacing: '0.1em',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+          }}>
+            {liveUrl.replace('https://', '')}
+          </span>
+        </div>
+        <a
+          href={liveUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            flexShrink: 0,
+            display: 'flex',
+            alignItems: 'center',
+            gap: 4,
+            padding: '3px 8px',
+            borderRadius: 5,
+            border: `1px solid ${accent}33`,
+            background: `${accent}11`,
+            textDecoration: 'none',
+          }}
+        >
+          <span className="font-mono" style={{ fontSize: 7.5, color: `${accent}bb`, letterSpacing: '0.12em' }}>OPEN ↗</span>
+        </a>
+      </div>
+
+      {/* Preview area */}
+      <div style={{ position: 'relative' }}>
+        {/* The iframe or fallback */}
+        {iframeState === 'blocked' ? (
+          <IframeFallback name={name} accent={accent} liveUrl={liveUrl} />
+        ) : (
+          <div style={{
+            position: 'relative',
+            paddingBottom: '56.25%',
+            overflow: 'hidden',
+          }}>
+            {/* Pending skeleton shimmer */}
+            {iframeState === 'pending' && (
+              <div style={{
+                position: 'absolute',
+                inset: 0,
+                background: `linear-gradient(135deg, #080010 0%, #100020 100%)`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: 2,
+              }}>
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12 }}>
+                  <motion.div
+                    animate={{ opacity: [0.3, 0.8, 0.3] }}
+                    transition={{ duration: 1.5, repeat: Infinity, ease: 'easeInOut' }}
+                  >
+                    <div style={{ width: 32, height: 32, borderRadius: '50%', border: `2px solid ${accent}44`, borderTopColor: accent, animation: 'spin 0.9s linear infinite' }} />
+                  </motion.div>
+                  <span className="font-mono" style={{ fontSize: 8, letterSpacing: '0.2em', color: `${accent}66`, textTransform: 'uppercase' }}>
+                    Loading preview…
+                  </span>
+                </div>
+              </div>
+            )}
+
+            {/* Scaled iframe wrapper */}
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '357.14%',   // 100 / 0.28
+              height: '357.14%',
+            }}>
+              <iframe
+                ref={handleIframeRef}
+                src={liveUrl}
+                title={`${name} preview`}
+                sandbox="allow-scripts allow-same-origin"
+                loading="lazy"
+                onLoad={handleLoad}
+                onError={handleError}
+                style={{
+                  width: 1440,
+                  height: 900,
+                  border: 'none',
+                  transform: 'scale(0.28)',
+                  transformOrigin: 'top left',
+                  display: 'block',
+                  pointerEvents: 'none',
+                }}
+              />
+            </div>
+
+            {/* Bottom gradient fade overlay */}
+            <div style={{
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: 80,
+              background: `linear-gradient(to bottom, transparent, #060010)`,
+              pointerEvents: 'none',
+              zIndex: 3,
+            }} />
+          </div>
+        )}
+      </div>
+
+      {/* Status bar */}
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '5px 14px',
+        background: 'rgba(4,0,12,0.95)',
+        borderTop: `1px solid ${accent}15`,
+      }}>
+        <span className="font-mono" style={{ fontSize: 7.5, color: `${accent}55`, letterSpacing: '0.18em' }}>LIVE DEMO</span>
+        <div style={{ height: 1.5, flex: 1, margin: '0 10px', background: 'rgba(139,92,246,0.06)', borderRadius: 1, overflow: 'hidden' }}>
+          <motion.div
+            animate={{ x: ['-100%', '100%'] }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+            style={{ height: '100%', width: '35%', background: `linear-gradient(90deg, transparent, ${accent}70, transparent)` }}
+          />
+        </div>
+        <span className="font-mono" style={{ fontSize: 7.5, color: 'rgba(139,92,246,0.35)', letterSpacing: '0.18em' }}>WF.CLIENT</span>
+      </div>
+    </div>
+  );
+}
+
+// ─── NovaBites logo card (visual side) ────────────────────────────────────────
 function NovaBitesCard() {
   const [hovered, setHovered] = useState(false);
   return (
@@ -38,7 +346,7 @@ function NovaBitesCard() {
         position: 'relative',
       }}
     >
-      {/* top accent */}
+      {/* top accent line */}
       <div style={{
         position: 'absolute', top: 0, left: 0, right: 0, height: 1.5,
         background: 'linear-gradient(90deg, transparent, #f97316, #fb923c, transparent)',
@@ -72,9 +380,10 @@ function NovaBitesCard() {
         minHeight: 200,
         background: 'radial-gradient(ellipse 80% 60% at 50% 40%, rgba(249,115,22,0.08) 0%, transparent 70%)',
       }}>
-        {/* NovaBites logo */}
         <motion.div
-          animate={hovered ? { scale: 1.08, filter: 'drop-shadow(0 0 20px rgba(249,115,22,0.6))' } : { scale: 1, filter: 'drop-shadow(0 0 8px rgba(249,115,22,0.3))' }}
+          animate={hovered
+            ? { scale: 1.08, filter: 'drop-shadow(0 0 20px rgba(249,115,22,0.6))' }
+            : { scale: 1, filter: 'drop-shadow(0 0 8px rgba(249,115,22,0.3))' }}
           transition={{ duration: 0.4 }}
           style={{ fontSize: 64, lineHeight: 1, userSelect: 'none' }}
         >
@@ -109,7 +418,7 @@ function NovaBitesCard() {
           padding: '4px 12px', borderRadius: 100,
           border: '1px solid rgba(249,115,22,0.25)', background: 'rgba(249,115,22,0.08)',
         }}>
-          <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#f97316', animation: 'glow-pulse 2s ease-in-out infinite' }} />
+          <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#f97316' }} />
           <span className="font-mono" style={{ fontSize: 7.5, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(249,115,22,0.7)' }}>
             Demo Project
           </span>
@@ -135,201 +444,26 @@ function NovaBitesCard() {
   );
 }
 
-// ─── Live site browser frame (Vercel links, no iframe issues) ─────────────────
-function BrowserFrame({ project, isActive }: { project: typeof liveProjects[0]; isActive: boolean }) {
-  return (
-    <div style={{
-      width: '100%', borderRadius: 14, overflow: 'hidden',
-      border: `1px solid ${isActive ? project.accent + '55' : 'rgba(139,92,246,0.15)'}`,
-      background: project.screenBg,
-      boxShadow: isActive
-        ? `0 0 0 1px ${project.accent}22, 0 20px 60px rgba(0,0,0,0.7), 0 0 40px ${project.glow}`
-        : '0 8px 32px rgba(0,0,0,0.5)',
-      transition: 'box-shadow 0.4s, border-color 0.4s', position: 'relative',
-    }}>
-      {/* chrome */}
-      <div style={{
-        display: 'flex', alignItems: 'center', gap: 10, padding: '9px 14px',
-        background: 'rgba(4,0,12,0.92)', borderBottom: `1px solid ${project.accent}22`,
-      }}>
-        <div style={{ display: 'flex', gap: 5 }}>
-          {['#ef4444', '#f59e0b', '#10b981'].map((c, i) => (
-            <div key={i} style={{ width: 9, height: 9, borderRadius: '50%', background: c, opacity: 0.8 }} />
-          ))}
-        </div>
-        <div style={{
-          flex: 1, display: 'flex', alignItems: 'center', gap: 7,
-          background: 'rgba(8,0,20,0.8)', border: `1px solid ${project.accent}25`,
-          borderRadius: 6, padding: '3px 10px', overflow: 'hidden',
-        }}>
-          <div style={{ width: 5, height: 5, borderRadius: '50%', background: '#10b981', flexShrink: 0 }} />
-          <span className="font-mono" style={{ fontSize: 8, color: `${project.accent}99`, letterSpacing: '0.1em', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-            {project.liveUrl.replace('https://', '')}
-          </span>
-        </div>
-        <a href={project.liveUrl} target="_blank" rel="noopener noreferrer"
-          style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 4, padding: '3px 8px', borderRadius: 5, border: `1px solid ${project.accent}33`, background: `${project.accent}11`, textDecoration: 'none' }}>
-          <span className="font-mono" style={{ fontSize: 7.5, color: `${project.accent}bb`, letterSpacing: '0.12em' }}>OPEN ↗</span>
-        </a>
-      </div>
-
-      {/* screen mockup — coded, no iframe */}
-      <div style={{ position: 'relative', overflow: 'hidden', minHeight: 220 }}>
-        <project.ScreenContent isActive={isActive} />
-        {/* bottom fade */}
-        <div style={{
-          position: 'absolute', bottom: 0, left: 0, right: 0, height: 60,
-          background: `linear-gradient(to bottom, transparent, ${project.screenBgEnd})`,
-          pointerEvents: 'none',
-        }} />
-        {/* scan line */}
-        {isActive && (
-          <motion.div
-            animate={{ y: ['-5%', '110%'] }}
-            transition={{ duration: 3.5, repeat: Infinity, ease: 'linear', repeatDelay: 2 }}
-            style={{
-              position: 'absolute', left: 0, right: 0, height: 1.5,
-              background: `linear-gradient(90deg, transparent, ${project.accent}55, transparent)`,
-              pointerEvents: 'none',
-            }}
-          />
-        )}
-      </div>
-
-      {/* status */}
-      <div style={{
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-        padding: '5px 14px', background: 'rgba(4,0,12,0.95)',
-        borderTop: `1px solid ${project.accent}15`,
-      }}>
-        <span className="font-mono" style={{ fontSize: 7.5, color: `${project.accent}55`, letterSpacing: '0.18em' }}>LIVE DEMO</span>
-        <div style={{ height: 1.5, flex: 1, margin: '0 10px', background: 'rgba(139,92,246,0.06)', borderRadius: 1, overflow: 'hidden' }}>
-          <motion.div
-            animate={{ x: ['-100%', '100%'] }}
-            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
-            style={{ height: '100%', width: '35%', background: `linear-gradient(90deg, transparent, ${project.accent}70, transparent)` }}
-          />
-        </div>
-        <span className="font-mono" style={{ fontSize: 7.5, color: 'rgba(139,92,246,0.35)', letterSpacing: '0.18em' }}>WF.CLIENT</span>
-      </div>
-    </div>
-  );
+// ─── Project data ──────────────────────────────────────────────────────────────
+interface Project {
+  id: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  liveUrl: string | null;
+  repoUrl: string;
+  by: string;
+  accent: string;
+  accentAlt: string;
+  glow: string;
+  glowSoft: string;
+  tag: string;
+  icon: string;
+  features: string[];
+  hasIframe: boolean;
 }
 
-// ─── KFC screen mockup ────────────────────────────────────────────────────────
-function KFCScreen({ isActive }: { isActive: boolean }) {
-  return (
-    <div style={{ background: 'linear-gradient(180deg, #0a0000 0%, #1a0002 100%)', padding: '20px 18px', minHeight: 220 }}>
-      {/* hero bar */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <div style={{ fontSize: 20 }}>🍗</div>
-          <span className="font-display" style={{ fontSize: 13, fontWeight: 900, color: '#dc2626', letterSpacing: '-0.01em' }}>KFC</span>
-        </div>
-        <div style={{ display: 'flex', gap: 10 }}>
-          {['Menu', 'Deals', 'Order'].map(n => (
-            <span key={n} className="font-mono" style={{ fontSize: 7.5, color: 'rgba(220,38,38,0.55)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>{n}</span>
-          ))}
-        </div>
-      </div>
-      {/* hero headline */}
-      <div style={{ marginBottom: 14 }}>
-        <div className="font-display" style={{ fontSize: 18, fontWeight: 900, color: '#f5f5f5', lineHeight: 1.1, marginBottom: 4 }}>
-          Finger Lickin'<br />
-          <span style={{ color: '#dc2626' }}>Good.</span>
-        </div>
-        <div style={{ fontSize: 10, color: 'rgba(245,245,245,0.45)', fontWeight: 300 }}>Original Recipe. Unbeatable taste.</div>
-      </div>
-      {/* menu cards */}
-      <div style={{ display: 'flex', gap: 8 }}>
-        {[
-          { icon: '🍗', name: 'Original', price: '$12.99', hot: true },
-          { icon: '🌶️', name: 'Spicy', price: '$13.49', hot: false },
-          { icon: '🍟', name: 'Combo', price: '$15.99', hot: false },
-        ].map((item, i) => (
-          <motion.div
-            key={item.name}
-            initial={{ opacity: 0, y: 12 }}
-            animate={isActive ? { opacity: 1, y: 0 } : { opacity: 0.6, y: 0 }}
-            transition={{ delay: i * 0.08, duration: 0.4 }}
-            style={{
-              flex: 1, padding: '10px 8px', borderRadius: 8,
-              background: 'rgba(220,38,38,0.08)', border: '1px solid rgba(220,38,38,0.2)',
-              textAlign: 'center',
-            }}
-          >
-            <div style={{ fontSize: 18, marginBottom: 4 }}>{item.icon}</div>
-            <div className="font-mono" style={{ fontSize: 7.5, color: '#f5f5f5', letterSpacing: '0.08em', marginBottom: 2 }}>{item.name}</div>
-            <div style={{ fontSize: 9, color: '#dc2626', fontWeight: 700 }}>{item.price}</div>
-            {item.hot && <div style={{ fontSize: 6.5, color: 'rgba(220,38,38,0.7)', marginTop: 2, letterSpacing: '0.1em' }}>POPULAR</div>}
-          </motion.div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ─── Pizza Hut screen mockup ──────────────────────────────────────────────────
-function PizzaScreen({ isActive }: { isActive: boolean }) {
-  return (
-    <div style={{ background: 'linear-gradient(180deg, #080005 0%, #150008 100%)', padding: '20px 18px', minHeight: 220 }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 14 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <div style={{ fontSize: 18 }}>🍕</div>
-          <span className="font-display" style={{ fontSize: 11, fontWeight: 900, color: '#e11d48', letterSpacing: '-0.01em' }}>PIZZA HUT</span>
-        </div>
-        <div style={{ display: 'flex', gap: 8 }}>
-          {['Pizzas', 'Deals', 'Track'].map(n => (
-            <span key={n} className="font-mono" style={{ fontSize: 7, color: 'rgba(225,29,72,0.5)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>{n}</span>
-          ))}
-        </div>
-      </div>
-      <div style={{ marginBottom: 14 }}>
-        <div className="font-display" style={{ fontSize: 17, fontWeight: 900, color: '#fff', lineHeight: 1.1, marginBottom: 4 }}>
-          No One<br />
-          <span style={{ color: '#e11d48' }}>OutPizzas</span><br />
-          The Hut.
-        </div>
-        <motion.div
-          animate={isActive ? { opacity: [0.5, 1, 0.5] } : {}}
-          transition={{ duration: 2, repeat: Infinity }}
-          style={{
-            display: 'inline-block', marginTop: 6, padding: '4px 10px', borderRadius: 100,
-            background: '#e11d48', fontSize: 8.5, color: '#fff', fontWeight: 700,
-          }}
-        >
-          Order Now
-        </motion.div>
-      </div>
-      {/* pizza grid */}
-      <div style={{ display: 'flex', gap: 8 }}>
-        {[
-          { icon: '🍕', name: 'Pepperoni', tag: 'Fan Fave' },
-          { icon: '🧀', name: 'Cheese', tag: 'Classic' },
-          { icon: '🌿', name: 'Veggie', tag: 'New' },
-        ].map((p, i) => (
-          <motion.div
-            key={p.name}
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={isActive ? { opacity: 1, scale: 1 } : { opacity: 0.5, scale: 1 }}
-            transition={{ delay: i * 0.07, duration: 0.35 }}
-            style={{
-              flex: 1, padding: '10px 7px', borderRadius: 8, textAlign: 'center',
-              background: 'rgba(225,29,72,0.07)', border: '1px solid rgba(225,29,72,0.18)',
-            }}
-          >
-            <div style={{ fontSize: 20, marginBottom: 4 }}>{p.icon}</div>
-            <div className="font-mono" style={{ fontSize: 7, color: '#fff', letterSpacing: '0.08em', marginBottom: 2 }}>{p.name}</div>
-            <div style={{ fontSize: 6.5, color: '#e11d48', letterSpacing: '0.12em', textTransform: 'uppercase' }}>{p.tag}</div>
-          </motion.div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-// ─── Live project data ────────────────────────────────────────────────────────
-const liveProjects = [
+const projects: Project[] = [
   {
     id: 'kfc',
     title: 'KFC Demo',
@@ -338,7 +472,6 @@ const liveProjects = [
     liveUrl: 'https://kfc-webfixxies-demo.vercel.app/',
     repoUrl: 'https://github.com/Mcethereal/KFC_Webfixxies_Demo',
     by: 'VEX',
-    byLabel: 'Design Principal',
     accent: '#dc2626',
     accentAlt: '#f87171',
     glow: 'rgba(220,38,38,0.2)',
@@ -346,9 +479,7 @@ const liveProjects = [
     tag: 'FOOD & BRAND',
     icon: '🍗',
     features: ['Brand Overhaul', 'Bold Typography', 'Conversion Layout', 'Mobile First'],
-    screenBg: 'linear-gradient(135deg, #080000 0%, #180000 100%)',
-    screenBgEnd: '#080000',
-    ScreenContent: KFCScreen,
+    hasIframe: true,
   },
   {
     id: 'pizzahut',
@@ -358,7 +489,6 @@ const liveProjects = [
     liveUrl: 'https://pizzahut-demo-page.vercel.app/',
     repoUrl: 'https://github.com/AlexWoods6351/Pizzahut-demo-page',
     by: 'ARSENIC',
-    byLabel: 'Growth Strategist',
     accent: '#e11d48',
     accentAlt: '#fb7185',
     glow: 'rgba(225,29,72,0.2)',
@@ -366,14 +496,12 @@ const liveProjects = [
     tag: 'FOOD & BRAND',
     icon: '🍕',
     features: ['Modern Redesign', 'Animated Sections', 'Ordering Flow', 'Responsive Layout'],
-    screenBg: 'linear-gradient(135deg, #080005 0%, #150008 100%)',
-    screenBgEnd: '#080005',
-    ScreenContent: PizzaScreen,
+    hasIframe: true,
   },
 ];
 
-// ─── Live project card ────────────────────────────────────────────────────────
-function LiveProjectCard({ project, index }: { project: typeof liveProjects[0]; index: number }) {
+// ─── Live project card (KFC / Pizza Hut) ──────────────────────────────────────
+function LiveProjectCard({ project, index }: { project: Project; index: number }) {
   const [hovered, setHovered] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: '-60px' });
@@ -412,15 +540,16 @@ function LiveProjectCard({ project, index }: { project: typeof liveProjects[0]; 
         filter: 'blur(50px)', pointerEvents: 'none',
         opacity: hovered ? 1 : 0.5, transition: 'opacity 0.4s',
       }} />
-      {/* top accent */}
+      {/* top accent line */}
       <div style={{
         position: 'absolute', top: 0, left: 0, right: 0, height: 1.5,
         background: `linear-gradient(90deg, transparent, ${project.accent}, ${project.accentAlt}, transparent)`,
         opacity: hovered ? 0.85 : 0.3, transition: 'opacity 0.4s',
       }} />
 
-      {/* Text side */}
+      {/* ── Text column ─── */}
       <div style={{ position: 'relative', zIndex: 1 }}>
+        {/* Tags row */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
           <div className="font-mono" style={{
             display: 'inline-flex', alignItems: 'center', gap: 7,
@@ -450,6 +579,7 @@ function LiveProjectCard({ project, index }: { project: typeof liveProjects[0]; 
           {project.description}
         </p>
 
+        {/* Feature pills */}
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 32 }}>
           {project.features.map(f => (
             <span key={f} className="font-mono" style={{
@@ -461,25 +591,25 @@ function LiveProjectCard({ project, index }: { project: typeof liveProjects[0]; 
           ))}
         </div>
 
+        {/* CTA buttons */}
         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-          <a href={project.liveUrl} target="_blank" rel="noopener noreferrer"
-            style={{
-              display: 'inline-flex', alignItems: 'center', gap: 8,
-              padding: '11px 24px', borderRadius: 100,
-              background: `linear-gradient(135deg, ${project.accent}, ${project.accentAlt})`,
-              border: 'none', color: '#fff', fontSize: 10,
-              fontFamily: 'Space Mono, monospace', letterSpacing: '0.15em',
-              textTransform: 'uppercase', textDecoration: 'none', cursor: 'pointer',
-              boxShadow: `0 0 24px ${project.glow}`, transition: 'all 0.3s',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = `0 0 40px ${project.glow}`; }}
-            onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = `0 0 24px ${project.glow}`; }}
-          >
-            View Live
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-              <path d="M7 17L17 7M17 7H7M17 7V17" />
-            </svg>
-          </a>
+          {project.liveUrl && (
+            <a href={project.liveUrl} target="_blank" rel="noopener noreferrer"
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 8,
+                padding: '11px 24px', borderRadius: 100,
+                background: `linear-gradient(135deg, ${project.accent}, ${project.accentAlt})`,
+                border: 'none', color: '#fff', fontSize: 10,
+                fontFamily: 'Space Mono, monospace', letterSpacing: '0.15em',
+                textTransform: 'uppercase', textDecoration: 'none', cursor: 'pointer',
+                boxShadow: `0 0 24px ${project.glow}`, transition: 'all 0.3s',
+              }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = `0 0 40px ${project.glow}`; }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = `0 0 24px ${project.glow}`; }}
+            >
+              View Live ↗
+            </a>
+          )}
           <a href={project.repoUrl} target="_blank" rel="noopener noreferrer"
             style={{
               display: 'inline-flex', alignItems: 'center', gap: 8,
@@ -493,27 +623,34 @@ function LiveProjectCard({ project, index }: { project: typeof liveProjects[0]; 
             onMouseEnter={e => { e.currentTarget.style.borderColor = `${project.accent}66`; e.currentTarget.style.color = '#f5f0ff'; }}
             onMouseLeave={e => { e.currentTarget.style.borderColor = `${project.accent}33`; e.currentTarget.style.color = `${project.accentAlt}cc`; }}
           >
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z" />
-            </svg>
+            <GitHubIcon size={12} />
             Source
           </a>
         </div>
       </div>
 
-      {/* Browser preview */}
+      {/* ── Preview column ── */}
       <motion.div
         style={{ position: 'relative', zIndex: 1 }}
         animate={hovered ? { y: -6 } : { y: 0 }}
         transition={{ type: 'spring', stiffness: 300, damping: 25 }}
       >
-        <BrowserFrame project={project} isActive={hovered} />
+        {project.liveUrl && (
+          <IframeBrowserFrame
+            liveUrl={project.liveUrl}
+            accent={project.accent}
+            accentAlt={project.accentAlt}
+            glow={project.glow}
+            isActive={hovered}
+            name={project.title}
+          />
+        )}
       </motion.div>
     </motion.div>
   );
 }
 
-// ─── NovaBites card (no live preview, just logo) ──────────────────────────────
+// ─── NovaBites project card ────────────────────────────────────────────────────
 function NovaBitesProjectCard({ index }: { index: number }) {
   const [hovered, setHovered] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -558,7 +695,7 @@ function NovaBitesProjectCard({ index }: { index: number }) {
         opacity: hovered ? 0.85 : 0.3, transition: 'opacity 0.4s',
       }} />
 
-      {/* Text */}
+      {/* ── Text column ── */}
       <div style={{ position: 'relative', zIndex: 1 }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 }}>
           <div className="font-mono" style={{
@@ -600,29 +737,28 @@ function NovaBitesProjectCard({ index }: { index: number }) {
           ))}
         </div>
 
+        {/* CTA: repo only */}
         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
           <a href="https://github.com/Rainxfc/NovaBites" target="_blank" rel="noopener noreferrer"
             style={{
               display: 'inline-flex', alignItems: 'center', gap: 8,
-              padding: '10px 22px', borderRadius: 100,
-              background: 'transparent', border: '1px solid rgba(249,115,22,0.3)',
-              color: 'rgba(251,146,60,0.8)', fontSize: 10,
+              padding: '11px 24px', borderRadius: 100,
+              background: 'linear-gradient(135deg, #f97316, #fb923c)',
+              border: 'none', color: '#fff', fontSize: 10,
               fontFamily: 'Space Mono, monospace', letterSpacing: '0.15em',
-              textTransform: 'uppercase', textDecoration: 'none',
-              transition: 'all 0.3s',
+              textTransform: 'uppercase', textDecoration: 'none', cursor: 'pointer',
+              boxShadow: '0 0 24px rgba(249,115,22,0.3)', transition: 'all 0.3s',
             }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(249,115,22,0.6)'; e.currentTarget.style.color = '#f5f0ff'; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(249,115,22,0.3)'; e.currentTarget.style.color = 'rgba(251,146,60,0.8)'; }}
+            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 0 40px rgba(249,115,22,0.45)'; }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 0 24px rgba(249,115,22,0.3)'; }}
           >
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z" />
-            </svg>
+            <GitHubIcon size={12} />
             View Source
           </a>
         </div>
       </div>
 
-      {/* NovaBites visual card */}
+      {/* ── NovaBites logo card ── */}
       <motion.div
         style={{ position: 'relative', zIndex: 1 }}
         animate={hovered ? { y: -6 } : { y: 0 }}
@@ -634,7 +770,7 @@ function NovaBitesProjectCard({ index }: { index: number }) {
   );
 }
 
-// ─── Main section ─────────────────────────────────────────────────────────────
+// ─── Main section ──────────────────────────────────────────────────────────────
 export default function ProjectsSection() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: '-80px' });
@@ -649,7 +785,7 @@ export default function ProjectsSection() {
       <div style={{ position: 'absolute', bottom: '20%', right: '10%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(192,38,211,0.07) 0%, transparent 70%)', filter: 'blur(80px)', pointerEvents: 'none' }} />
 
       <div style={{ position: 'relative', zIndex: 1, maxWidth: 1200, margin: '0 auto' }}>
-        {/* Header */}
+        {/* Section header */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -670,7 +806,7 @@ export default function ProjectsSection() {
           <p style={{ maxWidth: 560, margin: '0 auto', fontSize: 15, color: '#7c6a99', lineHeight: 1.8, fontWeight: 300 }}>
             Live projects delivered by the Web Fixxies collective — fast food brand experiences engineered to command attention and drive retention.
           </p>
-          {/* WF logo + credit row */}
+          {/* WF logo credit row */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginTop: 24 }}>
             <WFLogo size={20} />
             <span className="font-mono" style={{ fontSize: 9, letterSpacing: '0.25em', textTransform: 'uppercase', color: 'rgba(167,139,250,0.45)' }}>
@@ -681,10 +817,10 @@ export default function ProjectsSection() {
 
         {/* Cards */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
-          {liveProjects.map((project, i) => (
+          {projects.map((project, i) => (
             <LiveProjectCard key={project.id} project={project} index={i} />
           ))}
-          <NovaBitesProjectCard index={liveProjects.length} />
+          <NovaBitesProjectCard index={projects.length} />
         </div>
       </div>
     </section>
