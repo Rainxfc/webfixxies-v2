@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizza Hut Bangladesh - Interactive Menu</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Glassmorphism Navigation -->
+    <nav class="glass-nav">
+        <div class="logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d2/Pizza_Hut_logo.svg" alt="Pizza Hut BD Logo">
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">3D Builder</a></li>
+            <li><a href="menu.html" class="active">Menu</a></li>
+            <li><a href="deals.html">Deals</a></li>
+            <li class="dropdown">
+                <a href="#">Stores ▾</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Gulshan</a></li>
+                    <li><a href="#">Dhanmondi</a></li>
+                    <li><a href="#">Banani</a></li>
+                    <li><a href="#">Uttara</a></li>
+                    <li><a href="#">Baily Road</a></li>
+                </ul>
+            </li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <div class="cart">
+            <span class="cart-icon">🛒</span>
+            <span class="cart-count">0</span>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="hero">
+        <img src="assets/offer.jpg" alt="Everyday Value 1 Plus 1 2 Medium Pizzas 1099 Tk">
+    </header>
+
+    <main class="menu-container">
+        <!-- Category Filters -->
+        <div class="filters">
+            <button class="filter-btn active" data-filter="all">All</button>
+            <button class="filter-btn" data-filter="pizzas">Pizzas</button>
+            <button class="filter-btn" data-filter="sides">Sides</button>
+            <button class="filter-btn" data-filter="desserts">Desserts</button>
+        </div>
+
+        <!-- Menu Grid -->
+        <div class="menu-grid">
+            
+            <!-- Item 1: Spicy Chicken Pizza -->
+            <div class="menu-card tilt-card" data-category="pizzas">
+                <div class="card-image placeholder-img" style="background: transparent;">
+                    <img src="assets/spicy_chicken.png" alt="Spicy Chicken Pizza" style="max-height: 100%; max-width: 100%; object-fit: contain; filter: drop-shadow(0 15px 15px rgba(0,0,0,0.5));">
+                </div>
+                <div class="card-content">
+                    <div class="card-header">
+                        <h3>Spicy Chicken</h3>
+                        <span class="price" data-base-price="550">৳ 550</span>
+                    </div>
+                    <p class="description">Spicy chicken chunks, green chilies, onions and capsicum.</p>
+                    
+                    <div class="options">
+                        <div class="toggle-group">
+                            <label>Size:</label>
+                            <div class="size-toggle">
+                                <input type="radio" name="size-1" id="size-1-s" value="1" checked>
+                                <label for="size-1-s">S</label>
+                                <input type="radio" name="size-1" id="size-1-m" value="1.5">
+                                <label for="size-1-m">M</label>
+                                <input type="radio" name="size-1" id="size-1-l" value="2">
+                                <label for="size-1-l">L</label>
+                            </div>
+                        </div>
+                        <div class="toggle-group">
+                            <label>Crust:</label>
+                            <select class="crust-select">
+                                <option value="0">Pan</option>
+                                <option value="150">Stuffed (+৳150)</option>
+                                <option value="0">Thin</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="spice-meter">
+                        <label>Spice Level: <span class="spice-value-text">Medium</span></label>
+                        <input type="range" min="1" max="5" value="3" class="slider spice-slider">
+                        <div class="spice-labels">
+                            <span>Mild</span>
+                            <span>Fire</span>
+                        </div>
+                    </div>
+
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+
+            <!-- Item 2: Beef Kala Bhuna -->
+            <div class="menu-card tilt-card" data-category="pizzas">
+                <div class="card-image placeholder-img" style="background: transparent;">
+                    <img src="assets/kala_bhuna.png" alt="Beef Kala Bhuna Pizza" style="max-height: 100%; max-width: 100%; object-fit: contain; filter: drop-shadow(0 15px 15px rgba(0,0,0,0.5));">
+                </div>
+                <div class="card-content">
+                    <div class="card-header">
+                        <h3>Beef Kala Bhuna</h3>
+                        <span class="price" data-base-price="650">৳ 650</span>
+                    </div>
+                    <p class="description">Traditional Kala Bhuna beef with a perfect cheese blend.</p>
+                    
+                    <div class="options">
+                        <div class="toggle-group">
+                            <label>Size:</label>
+                            <div class="size-toggle">
+                                <input type="radio" name="size-2" id="size-2-s" value="1" checked>
+                                <label for="size-2-s">S</label>
+                                <input type="radio" name="size-2" id="size-2-m" value="1.5">
+                                <label for="size-2-m">M</label>
+                                <input type="radio" name="size-2" id="size-2-l" value="2">
+                                <label for="size-2-l">L</label>
+                            </div>
+                        </div>
+                        <div class="toggle-group">
+                            <label>Crust:</label>
+                            <select class="crust-select">
+                                <option value="0">Pan</option>
+                                <option value="150">Stuffed (+৳150)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="spice-meter">
+                        <label>Spice Level: <span class="spice-value-text">Hot</span></label>
+                        <input type="range" min="1" max="5" value="4" class="slider spice-slider">
+                        <div class="spice-labels">
+                            <span>Mild</span>
+                            <span>Fire</span>
+                        </div>
+                    </div>
+
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+
+            <!-- Item 3: Garlic Bread -->
+            <div class="menu-card tilt-card" data-category="sides">
+                <div class="card-image placeholder-img" style="background: transparent;">
+                    <img src="assets/garlic_bread.png" alt="Garlic Bread" style="max-height: 100%; max-width: 100%; object-fit: contain; filter: drop-shadow(0 15px 15px rgba(0,0,0,0.5));">
+                </div>
+                <div class="card-content">
+                    <div class="card-header">
+                        <h3>Garlic Bread (4 pcs)</h3>
+                        <span class="price" data-base-price="180">৳ 180</span>
+                    </div>
+                    <p class="description">Crispy garlic bread baked to perfection.</p>
+                    
+                    <div class="options">
+                        <div class="toggle-group">
+                            <label>Add-ons:</label>
+                            <select class="crust-select">
+                                <option value="0">Plain</option>
+                                <option value="50">With Cheese (+৳50)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+
+             <!-- Item 4: Choco Volcano -->
+             <div class="menu-card tilt-card" data-category="desserts">
+                <div class="card-image placeholder-img" style="background: transparent;">
+                    <img src="assets/choco_volcano.jpg" alt="Choco Volcano" style="max-height: 100%; max-width: 100%; object-fit: cover; border-radius: 12px; filter: drop-shadow(0 10px 10px rgba(0,0,0,0.5));">
+                </div>
+                <div class="card-content">
+                    <div class="card-header">
+                        <h3>Choco Volcano</h3>
+                        <span class="price" data-base-price="250">৳ 250</span>
+                    </div>
+                    <p class="description">Warm chocolate cake with a gooey chocolate center.</p>
+
+                    <button class="add-to-cart">Add to Cart</button>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Pizza Hut Bangladesh. Premium Experience.</p>
+        <div style="margin-top: 15px; display: flex; justify-content: center; align-items: center; gap: 10px;">
+            <p style="font-size: 0.85rem; color: var(--ph-gray); margin: 0;">Demo by Arsenic(Ahnaf) from Webfixxies so many things were not added</p>
+            <img src="assets/webfixxies_logo.png" alt="Webfixxies Logo" style="height: 35px; opacity: 0.8;">
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

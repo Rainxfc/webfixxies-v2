@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Experience the legendary Beef Kala Bhuna Pizza and customize your flavor in interactive 3D at Pizza Hut Bangladesh. Order Pan Pizza, Stuffed Crust, and local favorites online.">
+    <title>Pizza Hut Bangladesh - 3D Interactive Customizer</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Core Styling -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Three.js and OrbitControls CDNs -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+
+    <!-- Sticky Navigation Bar -->
+    <header class="navbar">
+        <div class="nav-container">
+            <!-- Brand Logo (High Quality Image) -->
+            <a href="#" class="logo-link" id="nav-logo">
+                <img src="logo.svg" alt="Pizza Hut Bangladesh Logo" class="ph-logo" style="height: 48px; width: auto; object-fit: contain;">
+            </a>
+
+            <!-- Navigation Links -->
+            <nav class="nav-menu">
+                <a href="#customizer-section" class="nav-item active">3D Builder</a>
+                <a href="menu.html" class="nav-item">Menu</a>
+                <a href="#deals-section" class="nav-item">Hot Deals</a>
+                <a href="#kala-bhuna-section" class="nav-item">Local Flavors</a>
+                <a href="#outlets-section" class="nav-item">Find Outlets</a>
+            </nav>
+
+            <!-- Right Controls: Sound, Toggle Order Mode, Cart button -->
+            <div class="nav-right">
+                <button class="sound-toggle-btn" id="sound-btn" aria-label="Toggle sound">
+                    <i class="fa-solid fa-volume-xmark"></i>
+                </button>
+
+                <div class="order-type-switch">
+                    <button class="switch-option active" data-type="delivery">Delivery</button>
+                    <button class="switch-option" data-type="takeaway">Takeaway</button>
+                </div>
+
+                <button class="cart-btn" id="cart-drawer-toggle">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                    <span class="cart-badge" id="cart-qty-badge">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        
+        <!-- Hero Section: Interactive 3D Customizer -->
+        <section id="customizer-section" class="hero-customizer">
+            
+            <!-- Left Side: Interactive Controls Overlay -->
+            <div class="customizer-controls-container">
+                <div class="hero-text">
+                    <span class="badge-local"><i class="fa-solid fa-fire"></i> Local Favorite</span>
+                    <h1 class="glow-text">Craft Your Perfect Slice</h1>
+                    <p class="hero-desc">Experience Pizza Hut Bangladesh's rich local spices. Add legendary **Beef Kala Bhuna** or **Chicken Tikka**, customize your crust, and watch it bake in real-time 3D!</p>
+                </div>
+
+                <!-- Customizer Panel -->
+                <div class="customizer-card glass-panel">
+                    <!-- Tab headers -->
+                    <div class="customizer-tabs">
+                        <button class="tab-btn active" data-tab="crust"><i class="fa-solid fa-circle-dot"></i> Crust</button>
+                        <button class="tab-btn" data-tab="toppings"><i class="fa-solid fa-pepper-hot"></i> Toppings</button>
+                    </div>
+
+                    <!-- Tab Content: Crust -->
+                    <div class="tab-content active" id="tab-crust">
+                        <h3 class="panel-subtitle">Select Signature Crust</h3>
+                        <div class="option-grid">
+                            <div class="option-card crust-card active" data-crust="pan">
+                                <div class="option-icon"><i class="fa-solid fa-circle"></i></div>
+                                <div class="option-details">
+                                    <h4>Signature Pan Pizza</h4>
+                                    <p>Golden, crispy outside, fluffy inside. +BDT 0</p>
+                                </div>
+                            </div>
+                            <div class="option-card crust-card" data-crust="thin">
+                                <div class="option-icon"><i class="fa-solid fa-border-none"></i></div>
+                                <div class="option-details">
+                                    <h4>Thin 'N Crispy</h4>
+                                    <p>Light, thin, ultra-crisp crust. +BDT 50</p>
+                                </div>
+                            </div>
+                            <div class="option-card crust-card" data-crust="stuffed">
+                                <div class="option-icon"><i class="fa-solid fa-circle-notch"></i></div>
+                                <div class="option-details">
+                                    <h4>Cheesy Stuffed Crust</h4>
+                                    <p>Ring of melted mozzarella cheese. +BDT 180</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tab Content: Toppings -->
+                    <div class="tab-content" id="tab-toppings">
+                        <h3 class="panel-subtitle">Add Local & Classic Toppings</h3>
+                        <div class="topping-selectors">
+                            
+                            <!-- Local Special 1 -->
+                            <div class="topping-item" data-topping="kalabhuna">
+                                <div class="topping-checkbox-wrapper">
+                                    <input type="checkbox" id="top-kb" class="topping-cb">
+                                    <label for="top-kb" class="topping-lbl">
+                                        <span class="lbl-main">Beef Kala Bhuna <span class="badge-spicy">Spicy</span></span>
+                                        <span class="lbl-sub">Traditional slow-cooked spiced beef. +BDT 150</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Local Special 2 -->
+                            <div class="topping-item" data-topping="chickentikka">
+                                <div class="topping-checkbox-wrapper">
+                                    <input type="checkbox" id="top-ct" class="topping-cb">
+                                    <label for="top-ct" class="topping-lbl">
+                                        <span class="lbl-main">Chicken Tikka</span>
+                                        <span class="lbl-sub">Marinated charcoal-grilled chicken cubes. +BDT 120</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Green Capsicum -->
+                            <div class="topping-item" data-topping="capsicum">
+                                <div class="topping-checkbox-wrapper">
+                                    <input type="checkbox" id="top-cp" class="topping-cb">
+                                    <label for="top-cp" class="topping-lbl">
+                                        <span class="lbl-main">Green Capsicum</span>
+                                        <span class="lbl-sub">Fresh green bell pepper slices. +BDT 60</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Mushrooms -->
+                            <div class="topping-item" data-topping="mushrooms">
+                                <div class="topping-checkbox-wrapper">
+                                    <input type="checkbox" id="top-mr" class="topping-cb">
+                                    <label for="top-mr" class="topping-lbl">
+                                        <span class="lbl-main">Fresh Mushrooms</span>
+                                        <span class="lbl-sub">Sautéed earthy button mushrooms. +BDT 70</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Red Onions -->
+                            <div class="topping-item" data-topping="onions">
+                                <div class="topping-checkbox-wrapper">
+                                    <input type="checkbox" id="top-on" class="topping-cb">
+                                    <label for="top-on" class="topping-lbl">
+                                        <span class="lbl-main">Sweet Red Onions</span>
+                                        <span class="lbl-sub">Crispy sliced red onions. +BDT 40</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Customizer Actions -->
+                <div class="customizer-actions glass-panel">
+                    <div class="price-display">
+                        <span class="price-lbl">Estimated Price</span>
+                        <div class="price-val">BDT <span id="custom-pizza-price">799</span></div>
+                    </div>
+                    <button class="add-to-cart-btn" id="add-pizza-to-cart">
+                        <i class="fa-solid fa-cart-plus"></i> Add to Order
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Side: 3D Rendering Canvas Container -->
+            <div class="canvas-viewport-container">
+                <!-- 3D Canvas Canvas -->
+                <div id="pizza-3d-canvas-container">
+                    <div class="canvas-loading-spinner" id="canvas-spinner">
+                        <div class="pizza-slice-loader"></div>
+                        <p>Preparing 3D Oven...</p>
+                    </div>
+                </div>
+
+                <!-- 3D Helper overlays -->
+                <div class="viewport-overlay-ui">
+                    <div class="tip-card"><i class="fa-solid fa-hand-pointer"></i> Drag to Rotate 3D Pizza | Scroll to Zoom</div>
+                    <div class="view-controls">
+                        <button class="view-btn" id="btn-view-top" title="Top View"><i class="fa-solid fa-eye"></i> Top</button>
+                        <button class="view-btn" id="btn-view-ortho" title="Side View"><i class="fa-solid fa-compass"></i> Angled</button>
+                        <button class="view-btn" id="btn-reset-pizza" title="Reset/Spin"><i class="fa-solid fa-arrows-rotate"></i> Spin</button>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Local Flavor Story Section: Beef Kala Bhuna -->
+        <section id="kala-bhuna-section" class="featured-story">
+            <div class="story-container">
+                <div class="story-image">
+                    <!-- Generated beautiful design representing a spicy local baking stove -->
+                    <div class="story-graphic glass-panel">
+                        <div class="graphic-layer fire-glow"></div>
+                        <div class="graphic-content">
+                            <span class="spice-label">Spiciness level: Very Hot</span>
+                            <h2>BEEF KALA BHUNA</h2>
+                            <p class="tagline">Traditional Chittagonian Slow-Fried Spiced Beef meets Pizza Hut Pan Crust.</p>
+                            <div class="chili-icons">
+                                <i class="fa-solid fa-pepper-hot"></i>
+                                <i class="fa-solid fa-pepper-hot"></i>
+                                <i class="fa-solid fa-pepper-hot"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="story-content">
+                    <span class="sub-heading">Flavors of Bangladesh</span>
+                    <h2>A Culinary Fusion Masterpiece</h2>
+                    <p>At Pizza Hut Bangladesh, we celebrate localized taste profiles. Our chefs have fused the highly beloved **Beef Kala Bhuna**—slow-roasted beef fried in mustard oil with traditional aromatic garam masala, black pepper, and local spices—directly onto our signature fluffy Pan Pizza dough, layered with fresh mozzarella and hot green chilies.</p>
+                    
+                    <div class="story-highlights">
+                        <div class="highlight-item">
+                            <div class="h-icon"><i class="fa-solid fa-mortar-pestle"></i></div>
+                            <h4>Aromatic Local Spices</h4>
+                            <p>Authentic local spice mix featuring dark cinnamon, cardamom, mustard oil, and local peppers.</p>
+                        </div>
+                        <div class="highlight-item">
+                            <div class="h-icon"><i class="fa-solid fa-cheese"></i></div>
+                            <h4>Double Layer Cheese</h4>
+                            <p>Premium rich gooey mozzarella that melts seamlessly into the spicy Kala Bhuna marinade.</p>
+                        </div>
+                    </div>
+
+                    <button class="story-cta-btn" id="btn-load-kala-bhuna">
+                        Customize Kala Bhuna Now <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Hot Deals Section -->
+        <section id="deals-section" class="deals-carousel-section">
+            <div class="section-header">
+                <span class="sub-heading">Unbeatable Savings</span>
+                <h2 class="glow-text">Exclusive Deals for Bangladesh</h2>
+            </div>
+
+            <!-- Carousel Cards Grid -->
+            <div class="deals-grid">
+                
+                <!-- Deal 1 -->
+                <div class="deal-card glass-panel">
+                    <div class="deal-badge">Most Popular</div>
+                    <div class="deal-media">
+                        <!-- SVG pizza layout -->
+                        <img src="assets/deal1.jpg" alt="Weekend Favourite" style="width: 100%; height: 100%; object-fit: cover; border-radius: 12px;">
+                    </div>
+                    <div class="deal-body">
+                        <h3>Double Treat Medium</h3>
+                        <p class="deal-desc">Enjoy **2 Medium Pan Pizzas** of your choice. Perfect for family and friends sharing!</p>
+                        <div class="deal-pricing">
+                            <span class="price-old">BDT 2,299</span>
+                            <span class="price-current">BDT 1,499</span>
+                        </div>
+                        <button class="deal-buy-btn" data-deal-id="double-treat">Add Deal <i class="fa-solid fa-plus"></i></button>
+                    </div>
+                </div>
+
+                <!-- Deal 2 -->
+                <div class="deal-card glass-panel">
+                    <div class="deal-badge">Solo Pack</div>
+                    <div class="deal-media">
+                        <svg class="deal-svg" viewBox="0 0 100 100">
+                            <circle cx="50" cy="40" r="22" fill="#FFC72C" opacity="0.15"/>
+                            <circle cx="50" cy="40" r="20" fill="none" stroke="#E51A22" stroke-width="4"/>
+                            <rect x="35" y="70" width="30" height="15" rx="2" fill="none" stroke="#FFC72C" stroke-width="3"/>
+                        </svg>
+                    </div>
+                    <div class="deal-body">
+                        <h3>My Box Solo</h3>
+                        <p class="deal-desc">Get **1 Personal Pizza**, **1 Portion of Garlic Bread**, and **1 Soft Drink** can.</p>
+                        <div class="deal-pricing">
+                            <span class="price-old">BDT 549</span>
+                            <span class="price-current">BDT 399</span>
+                        </div>
+                        <button class="deal-buy-btn" data-deal-id="my-box">Add Deal <i class="fa-solid fa-plus"></i></button>
+                    </div>
+                </div>
+
+                <!-- Deal 3 -->
+                <div class="deal-card glass-panel">
+                    <div class="deal-badge">Huge Savings</div>
+                    <div class="deal-media">
+                        <svg class="deal-svg" viewBox="0 0 100 100">
+                            <circle cx="50" cy="50" r="32" fill="#FFC72C" opacity="0.15"/>
+                            <circle cx="50" cy="50" r="28" fill="none" stroke="#E51A22" stroke-width="5"/>
+                            <line x1="18" y1="50" x2="82" y2="50" stroke="#FFC72C" stroke-width="2" stroke-dasharray="3,3"/>
+                        </svg>
+                    </div>
+                    <div class="deal-body">
+                        <h3>Triple Feast Large</h3>
+                        <p class="deal-desc">Feast like royalty with **3 Large Pan Pizzas** of your choice. Incredible value.</p>
+                        <div class="deal-pricing">
+                            <span class="price-old">BDT 3,899</span>
+                            <span class="price-current">BDT 2,499</span>
+                        </div>
+                        <button class="deal-buy-btn" data-deal-id="triple-feast">Add Deal <i class="fa-solid fa-plus"></i></button>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Local Outlets Section -->
+        <section id="outlets-section" class="outlets-section">
+            <div class="outlets-container">
+                
+                <!-- Left: List of locations -->
+                <div class="outlets-list-side">
+                    <span class="sub-heading">Find a Pizza Hut Near You</span>
+                    <h2 class="glow-text">Locations in Bangladesh</h2>
+                    <p>Select an outlet to see opening hours, contact details, and start your order for collection.</p>
+                    
+                    <div class="outlet-cards-list">
+                        <div class="outlet-item active" data-lat="23.7925" data-lng="90.4078">
+                            <h4>Gulshan 1 Outlet</h4>
+                            <p><i class="fa-solid fa-location-dot"></i> Jabbar Tower, Road 135, Gulshan 1, Dhaka</p>
+                            <span class="status-open">Open until 11:30 PM</span>
+                        </div>
+
+                        <div class="outlet-item" data-lat="23.7461" data-lng="90.3742">
+                            <h4>Dhanmondi Outlet</h4>
+                            <p><i class="fa-solid fa-location-dot"></i> Road 10A, Dhanmondi R/A, Dhaka</p>
+                            <span class="status-open">Open until 11:00 PM</span>
+                        </div>
+
+                        <div class="outlet-item" data-lat="23.8722" data-lng="90.3888">
+                            <h4>Uttara Sector 11 Outlet</h4>
+                            <p><i class="fa-solid fa-location-dot"></i> Sonargaon Janapath, Sector 11, Uttara, Dhaka</p>
+                            <span class="status-open">Open until 11:00 PM</span>
+                        </div>
+
+                        <div class="outlet-item" data-lat="22.3592" data-lng="91.8219">
+                            <h4>Chittagong GEC Outlet</h4>
+                            <p><i class="fa-solid fa-location-dot"></i> GEC Circle, CDA Avenue, Chattogram</p>
+                            <span class="status-open">Open until 11:30 PM</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right: Visual Map Emulator -->
+                <div class="outlets-map-side glass-panel">
+                    <div class="map-emulator" id="outlet-map-emu">
+                        <!-- Simulated modern dynamic map showing outlets -->
+                        <div class="map-grid-bg"></div>
+                        <div class="map-pin" style="top: 45%; left: 52%;" id="map-pin-target">
+                            <div class="pulse-ring"></div>
+                            <i class="fa-solid fa-location-pin"></i>
+                        </div>
+                        <div class="map-overlay-details" id="map-details-card">
+                            <h4>Gulshan 1 Outlet</h4>
+                            <p><i class="fa-solid fa-phone"></i> +880 9613-888777</p>
+                            <p><i class="fa-solid fa-clock"></i> 11:00 AM - 11:30 PM</p>
+                            <button class="map-order-btn">Order From Here</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Slide-out Shopping Cart Drawer -->
+    <div class="cart-overlay-shadow" id="cart-shadow"></div>
+    <div class="cart-drawer" id="cart-drawer">
+        <div class="drawer-header">
+            <h3><i class="fa-solid fa-bag-shopping"></i> Your Order</h3>
+            <button class="drawer-close-btn" id="cart-close-btn"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+
+        <div class="drawer-body" id="cart-items-container">
+            <!-- Dynamic items go here -->
+            <div class="cart-empty-state">
+                <i class="fa-solid fa-pizza-slice"></i>
+                <p>Your basket is currently empty.</p>
+                <p class="sub-info">Head back to the 3D Customizer to build your pizza or select one of our deals!</p>
+            </div>
+        </div>
+
+        <div class="drawer-footer">
+            <div class="cart-summary-line">
+                <span>Subtotal</span>
+                <span>BDT <span id="cart-subtotal">0</span></span>
+            </div>
+            <div class="cart-summary-line vat-line">
+                <span>Govt. VAT (10%)</span>
+                <span>BDT <span id="cart-vat">0</span></span>
+            </div>
+            <div class="cart-summary-line total-line">
+                <span>Grand Total</span>
+                <span>BDT <span id="cart-total">0</span></span>
+            </div>
+            <button class="checkout-btn" id="btn-checkout">
+                Proceed to Checkout <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="toast-container" id="toast">
+        <i class="fa-solid fa-circle-check"></i>
+        <span class="toast-msg">Item added to cart!</span>
+    </div>
+
+    <!-- Page Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-brand">
+                <img src="logo.svg" alt="Pizza Hut Bangladesh Logo" style="height: 40px; width: auto; object-fit: contain; margin-bottom: 12px;">
+                <p>Delivering hot, delicious pizzas across Bangladesh since 2003. Fusing international quality with loved local flavors.</p>
+                <div class="social-links">
+                    <a href="#"><i class="fa-brands fa-facebook"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                </div>
+            </div>
+            <div class="footer-links">
+                <h4>Explore</h4>
+                <ul>
+                    <li><a href="#customizer-section">3D Pizza Customizer</a></li>
+                    <li><a href="menu.html">Menu</a></li>
+                    <li><a href="#deals-section">Hot Deals</a></li>
+                    <li><a href="#kala-bhuna-section">Flavors of Bangladesh</a></li>
+                    <li><a href="#outlets-section">Find Outlets</a></li>
+                </ul>
+            </div>
+            <div class="footer-contact">
+                <h4>Order Hotline</h4>
+                <p class="hotline-number"><i class="fa-solid fa-phone"></i> 16230</p>
+                <p>Support Hours: 11:00 AM - 11:30 PM</p>
+                <p class="vat-info">Pizza Hut Bangladesh is operated by Transcom Foods Limited.</p>
+            </div>
+        </div>
+        <div class="footer-bottom" style="display: flex; align-items: center; justify-content: center; gap: 10px; flex-wrap: wrap;">
+            <p>&copy; 2026 Pizza Hut Bangladesh. All rights reserved. This was a demo page made by Arsenic(Ahnaf) from Webfixxies.</p>
+            <img src="assets/webfixxies_logo.png" alt="Webfixxies Logo" style="height: 32px; width: auto;">
+        </div>
+    </footer>
+
+    <!-- App Scripts -->
+    <script src="pizza3d.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

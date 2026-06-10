@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pizza Hut Bangladesh - Deals</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Glassmorphism Navigation -->
+    <nav class="glass-nav">
+        <div class="logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/d/d2/Pizza_Hut_logo.svg" alt="Pizza Hut BD Logo">
+        </div>
+        <ul class="nav-links">
+            <li><a href="index.html">3D Builder</a></li>
+            <li><a href="menu.html">Menu</a></li>
+            <li><a href="deals.html" class="active">Deals</a></li>
+            <li class="dropdown">
+                <a href="#">Stores ▾</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#">Gulshan</a></li>
+                    <li><a href="#">Dhanmondi</a></li>
+                    <li><a href="#">Banani</a></li>
+                    <li><a href="#">Uttara</a></li>
+                    <li><a href="#">Baily Road</a></li>
+                </ul>
+            </li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+        <div class="cart">
+            <span class="cart-icon">🛒</span>
+            <span class="cart-count">0</span>
+        </div>
+    </nav>
+
+    <main class="page-container" style="padding: 120px 5% 5rem 5%; max-width: 1400px; margin: 0 auto; min-height: 70vh;">
+        <h2 style="font-size: 3rem; font-weight: 700; color: var(--ph-dark); text-align: center; margin-bottom: 3rem; letter-spacing: -1px;">Latest Deals</h2>
+        
+        <div class="deals-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(500px, 1fr)); gap: 3rem;">
+            <img src="assets/deal1.jpg" alt="Weekend Favourite" style="width: 100%; border-radius: 20px; box-shadow: var(--shadow-soft); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer;" onmouseover="this.style.transform='scale(1.04) translateY(-10px)'; this.style.boxShadow='var(--shadow-hover)';" onmouseout="this.style.transform='scale(1) translateY(0)'; this.style.boxShadow='var(--shadow-soft)';">
+            <img src="assets/deal2.jpg" alt="1 Plus 1 Medium" style="width: 100%; border-radius: 20px; box-shadow: var(--shadow-soft); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer;" onmouseover="this.style.transform='scale(1.04) translateY(-10px)'; this.style.boxShadow='var(--shadow-hover)';" onmouseout="this.style.transform='scale(1) translateY(0)'; this.style.boxShadow='var(--shadow-soft)';">
+            <img src="assets/deal3.jpg" alt="1 Plus 1 Large" style="width: 100%; border-radius: 20px; box-shadow: var(--shadow-soft); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer;" onmouseover="this.style.transform='scale(1.04) translateY(-10px)'; this.style.boxShadow='var(--shadow-hover)';" onmouseout="this.style.transform='scale(1) translateY(0)'; this.style.boxShadow='var(--shadow-soft)';">
+            <img src="assets/deal4.jpg" alt="Classic Combo" style="width: 100%; border-radius: 20px; box-shadow: var(--shadow-soft); transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer;" onmouseover="this.style.transform='scale(1.04) translateY(-10px)'; this.style.boxShadow='var(--shadow-hover)';" onmouseout="this.style.transform='scale(1) translateY(0)'; this.style.boxShadow='var(--shadow-soft)';">
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Pizza Hut Bangladesh. Premium Experience.</p>
+        <div style="margin-top: 15px; display: flex; justify-content: center; align-items: center; gap: 10px;">
+            <p style="font-size: 0.85rem; color: var(--ph-gray); margin: 0;">Demo by Arsenic(Ahnaf) from Webfixxies so many things were not added</p>
+            <img src="assets/webfixxies_logo.png" alt="Webfixxies Logo" style="height: 35px; opacity: 0.8;">
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
