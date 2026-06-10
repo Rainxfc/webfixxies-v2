@@ -102,8 +102,8 @@ const projects = [
     description: 'Cinematic landing page, animated menu flow, location browsing, and brand-history storytelling for a Bangladesh-focused KFC concept demo.',
     liveUrl: 'https://kfc-webfixxies-demo.vercel.app/',
     repoUrl: 'https://github.com/Mcethereal/KFC_Webfixxies_Demo',
-    // KFC repo is private — using Vercel URL directly, fallback shows if blocked
-    iframeSrc: 'https://kfc-webfixxies-demo.vercel.app/',
+    // KFC built and hosted same-origin
+    iframeSrc: '/demos/kfc/index.html',
     accent: '#dc2626',
     accentAlt: '#f87171',
     glow: 'rgba(220,38,38,0.18)',
