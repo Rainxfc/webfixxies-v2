@@ -125,6 +125,19 @@ function ScanLine() {
   );
 }
 
+function GridBackground() {
+  return (
+    <div style={{
+      position: 'fixed', inset: 0, zIndex: 0, pointerEvents: 'none',
+      backgroundSize: '40px 40px',
+      backgroundImage: 'linear-gradient(to right, rgba(124,58,237,0.03) 1px, transparent 1px), linear-gradient(to bottom, rgba(124,58,237,0.03) 1px, transparent 1px)',
+      maskImage: 'radial-gradient(circle at center, black 10%, transparent 80%)',
+      WebkitMaskImage: 'radial-gradient(circle at center, black 10%, transparent 80%)',
+      animation: 'pulse-grid 15s linear infinite'
+    }} />
+  );
+}
+
 function App() {
   useEffect(() => {
     const lenis = new Lenis({
@@ -133,7 +146,6 @@ function App() {
       smoothWheel: true,
     });
 
-    // Lenis MUST run every single RAF tick — throttling it causes choppy scroll
     let rafId = 0;
     function raf(time: number) {
       lenis.raf(time);
@@ -146,6 +158,7 @@ function App() {
   return (
     <div style={{ position: 'relative', minHeight: '100vh', background: '#04000d', overflowX: 'hidden' }}>
       <ParticleField />
+      <GridBackground />
       <CursorGlow />
       <ScanLine />
       <Navbar />

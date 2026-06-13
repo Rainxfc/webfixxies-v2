@@ -25,7 +25,7 @@ const team = [
     name: 'ARSENIC', realName: 'Ahnaf',
     role: 'Growth Strategist & Client Relations',
     copy: 'The strategic conduit. Arsenic aligns advanced engineering capabilities with enterprise business growth. Fluent in international project deployment, cross-border client operations, and ensuring strict adherence to compliance standards.',
-    img: 'alexispfp.webp',
+    img: 'arsenicpfp.png',
     accent: '#e879f9', accentDark: '#c026d3',
     glow: 'rgba(192,38,211,0.3)', glowSoft: 'rgba(192,38,211,0.08)',
     tag: 'STRATEGY', icon: '◆', index: 2,
