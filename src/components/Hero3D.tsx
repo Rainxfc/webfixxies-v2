@@ -1,4 +1,4 @@
-﻿import { useRef, Suspense, useMemo } from 'react';
+import { useRef, Suspense, useMemo } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Environment, Float, MeshDistortMaterial, Sphere, Torus, Octahedron } from '@react-three/drei';
 import * as THREE from 'three';
@@ -24,7 +24,7 @@ function CrystalCore() {
     <group>
       <Sphere ref={meshRef} args={[1.8, 80, 80]}>
         <MeshDistortMaterial
-          color="#7c3aed"
+          color="#4f46e5"
           distort={0.38}
           speed={2.2}
           roughness={0}
@@ -39,8 +39,8 @@ function CrystalCore() {
       </Sphere>
       <Octahedron ref={innerRef} args={[0.9, 0]}>
         <meshStandardMaterial
-          color="#c026d3"
-          emissive="#9333ea"
+          color="#6366f1"
+          emissive="#4338ca"
           emissiveIntensity={1.8}
           metalness={0.9}
           roughness={0.05}
@@ -48,8 +48,8 @@ function CrystalCore() {
           opacity={0.9}
         />
       </Octahedron>
-      <pointLight color="#7c3aed" intensity={6} distance={6} />
-      <pointLight color="#c026d3" intensity={3} distance={4} position={[0, 1, 0]} />
+      <pointLight color="#4f46e5" intensity={6} distance={6} />
+      <pointLight color="#6366f1" intensity={3} distance={4} position={[0, 1, 0]} />
     </group>
   );
 }
@@ -68,13 +68,13 @@ function OrbitRings() {
   return (
     <group>
       <Torus ref={ring1} args={[2.8, 0.025, 16, 120]} rotation={[Math.PI / 3, 0, 0]}>
-        <meshStandardMaterial color="#a78bfa" emissive="#7c3aed" emissiveIntensity={2.5} metalness={1} roughness={0} transparent opacity={0.7} />
+        <meshStandardMaterial color="#818cf8" emissive="#4f46e5" emissiveIntensity={2.5} metalness={1} roughness={0} transparent opacity={0.7} />
       </Torus>
       <Torus ref={ring2} args={[3.5, 0.018, 16, 120]} rotation={[0, Math.PI / 5, Math.PI / 4]}>
-        <meshStandardMaterial color="#e879f9" emissive="#c026d3" emissiveIntensity={2} metalness={1} roughness={0} transparent opacity={0.55} />
+        <meshStandardMaterial color="#a5b4fc" emissive="#6366f1" emissiveIntensity={2} metalness={1} roughness={0} transparent opacity={0.55} />
       </Torus>
       <Torus ref={ring3} args={[4.2, 0.012, 16, 120]} rotation={[Math.PI / 6, Math.PI / 3, 0]}>
-        <meshStandardMaterial color="#818cf8" emissive="#4f46e5" emissiveIntensity={1.5} metalness={1} roughness={0} transparent opacity={0.4} />
+        <meshStandardMaterial color="#94a3b8" emissive="#4338ca" emissiveIntensity={1.5} metalness={1} roughness={0} transparent opacity={0.4} />
       </Torus>
     </group>
   );
@@ -97,7 +97,7 @@ function CrystalShard({ position, scale, speed, rotAxis }: {
   return (
     <Octahedron ref={ref} args={[1, 0]} position={position} scale={scale}>
       <meshPhysicalMaterial
-        color="#a78bfa" emissive="#7c3aed" emissiveIntensity={0.8}
+        color="#818cf8" emissive="#4f46e5" emissiveIntensity={0.8}
         metalness={0.8} roughness={0.1} transmission={0.6} thickness={0.5}
         transparent opacity={0.85}
       />
@@ -131,10 +131,10 @@ function CrystalShards() {
 function Scene() {
   return (
     <>
-      <ambientLight intensity={0.2} color="#2d0060" />
-      <directionalLight position={[5, 5, 5]} intensity={0.8} color="#a78bfa" />
-      <directionalLight position={[-5, -3, -5]} intensity={0.5} color="#c026d3" />
-      <pointLight position={[0, 6, 0]} intensity={2} color="#7c3aed" distance={12} />
+      <ambientLight intensity={0.2} color="#0d1a40" />
+      <directionalLight position={[5, 5, 5]} intensity={0.8} color="#818cf8" />
+      <directionalLight position={[-5, -3, -5]} intensity={0.5} color="#6366f1" />
+      <pointLight position={[0, 6, 0]} intensity={2} color="#4f46e5" distance={12} />
       <Environment preset="night" />
       <Suspense fallback={null}>
         <Float speed={1.2} rotationIntensity={0.1} floatIntensity={0.5} floatingRange={[-0.15, 0.15]}>
@@ -157,11 +157,11 @@ export default function Hero3D() {
     <div style={{
       position: 'relative', width: '100vw', height: '100vh',
       overflow: 'hidden',
-      background: 'radial-gradient(ellipse 120% 80% at 50% -10%, #1e0047 0%, #0a0018 40%, #04000d 100%)',
+      background: 'radial-gradient(ellipse 120% 80% at 50% -10%, #111827 0%, #080c14 40%, #07080a 100%)',
     }}>
       {/* 3D Canvas */}
       <div style={{ position: 'absolute', inset: 0, zIndex: 1 }}>
-        <Canvas camera={{ position: [0, -1.2, 9], fov: 42 }} gl={{ antialias: true, alpha: true }} dpr={[1, 2]} style={{ background: 'transparent' }}>
+        <Canvas camera={{ position: [0, -1.2, 9], fov: 42 }} gl={{ antialias: true, alpha: true }} dpr={[1, 1.5]} style={{ background: 'transparent' }}>
           <Scene />
         </Canvas>
       </div>
@@ -171,7 +171,7 @@ export default function Hero3D() {
         position: 'absolute', left: '50%', top: '50%',
         transform: 'translate(-50%, -50%)',
         width: 600, height: 600, borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(124,58,237,0.25) 0%, rgba(192,38,211,0.08) 40%, transparent 70%)',
+        background: 'radial-gradient(circle, rgba(79,70,229,0.2) 0%, rgba(99,102,241,0.06) 40%, transparent 70%)',
         filter: 'blur(40px)', zIndex: 0, pointerEvents: 'none',
       }} />
 
@@ -180,11 +180,12 @@ export default function Hero3D() {
         position: 'absolute', inset: 0, zIndex: 2,
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
         textAlign: 'center', padding: '0 24px', pointerEvents: 'none',
-        background: 'linear-gradient(to bottom, transparent 50%, #04000d 100%)',
+        background: 'linear-gradient(to bottom, transparent 50%, #07080a 100%)',
       }}>
-        <div className="section-tag" style={{ marginBottom: 28, pointerEvents: 'auto' }}>
-          <span className="dot" />
-          <span>Next-Gen Web Engineering</span>
+        {/* Logo badge */}
+        <div style={{ marginBottom: 24, pointerEvents: 'auto', display: 'flex', alignItems: 'center', gap: 12, padding: '8px 20px', borderRadius: 100, border: '1px solid rgba(99,102,241,0.22)', background: 'rgba(79,70,229,0.08)' }}>
+          <img src="logo.png" alt="Web Fixxies" style={{ width: 20, height: 20, objectFit: 'contain' }} />
+          <span style={{ fontFamily: 'Space Mono, monospace', fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: '#818cf8' }}>Premium Web Development Studio</span>
         </div>
 
         <h1
@@ -193,10 +194,10 @@ export default function Hero3D() {
           style={{
             fontSize: 'clamp(52px, 12vw, 130px)', fontWeight: 900,
             lineHeight: 0.9, letterSpacing: '-0.03em', textTransform: 'uppercase',
-            background: 'linear-gradient(135deg, #f5f0ff 0%, #c4b5fd 35%, #e879f9 65%, #818cf8 100%)',
+            background: 'linear-gradient(135deg, #f1f5f9 0%, #a5b4fc 35%, #818cf8 65%, #6366f1 100%)',
             WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
             marginBottom: 28,
-            filter: 'drop-shadow(0 0 40px rgba(167,139,250,0.4))',
+            filter: 'drop-shadow(0 0 40px rgba(99,102,241,0.35))',
           }}
         >
           WEB FIXXIES
@@ -204,11 +205,11 @@ export default function Hero3D() {
 
         <p style={{
           maxWidth: 620, fontSize: 'clamp(14px, 2vw, 18px)', fontWeight: 300,
-          lineHeight: 1.75, color: '#c4b5fd', marginBottom: 44, letterSpacing: '0.02em',
+          lineHeight: 1.75, color: '#94a3b8', marginBottom: 44, letterSpacing: '0.02em',
         }}>
-          Dismantling the limitations of the traditional web. We engineer
-          high-performance, hardware-accelerated 3D digital environments
-          designed to command market attention.
+          We engineer high-performance, visually immersive web experiences that
+          command attention and drive measurable business results. Built for brands
+          that refuse to blend in.
         </p>
 
         <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', justifyContent: 'center', pointerEvents: 'auto' }}>
@@ -229,15 +230,15 @@ export default function Hero3D() {
         position: 'absolute', bottom: 40, left: '50%', transform: 'translateX(-50%)',
         zIndex: 3, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, pointerEvents: 'none',
       }}>
-        <div style={{ width: 1.5, height: 56, background: 'linear-gradient(to bottom, transparent, rgba(167,139,250,0.6), transparent)', animation: 'float 2s ease-in-out infinite' }} />
-        <span className="font-mono" style={{ fontSize: 9, letterSpacing: '0.35em', color: 'rgba(124,58,237,0.7)', textTransform: 'uppercase' }}>Scroll Γåô</span>
+        <div style={{ width: 1.5, height: 56, background: 'linear-gradient(to bottom, transparent, rgba(129,140,248,0.6), transparent)', animation: 'float 2s ease-in-out infinite' }} />
+        <span className="font-mono" style={{ fontSize: 9, letterSpacing: '0.35em', color: 'rgba(99,102,241,0.7)', textTransform: 'uppercase' }}>Scroll ↓</span>
       </div>
 
       {/* HUD elements */}
-      <div className="hud-element" style={{ position: 'absolute', top: 100, left: 24, zIndex: 3, opacity: 0.5 }}>+ SYS.ONLINE</div>
+      <div className="hud-element" style={{ position: 'absolute', top: 100, left: 24, zIndex: 3, opacity: 0.5 }}>+ SERVICES.LIVE</div>
       <div className="hud-element" style={{ position: 'absolute', top: 100, right: 24, zIndex: 3, opacity: 0.5 }}>+ LATENCY: 2ms</div>
-      <div className="hud-element" style={{ position: 'absolute', bottom: 40, left: 24, zIndex: 3, opacity: 0.5 }}>+ W.F.PROTOCOL</div>
-      <div className="hud-element" style={{ position: 'absolute', bottom: 40, right: 24, zIndex: 3, opacity: 0.5 }}>+ MATRIX.ACTIVE</div>
+      <div className="hud-element" style={{ position: 'absolute', bottom: 40, left: 24, zIndex: 3, opacity: 0.5 }}>+ WF.STUDIO</div>
+      <div className="hud-element" style={{ position: 'absolute', bottom: 40, right: 24, zIndex: 3, opacity: 0.5 }}>+ INFRASTRUCTURE.LIVE</div>
     </div>
   );
 }

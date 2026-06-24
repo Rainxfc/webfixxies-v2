@@ -4,16 +4,7 @@ import { motion, AnimatePresence, useInView } from 'framer-motion';
 // ─── Webfixxies logo ──────────────────────────────────────────────────────────
 function WFLogoSmall() {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="15" viewBox="0 0 48 46" fill="none">
-      <defs>
-        <linearGradient id="wf-mis-grad" x1="0" y1="0" x2="48" y2="46" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stopColor="#c4b5fd" />
-          <stop offset="50%" stopColor="#a78bfa" />
-          <stop offset="100%" stopColor="#e879f9" />
-        </linearGradient>
-      </defs>
-      <path fill="url(#wf-mis-grad)" d="M25.946 44.938c-.664.845-2.021.375-2.021-.698V33.937a2.26 2.26 0 0 0-2.262-2.262H10.287c-.92 0-1.456-1.04-.92-1.788l7.48-10.471c1.07-1.497 0-3.578-1.842-3.578H1.237c-.92 0-1.456-1.04-.92-1.788L10.013.474c.214-.297.556-.474.92-.474h28.894c.92 0 1.456 1.04.92 1.788l-7.48 10.471c-1.07 1.498 0 3.579 1.842 3.579h11.377c.943 0 1.473 1.088.89 1.83L25.947 44.94z" />
-    </svg>
+    <img src="logo.png" alt="Web Fixxies" style={{ width: 16, height: 16, objectFit: 'contain' }} />
   );
 }
 
@@ -79,27 +70,27 @@ function LegacyScreen() {
 // ─── Premium modern screen content ───────────────────────────────────────────
 function PremiumScreen() {
   return (
-    <div style={{ padding: '0', background: '#04000d', minHeight: 240, overflow: 'hidden', position: 'relative' }}>
+    <div style={{ padding: '0', background: '#07080a', minHeight: 240, overflow: 'hidden', position: 'relative' }}>
       {/* animated bg */}
-      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 60% at 50% 30%, rgba(124,58,237,0.18) 0%, transparent 70%)', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse 80% 60% at 50% 30%, rgba(79,70,229,0.18) 0%, transparent 70%)', pointerEvents: 'none' }} />
       {/* grid */}
-      <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(139,92,246,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(139,92,246,0.05) 1px, transparent 1px)', backgroundSize: '28px 28px', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', inset: 0, backgroundImage: 'linear-gradient(rgba(99,102,241,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(99,102,241,0.05) 1px, transparent 1px)', backgroundSize: '28px 28px', pointerEvents: 'none' }} />
 
       <div style={{ position: 'relative', padding: '14px 16px' }}>
         {/* nav */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             <WFLogoSmall />
-            <span style={{ fontSize: 10, fontWeight: 900, fontFamily: 'Outfit, sans-serif', letterSpacing: '-0.02em', background: 'linear-gradient(135deg, #c4b5fd, #e879f9)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+            <span style={{ fontSize: 10, fontWeight: 900, fontFamily: 'Outfit, sans-serif', letterSpacing: '-0.02em', background: 'linear-gradient(135deg, #e2e8f0, #a5b4fc)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
               ACME
             </span>
           </div>
           <div style={{ display: 'flex', gap: 12 }}>
             {['Work', 'About', 'Contact'].map(n => (
-              <span key={n} className="font-mono" style={{ fontSize: 7.5, color: 'rgba(167,139,250,0.6)', letterSpacing: '0.14em', textTransform: 'uppercase' }}>{n}</span>
+              <span key={n} className="font-mono" style={{ fontSize: 7.5, color: 'rgba(129,140,248,0.6)', letterSpacing: '0.14em', textTransform: 'uppercase' }}>{n}</span>
             ))}
           </div>
-          <div style={{ padding: '4px 10px', borderRadius: 100, background: 'linear-gradient(135deg, #7c3aed, #c026d3)', fontSize: 7.5, color: '#fff', fontFamily: 'Space Mono, monospace', letterSpacing: '0.14em' }}>
+          <div style={{ padding: '4px 10px', borderRadius: 100, background: 'linear-gradient(135deg, #4f46e5, #6366f1)', fontSize: 7.5, color: '#fff', fontFamily: 'Space Mono, monospace', letterSpacing: '0.14em' }}>
             Get Started →
           </div>
         </div>
@@ -112,7 +103,7 @@ function PremiumScreen() {
             transition={{ delay: 0.1, duration: 0.5 }}
             style={{ marginBottom: 6 }}
           >
-            <span style={{ fontSize: 10, fontWeight: 900, fontFamily: 'Outfit, sans-serif', letterSpacing: '-0.02em', background: 'linear-gradient(135deg, #f5f0ff 0%, #c4b5fd 40%, #e879f9 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+            <span style={{ fontSize: 10, fontWeight: 900, fontFamily: 'Outfit, sans-serif', letterSpacing: '-0.02em', background: 'linear-gradient(135deg, #f1f5f9 0%, #a5b4fc 40%, #818cf8 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
               We Build the Future.
             </span>
           </motion.div>
@@ -120,7 +111,7 @@ function PremiumScreen() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.25, duration: 0.5 }}
-            style={{ fontSize: 8.5, color: 'rgba(196,181,253,0.65)', fontFamily: 'Space Grotesk, sans-serif', marginBottom: 10 }}
+            style={{ fontSize: 8.5, color: 'rgba(148,163,184,0.75)', fontFamily: 'Space Grotesk, sans-serif', marginBottom: 10 }}
           >
             Immersive digital experiences engineered for impact.
           </motion.div>
@@ -130,8 +121,8 @@ function PremiumScreen() {
             transition={{ delay: 0.35, duration: 0.4 }}
             style={{ display: 'inline-flex', gap: 8 }}
           >
-            <div style={{ padding: '5px 14px', borderRadius: 100, background: 'linear-gradient(135deg, #7c3aed, #c026d3)', fontSize: 8, color: '#fff', fontFamily: 'Space Mono, monospace', letterSpacing: '0.12em', boxShadow: '0 0 16px rgba(124,58,237,0.4)' }}>Explore →</div>
-            <div style={{ padding: '4px 13px', borderRadius: 100, border: '1px solid rgba(139,92,246,0.3)', fontSize: 8, color: 'rgba(167,139,250,0.8)', fontFamily: 'Space Mono, monospace', letterSpacing: '0.12em' }}>Learn More</div>
+            <div style={{ padding: '5px 14px', borderRadius: 100, background: 'linear-gradient(135deg, #4f46e5, #6366f1)', fontSize: 8, color: '#fff', fontFamily: 'Space Mono, monospace', letterSpacing: '0.12em', boxShadow: '0 0 16px rgba(79,70,229,0.4)' }}>Explore →</div>
+            <div style={{ padding: '4px 13px', borderRadius: 100, border: '1px solid rgba(99,102,241,0.3)', fontSize: 8, color: 'rgba(129,140,248,0.8)', fontFamily: 'Space Mono, monospace', letterSpacing: '0.12em' }}>Learn More</div>
           </motion.div>
         </div>
 
@@ -143,13 +134,13 @@ function PremiumScreen() {
           style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}
         >
           {[
-            { val: '3D', label: 'Immersive', color: '#a78bfa' },
+            { val: '3D', label: 'Immersive', color: '#818cf8' },
             { val: '<2ms', label: 'Latency', color: '#10b981' },
-            { val: '100%', label: 'Custom', color: '#e879f9' },
+            { val: '100%', label: 'Custom', color: '#a5b4fc' },
           ].map(s => (
-            <div key={s.label} style={{ padding: '8px', borderRadius: 8, border: '1px solid rgba(139,92,246,0.15)', background: 'rgba(124,58,237,0.06)', textAlign: 'center' }}>
+            <div key={s.label} style={{ padding: '8px', borderRadius: 8, border: '1px solid rgba(99,102,241,0.15)', background: 'rgba(79,70,229,0.06)', textAlign: 'center' }}>
               <div style={{ fontSize: 13, fontWeight: 800, fontFamily: 'Outfit, sans-serif', color: s.color, lineHeight: 1 }}>{s.val}</div>
-              <div className="font-mono" style={{ fontSize: 7, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(124,58,237,0.5)', marginTop: 3 }}>{s.label}</div>
+              <div className="font-mono" style={{ fontSize: 7, letterSpacing: '0.16em', textTransform: 'uppercase', color: 'rgba(79,70,229,0.5)', marginTop: 3 }}>{s.label}</div>
             </div>
           ))}
         </motion.div>
@@ -183,17 +174,17 @@ function WebUpgradeLaptop() {
       <div style={{
         width: '100%',
         borderRadius: '12px 12px 0 0',
-        border: '2px solid rgba(139,92,246,0.3)',
+        border: '2px solid rgba(99,102,241,0.25)',
         borderBottom: 'none',
-        background: 'linear-gradient(180deg, #150825 0%, #0d0318 100%)',
-        boxShadow: '0 0 0 1px rgba(192,38,211,0.1), inset 0 0 20px rgba(124,58,237,0.06)',
+        background: 'linear-gradient(180deg, #121519 0%, #0d0f12 100%)',
+        boxShadow: '0 0 0 1px rgba(79,70,229,0.08), inset 0 0 20px rgba(79,70,229,0.05)',
         overflow: 'hidden',
         position: 'relative',
       }}>
         {/* browser chrome */}
         <div style={{
           display: 'flex', alignItems: 'center', gap: 10, padding: '8px 12px',
-          background: 'rgba(4,0,12,0.95)', borderBottom: '1px solid rgba(139,92,246,0.15)',
+          background: 'rgba(7,8,10,0.98)', borderBottom: '1px solid rgba(99,102,241,0.12)',
         }}>
           <div style={{ display: 'flex', gap: 5 }}>
             {['#ef4444', '#f59e0b', '#10b981'].map((c, i) => (
@@ -202,11 +193,11 @@ function WebUpgradeLaptop() {
           </div>
           <div style={{
             flex: 1, display: 'flex', alignItems: 'center', gap: 6,
-            background: 'rgba(8,0,20,0.8)', border: '1px solid rgba(139,92,246,0.18)',
+            background: 'rgba(13,15,18,0.9)', border: '1px solid rgba(99,102,241,0.15)',
             borderRadius: 5, padding: '3px 9px', overflow: 'hidden',
           }}>
             <div style={{ width: 4, height: 4, borderRadius: '50%', background: upgraded ? '#10b981' : '#ef4444', flexShrink: 0, transition: 'background 0.5s' }} />
-            <span className="font-mono" style={{ fontSize: 7.5, color: upgraded ? 'rgba(167,139,250,0.7)' : 'rgba(100,100,100,0.7)', letterSpacing: '0.1em', transition: 'color 0.5s' }}>
+            <span className="font-mono" style={{ fontSize: 7.5, color: upgraded ? 'rgba(129,140,248,0.7)' : 'rgba(100,100,100,0.7)', letterSpacing: '0.1em', transition: 'color 0.5s' }}>
               {upgraded ? 'acme.webfixxies.dev' : 'acmecorp.com — OUTDATED'}
             </span>
           </div>
@@ -216,17 +207,17 @@ function WebUpgradeLaptop() {
             whileTap={{ scale: 0.88 }}
             animate={!upgraded ? { scale: [1, 1.06, 1] } : { scale: 1 }}
             transition={!upgraded ? { duration: 2, repeat: Infinity, ease: 'easeInOut' } : {}}
-            title={upgraded ? 'Revert to legacy' : 'Upgrade interface'}
+            title={upgraded ? 'Revert to legacy' : 'Upgrade website'}
             style={{
               flexShrink: 0, width: 22, height: 22, borderRadius: 6,
-              border: `1px solid ${upgraded ? 'rgba(139,92,246,0.5)' : 'rgba(100,100,100,0.35)'}`,
-              background: upgraded ? 'rgba(124,58,237,0.2)' : 'rgba(60,60,60,0.3)',
+              border: `1px solid ${upgraded ? 'rgba(99,102,241,0.5)' : 'rgba(100,100,100,0.35)'}`,
+              background: upgraded ? 'rgba(79,70,229,0.2)' : 'rgba(60,60,60,0.3)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               cursor: 'pointer', transition: 'all 0.4s',
             }}
           >
             <svg width="11" height="11" viewBox="0 0 24 24" fill="none"
-              stroke={upgraded ? '#a78bfa' : '#888'} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+              stroke={upgraded ? '#818cf8' : '#888'} strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
             </svg>
           </motion.button>
@@ -256,16 +247,17 @@ function WebUpgradeLaptop() {
             )}
           </AnimatePresence>
 
-          {/* scan line */}
+          {/* progress shimmer */}
           <motion.div
-            animate={{ y: ['-5%', '110%'] }}
-            transition={{ duration: upgraded ? 3 : 8, repeat: Infinity, ease: 'linear', repeatDelay: upgraded ? 2 : 5 }}
+            animate={{ x: ['-100%', '200%'] }}
+            transition={{ duration: upgraded ? 2.5 : 7, repeat: Infinity, ease: 'easeInOut', repeatDelay: upgraded ? 2 : 5 }}
             style={{
               position: 'absolute', left: 0, right: 0, height: 1.5,
               background: upgraded
-                ? 'linear-gradient(90deg, transparent, rgba(139,92,246,0.5), rgba(192,38,211,0.4), transparent)'
-                : 'linear-gradient(90deg, transparent, rgba(100,100,100,0.3), transparent)',
+                ? 'linear-gradient(90deg, transparent, rgba(99,102,241,0.5), rgba(129,140,248,0.4), transparent)'
+                : 'linear-gradient(90deg, transparent, rgba(100,100,100,0.25), transparent)',
               pointerEvents: 'none',
+              top: 0,
             }}
           />
 
@@ -282,12 +274,12 @@ function WebUpgradeLaptop() {
             >
               <svg width="16" height="20" viewBox="0 0 18 22" fill="none">
                 <path d="M1 1L1 17L5.5 13L8.5 20L11 19L8 12L14 12L1 1Z"
-                  fill={upgraded ? 'rgba(167,139,250,0.95)' : 'rgba(200,200,200,0.85)'}
-                  stroke={upgraded ? 'rgba(124,58,237,0.6)' : 'rgba(100,100,100,0.5)'}
+                  fill={upgraded ? 'rgba(129,140,248,0.95)' : 'rgba(200,200,200,0.85)'}
+                  stroke={upgraded ? 'rgba(79,70,229,0.6)' : 'rgba(100,100,100,0.5)'}
                   strokeWidth="1" />
               </svg>
             </motion.div>
-            {/* click ripple — only on legacy (clicking wrench) */}
+            {/* click ripple — only on legacy */}
             {!upgraded && (
               <motion.div
                 animate={{ scale: [0, 0, 2, 0, 0], opacity: [0, 0, 0.7, 0, 0] }}
@@ -295,7 +287,7 @@ function WebUpgradeLaptop() {
                 style={{
                   position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
                   width: 22, height: 22, borderRadius: '50%',
-                  border: '1.5px solid rgba(167,139,250,0.8)',
+                  border: '1.5px solid rgba(129,140,248,0.8)',
                   pointerEvents: 'none',
                 }}
               />
@@ -306,21 +298,21 @@ function WebUpgradeLaptop() {
         {/* status bar */}
         <div style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          padding: '4px 12px', background: 'rgba(4,0,12,0.98)',
-          borderTop: '1px solid rgba(139,92,246,0.1)',
+          padding: '4px 12px', background: 'rgba(7,8,10,0.98)',
+          borderTop: '1px solid rgba(99,102,241,0.08)',
         }}>
-          <span className="font-mono" style={{ fontSize: 7, color: upgraded ? 'rgba(124,58,237,0.6)' : 'rgba(100,100,100,0.4)', letterSpacing: '0.18em', transition: 'color 0.5s' }}>
+          <span className="font-mono" style={{ fontSize: 7, color: upgraded ? 'rgba(79,70,229,0.6)' : 'rgba(100,100,100,0.4)', letterSpacing: '0.18em', transition: 'color 0.5s' }}>
             {upgraded ? 'WF.PREMIUM' : 'LEGACY.SITE'}
           </span>
-          <div style={{ height: 1, flex: 1, margin: '0 8px', background: 'rgba(139,92,246,0.07)', overflow: 'hidden' }}>
+          <div style={{ height: 1, flex: 1, margin: '0 8px', background: 'rgba(99,102,241,0.07)', overflow: 'hidden' }}>
             <motion.div
               animate={{ x: ['-100%', '100%'] }}
               transition={{ duration: upgraded ? 2 : 6, repeat: Infinity, ease: 'easeInOut' }}
-              style={{ height: '100%', width: '35%', background: upgraded ? 'linear-gradient(90deg, transparent, rgba(167,139,250,0.5), transparent)' : 'linear-gradient(90deg, transparent, rgba(120,120,120,0.3), transparent)' }}
+              style={{ height: '100%', width: '35%', background: upgraded ? 'linear-gradient(90deg, transparent, rgba(129,140,248,0.5), transparent)' : 'linear-gradient(90deg, transparent, rgba(120,120,120,0.3), transparent)' }}
             />
           </div>
-          <span className="font-mono" style={{ fontSize: 7, color: upgraded ? 'rgba(192,38,211,0.5)' : 'rgba(100,100,100,0.3)', letterSpacing: '0.18em', transition: 'color 0.5s' }}>
-            {upgraded ? 'SYS.ACTIVE' : 'ERRORS: 7'}
+          <span className="font-mono" style={{ fontSize: 7, color: upgraded ? 'rgba(99,102,241,0.5)' : 'rgba(100,100,100,0.3)', letterSpacing: '0.18em', transition: 'color 0.5s' }}>
+            {upgraded ? 'ACTIVE' : 'ERRORS: 7'}
           </span>
         </div>
       </div>
@@ -328,16 +320,16 @@ function WebUpgradeLaptop() {
       {/* ── Keyboard deck ── */}
       <div style={{
         width: '104%', marginLeft: '-2%', height: 12,
-        background: 'linear-gradient(to bottom, #160e29, #080314)',
+        background: 'linear-gradient(to bottom, #181c22, #0d0f12)',
         borderRadius: '0 0 8px 8px',
-        border: '1.5px solid rgba(139,92,246,0.2)',
-        borderTop: '2px solid rgba(167,139,250,0.4)',
+        border: '1.5px solid rgba(99,102,241,0.18)',
+        borderTop: '2px solid rgba(129,140,248,0.35)',
         boxShadow: '0 10px 24px rgba(0,0,0,0.7)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         position: 'relative',
       }}>
         {/* touchpad */}
-        <div style={{ width: 52, height: 6, background: 'rgba(5,2,12,0.9)', border: '1px solid rgba(139,92,246,0.12)', borderRadius: '1px 1px 0 0', position: 'absolute', bottom: 1 }} />
+        <div style={{ width: 52, height: 6, background: 'rgba(7,8,10,0.9)', border: '1px solid rgba(99,102,241,0.1)', borderRadius: '1px 1px 0 0', position: 'absolute', bottom: 1 }} />
       </div>
 
       {/* keyboard rows */}
@@ -352,9 +344,9 @@ function WebUpgradeLaptop() {
             {Array.from({ length: row.keys }).map((_, ki) => (
               <div key={ki} style={{
                 flex: ri === 2 && ki === 4 ? 3.5 : 1, height: 11,
-                background: upgraded ? 'linear-gradient(to bottom, #1a0a30, #0f0520)' : 'linear-gradient(to bottom, #1a1a1a, #0a0a0a)',
+                background: upgraded ? 'linear-gradient(to bottom, #1e2330, #181c22)' : 'linear-gradient(to bottom, #1a1a1a, #0a0a0a)',
                 borderRadius: 3,
-                border: upgraded ? '1px solid rgba(139,92,246,0.18)' : '1px solid rgba(80,80,80,0.25)',
+                border: upgraded ? '1px solid rgba(99,102,241,0.16)' : '1px solid rgba(80,80,80,0.25)',
                 boxShadow: 'inset 0 -1.5px 0 rgba(0,0,0,0.5)',
                 transition: 'background 0.6s, border-color 0.6s',
               }} />
@@ -365,8 +357,8 @@ function WebUpgradeLaptop() {
 
       {/* caption */}
       <div style={{ textAlign: 'center', marginTop: 14, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-        <span className="font-mono" style={{ fontSize: 8.5, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(124,58,237,0.5)' }}>
-          {upgraded ? '✓ UPGRADED — Click wrench to revert' : 'Click the wrench ↑ to upgrade'}
+        <span className="font-mono" style={{ fontSize: 8.5, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'rgba(79,70,229,0.5)' }}>
+          {upgraded ? '✓ UPGRADED — Click the wrench to revert' : 'Click the wrench ↑ to see the upgrade'}
         </span>
       </div>
     </div>
@@ -374,9 +366,9 @@ function WebUpgradeLaptop() {
 }
 
 const problems = [
-  { tag: 'Broken Navigation', title: 'Broken navigation is the baseline problem.', body: 'We are generationally native digital builders who understand that modern web journeys are failing. In an era shaped by LLMs and instant answers, legacy websites act like data graveyards: stale, buried, and frustratingly hard to traverse.', icon: '⬡', color: '#7c3aed', glow: 'rgba(124,58,237,0.15)' },
-  { tag: 'Template Fatigue', title: 'Generic templates are killing distinction.', body: 'Most websites still look interchangeable, leaning on safe layouts that say nothing memorable about the brand behind them. We build spatial, high-end interfaces that feel intentional, premium, and unmistakably custom.', icon: '◈', color: '#c026d3', glow: 'rgba(192,38,211,0.15)' },
-  { tag: 'Access Gap', title: 'Design quality should not be gatekept.', body: 'Coming from a region where advanced graphic design is often trapped behind massive agency premiums, we see too many local businesses neglect their digital storefronts entirely. That gap should not exist.', icon: '◆', color: '#4f46e5', glow: 'rgba(79,70,229,0.15)' },
+  { tag: 'Broken Navigation', title: 'Poor navigation is costing you users.', body: 'In an era defined by instant answers and short attention spans, outdated websites act as barriers to entry. Broken flows, buried content, and slow interfaces cause visitors to leave before they even engage.', icon: '⬡', color: '#4f46e5', glow: 'rgba(79,70,229,0.15)' },
+  { tag: 'Template Fatigue', title: 'Generic templates are erasing brand distinction.', body: 'Most businesses still rely on off-the-shelf layouts that communicate nothing unique about their brand. We build custom, high-fidelity interfaces that feel intentional, premium, and unmistakably yours.', icon: '◈', color: '#6366f1', glow: 'rgba(99,102,241,0.15)' },
+  { tag: 'Access Gap', title: 'Premium design should not be a privilege.', body: 'Advanced web design has historically been locked behind large agency fees, pricing out local businesses that need it most. We exist to close that gap by delivering enterprise-quality results at accessible rates.', icon: '◆', color: '#4338ca', glow: 'rgba(67,56,202,0.15)' },
 ];
 
 export default function MissionSection() {
@@ -384,10 +376,10 @@ export default function MissionSection() {
   const inView = useInView(ref, { once: true, margin: '-80px' });
 
   return (
-    <section id="mission" ref={ref} style={{ position: 'relative', width: '100%', padding: '120px 24px', overflow: 'hidden', background: 'linear-gradient(180deg, #04000d 0%, #080016 50%, #04000d 100%)' }}>
+    <section id="mission" ref={ref} style={{ position: 'relative', width: '100%', padding: '120px 24px', overflow: 'hidden', background: 'linear-gradient(180deg, #07080a 0%, #0d0f12 50%, #07080a 100%)' }}>
       <div className="grid-overlay" style={{ position: 'absolute', inset: 0, opacity: 0.6 }} />
-      <div style={{ position: 'absolute', top: '10%', left: '5%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(124,58,237,0.08) 0%, transparent 70%)', filter: 'blur(60px)', pointerEvents: 'none' }} />
-      <div style={{ position: 'absolute', bottom: '10%', right: '5%', width: 350, height: 350, borderRadius: '50%', background: 'radial-gradient(circle, rgba(192,38,211,0.07) 0%, transparent 70%)', filter: 'blur(60px)', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', top: '10%', left: '5%', width: 400, height: 400, borderRadius: '50%', background: 'radial-gradient(circle, rgba(79,70,229,0.07) 0%, transparent 70%)', filter: 'blur(60px)', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', bottom: '10%', right: '5%', width: 350, height: 350, borderRadius: '50%', background: 'radial-gradient(circle, rgba(99,102,241,0.06) 0%, transparent 70%)', filter: 'blur(60px)', pointerEvents: 'none' }} />
 
       <div style={{ position: 'relative', zIndex: 1, maxWidth: 1200, margin: '0 auto' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '40px 48px', alignItems: 'start' }}>
@@ -396,21 +388,21 @@ export default function MissionSection() {
             <div className="section-tag" style={{ marginBottom: 24 }}>
               <span className="dot" />Mission
             </div>
-            <h2 className="font-display" style={{ fontSize: 'clamp(36px, 5vw, 58px)', fontWeight: 800, lineHeight: 1.05, letterSpacing: '-0.03em', marginBottom: 24, color: '#f5f0ff' }}>
+            <h2 className="font-display" style={{ fontSize: 'clamp(36px, 5vw, 58px)', fontWeight: 800, lineHeight: 1.05, letterSpacing: '-0.03em', marginBottom: 24, color: '#f1f5f9' }}>
               We build the web so it feels{' '}
-              <span style={{ background: 'linear-gradient(135deg, #a78bfa, #e879f9)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
-                immediate, premium &amp; effortless.
+              <span style={{ background: 'linear-gradient(135deg, #818cf8, #a5b4fc)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+                immediate, premium & effortless.
               </span>
             </h2>
-            <p style={{ color: '#9d8fb5', fontSize: 15, lineHeight: 1.8, marginBottom: 16, fontWeight: 300 }}>
-              Web Fixxies exists to correct the experience layer of modern browsing. We engineer visually stunning, fluid spatial architectures for brands that need more than a template.
+            <p style={{ color: '#64748b', fontSize: 15, lineHeight: 1.8, marginBottom: 16, fontWeight: 300 }}>
+              Web Fixxies exists to raise the standard of the modern web experience. We engineer visually striking, high-performance digital platforms for brands that demand more than a template.
             </p>
-            <p style={{ color: '#6b5d80', fontSize: 14, lineHeight: 1.8, fontWeight: 300 }}>
-              Our mission is to make advanced digital presence accessible at a fraction of enterprise cost, giving local businesses and ambitious teams the level of polish that used to be locked behind agency premiums.
+            <p style={{ color: '#475569', fontSize: 14, lineHeight: 1.8, fontWeight: 300 }}>
+              Our mission is to make advanced digital presence accessible at a fraction of enterprise cost — giving local businesses and ambitious teams the level of polish that was once exclusive to large agency budgets.
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 32 }}>
               {['Performance First', 'Spatial Storytelling', 'Accessible Premium'].map(tag => (
-                <span key={tag} className="font-mono" style={{ padding: '6px 14px', border: '1px solid rgba(139,92,246,0.2)', borderRadius: 100, fontSize: 9, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#7c6a99', background: 'rgba(124,58,237,0.05)' }}>
+                <span key={tag} className="font-mono" style={{ padding: '6px 14px', border: '1px solid rgba(99,102,241,0.18)', borderRadius: 100, fontSize: 9, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#64748b', background: 'rgba(79,70,229,0.05)' }}>
                   {tag}
                 </span>
               ))}
@@ -426,15 +418,15 @@ export default function MissionSection() {
                 animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}}
                 transition={{ duration: 0.6, delay: 0.3 + i * 0.15, ease: [0.22, 1, 0.36, 1] }}
                 whileHover={{ y: -4, scale: 1.01 }}
-                style={{ padding: '28px', borderRadius: 16, border: '1px solid rgba(139,92,246,0.12)', background: 'rgba(13,0,31,0.8)', backdropFilter: 'blur(20px)', position: 'relative', overflow: 'hidden', cursor: 'default' }}
+                style={{ padding: '28px', borderRadius: 16, border: '1px solid rgba(99,102,241,0.1)', background: 'rgba(13,15,18,0.85)', backdropFilter: 'blur(20px)', position: 'relative', overflow: 'hidden', cursor: 'default' }}
               >
                 <div style={{ position: 'absolute', top: 0, right: 0, width: 120, height: 120, borderRadius: '50%', background: `radial-gradient(circle, ${p.glow} 0%, transparent 70%)`, filter: 'blur(20px)', pointerEvents: 'none' }} />
-                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 1, background: `linear-gradient(90deg, transparent, ${p.color}, transparent)`, opacity: 0.5 }} />
+                <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 1, background: `linear-gradient(90deg, transparent, ${p.color}, transparent)`, opacity: 0.4 }} />
                 <div className="font-mono" style={{ fontSize: 9, letterSpacing: '0.25em', textTransform: 'uppercase', color: p.color, marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
                   <span style={{ fontSize: 14 }}>{p.icon}</span>{p.tag}
                 </div>
-                <h3 className="font-display" style={{ fontSize: 18, fontWeight: 700, color: '#f5f0ff', marginBottom: 12, lineHeight: 1.3 }}>{p.title}</h3>
-                <p style={{ fontSize: 13, color: '#7c6a99', lineHeight: 1.75, fontWeight: 300 }}>{p.body}</p>
+                <h3 className="font-display" style={{ fontSize: 18, fontWeight: 700, color: '#f1f5f9', marginBottom: 12, lineHeight: 1.3 }}>{p.title}</h3>
+                <p style={{ fontSize: 13, color: '#64748b', lineHeight: 1.75, fontWeight: 300 }}>{p.body}</p>
               </motion.div>
             ))}
 
@@ -442,15 +434,15 @@ export default function MissionSection() {
               initial={{ opacity: 0, y: 30 }} animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ duration: 0.7, delay: 0.75, ease: [0.22, 1, 0.36, 1] }}
               className="glow-border"
-              style={{ padding: '32px 28px', borderRadius: 16, position: 'relative', overflow: 'hidden', background: 'rgba(13,0,31,0.9)' }}
+              style={{ padding: '32px 28px', borderRadius: 16, position: 'relative', overflow: 'hidden', background: 'rgba(13,15,18,0.95)' }}
             >
-              <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at top left, rgba(124,58,237,0.12) 0%, transparent 60%)', pointerEvents: 'none' }} />
-              <div className="font-mono" style={{ fontSize: 9, letterSpacing: '0.25em', textTransform: 'uppercase', color: '#7c3aed', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
-                <span style={{ display: 'inline-block', width: 24, height: 1, background: 'linear-gradient(90deg, #7c3aed, #c026d3)' }} />
+              <div style={{ position: 'absolute', inset: 0, background: 'radial-gradient(ellipse at top left, rgba(79,70,229,0.1) 0%, transparent 60%)', pointerEvents: 'none' }} />
+              <div className="font-mono" style={{ fontSize: 9, letterSpacing: '0.25em', textTransform: 'uppercase', color: '#4f46e5', marginBottom: 16, display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span style={{ display: 'inline-block', width: 24, height: 1, background: 'linear-gradient(90deg, #4f46e5, #6366f1)' }} />
                 Our Mission
               </div>
-              <p className="font-display" style={{ fontSize: 'clamp(16px, 2vw, 22px)', fontWeight: 600, lineHeight: 1.5, color: '#f5f0ff', position: 'relative' }}>
-                We disrupt that cycle by delivering high-performance, visually stunning, fluid spatial web architectures at a fraction of enterprise cost, making advanced digital presence accessible to the businesses that need it most.
+              <p className="font-display" style={{ fontSize: 'clamp(16px, 2vw, 22px)', fontWeight: 600, lineHeight: 1.5, color: '#f1f5f9', position: 'relative' }}>
+                We deliver high-performance, visually compelling web architectures at a fraction of enterprise cost — making advanced digital presence genuinely accessible to the businesses that need it most.
               </p>
             </motion.div>
           </motion.div>

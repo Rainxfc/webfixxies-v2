@@ -12,11 +12,11 @@ interface Particle {
 }
 
 const COLORS = [
-  'rgba(139, 92, 246,',
-  'rgba(167, 139, 250,',
-  'rgba(192, 38, 211,',
   'rgba(79, 70, 229,',
-  'rgba(232, 121, 249,',
+  'rgba(99, 102, 241,',
+  'rgba(129, 140, 248,',
+  'rgba(67, 56, 202,',
+  'rgba(148, 163, 184,',
 ];
 
 // Pre-built fillStyle strings to avoid string concat every frame
@@ -54,8 +54,8 @@ export default function ParticleField() {
       canvas.height = window.innerHeight;
       // Reduced cap: 80 max (was 180). Connection lines are O(n²) — halving n
       // cuts connection checks by ~75%
-      const count = Math.floor((window.innerWidth * window.innerHeight) / 14000);
-      particles.current = Array.from({ length: Math.min(count, 80) }, () =>
+      const count = Math.floor((window.innerWidth * window.innerHeight) / 16000);
+      particles.current = Array.from({ length: Math.min(count, 65) }, () =>
         createParticle(canvas.width, canvas.height)
       );
     };
@@ -139,11 +139,11 @@ export default function ParticleField() {
           const dy = pts[i].y - pts[j].y;
           const dSq = dx * dx + dy * dy;
           if (dSq < CONNECT_DIST_SQ) {
-            const alpha = 0.055 * (1 - Math.sqrt(dSq) / CONNECT_DIST);
+            const alpha = 0.045 * (1 - Math.sqrt(dSq) / CONNECT_DIST);
             ctx.beginPath();
             ctx.moveTo(pts[i].x, pts[i].y);
             ctx.lineTo(pts[j].x, pts[j].y);
-            ctx.strokeStyle = `rgba(124, 58, 237, ${alpha.toFixed(3)})`;
+            ctx.strokeStyle = `rgba(99, 102, 241, ${alpha.toFixed(3)})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
