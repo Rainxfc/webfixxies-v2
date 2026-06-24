@@ -234,11 +234,6 @@ export default function Hero3D() {
         <span className="font-mono" style={{ fontSize: 9, letterSpacing: '0.35em', color: 'rgba(99,102,241,0.7)', textTransform: 'uppercase' }}>Scroll ↓</span>
       </div>
 
-      {/* HUD elements */}
-      <div className="hud-element" style={{ position: 'absolute', top: 100, left: 24, zIndex: 3, opacity: 0.5 }}>+ SERVICES.LIVE</div>
-      <div className="hud-element" style={{ position: 'absolute', top: 100, right: 24, zIndex: 3, opacity: 0.5 }}>+ LATENCY: 2ms</div>
-      <div className="hud-element" style={{ position: 'absolute', bottom: 40, left: 24, zIndex: 3, opacity: 0.5 }}>+ WF.STUDIO</div>
-      <div className="hud-element" style={{ position: 'absolute', bottom: 40, right: 24, zIndex: 3, opacity: 0.5 }}>+ INFRASTRUCTURE.LIVE</div>
     </div>
   );
 }
