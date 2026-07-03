@@ -70,14 +70,29 @@ export default function ContactSection() {
               WEB FIXXIES
             </span>
           </div>
-          <div style={{ display: 'flex', gap: 32 }}>
-            {['Mission', 'About', 'Projects', 'Pricing', 'Contact'].map(item => (
-              <a key={item} href={`#${item.toLowerCase()}`} className="font-mono" style={{ fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#334155', textDecoration: 'none', transition: 'color 0.3s' }}
-                onMouseEnter={e => (e.currentTarget.style.color = '#6366f1')}
-                onMouseLeave={e => (e.currentTarget.style.color = '#334155')}>
-                {item}
-              </a>
-            ))}
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 20, alignItems: 'center' }}>
+            <div style={{ display: 'flex', gap: 32 }}>
+              {['Mission', 'About', 'Projects', 'Pricing', 'Contact'].map(item => (
+                <a key={item} href={`#${item.toLowerCase()}`} className="font-mono" style={{ fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#334155', textDecoration: 'none', transition: 'color 0.3s' }}
+                  onMouseEnter={e => (e.currentTarget.style.color = '#6366f1')}
+                  onMouseLeave={e => (e.currentTarget.style.color = '#334155')}>
+                  {item}
+                </a>
+              ))}
+            </div>
+            <div style={{ display: 'flex', gap: 24 }}>
+              {[
+                { name: 'Facebook', url: 'https://www.facebook.com/people/Webfixxies/61591612619072/?sk=about' },
+                { name: 'Instagram', url: 'https://www.instagram.com/webfixxiesco/' },
+                { name: 'LinkedIn', url: 'https://www.linkedin.com/company/webfixxies' }
+              ].map(social => (
+                <a key={social.name} href={social.url} target="_blank" rel="noopener noreferrer" className="font-mono" style={{ fontSize: 9, letterSpacing: '0.15em', textTransform: 'uppercase', color: '#6366f1', textDecoration: 'none', transition: 'color 0.3s, text-shadow 0.3s' }}
+                  onMouseEnter={e => { e.currentTarget.style.color = '#a5b4fc'; e.currentTarget.style.textShadow = '0 0 10px rgba(165,180,252,0.5)'; }}
+                  onMouseLeave={e => { e.currentTarget.style.color = '#6366f1'; e.currentTarget.style.textShadow = 'none'; }}>
+                  {social.name}
+                </a>
+              ))}
+            </div>
           </div>
           <span className="font-mono" style={{ fontSize: 9, color: '#1e293b', letterSpacing: '0.15em' }}>© 2026 WEB FIXXIES</span>
         </motion.div>

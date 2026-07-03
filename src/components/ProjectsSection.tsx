@@ -355,7 +355,7 @@ function SitePreview({
 }
 
 // ─── Project data ──────────────────────────────────────────────────────────────
-const projects = [
+export const projects = [
   {
     id: 'kfc',
     name: 'KFC Bangladesh Demo',
@@ -420,6 +420,28 @@ const projects = [
       { label: 'Sections', value: 10, suffix: '+' },
       { label: 'JS Lines', value: 2400, suffix: '+' },
       { label: 'Score', value: 94, suffix: '' },
+    ],
+  },
+  {
+    id: 'nike',
+    name: 'Nike Shoe Demo',
+    subtitle: 'Premium E-Commerce Viewer',
+    by: 'VEX / Ibrahim',
+    byDetail: 'Design Principal',
+    description: 'A dedicated showcase of Nike shoes featuring real-time 3D models and interactive UI.',
+    liveUrl: 'https://nike-shoe-hazel.vercel.app/',
+    repoUrl: 'https://github.com/Rainxfc/webfixxies-v2',
+    iframeSrc: 'https://nike-shoe-hazel.vercel.app/',
+    accent: '#3b82f6',
+    accentAlt: '#60a5fa',
+    glow: 'rgba(59,130,246,0.18)',
+    glowSoft: 'rgba(59,130,246,0.05)',
+    tags: ['Live Deploy', '3D E-Commerce', 'Nike', 'Responsive'],
+    icon: '👟',
+    stats: [
+      { label: '3D Models', value: 3 },
+      { label: 'Animations', value: 15, suffix: '+' },
+      { label: 'Score', value: 95, suffix: '' },
     ],
   },
 ];
@@ -877,17 +899,27 @@ export default function ProjectsSection() {
           <div className="font-mono" style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(167,139,250,0.3)', marginBottom: 16 }}>
             Want your site rebuilt?
           </div>
-          <motion.a
-            href="mailto:webfixxies@gmail.com"
-            whileHover={{ scale: 1.04, boxShadow: '0 0 60px rgba(124,58,237,0.5)' }}
-            whileTap={{ scale: 0.97 }}
-            className="btn-primary"
-            style={{ textDecoration: 'none', fontSize: 10, padding: '14px 36px', letterSpacing: '0.2em', display: 'inline-flex', alignItems: 'center', gap: 10 }}
-          >
-            <motion.span animate={{ opacity: [1, 0.4, 1] }} transition={{ duration: 1.5, repeat: Infinity }}>✦</motion.span>
-            Start a Project
-            <motion.span animate={{ x: [0, 4, 0] }} transition={{ duration: 1.2, repeat: Infinity }}>→</motion.span>
-          </motion.a>
+          <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <motion.a
+              href="#all-projects"
+              whileHover={{ scale: 1.04, boxShadow: '0 0 60px rgba(124,58,237,0.3)' }}
+              whileTap={{ scale: 0.97 }}
+              style={{ padding: '14px 36px', borderRadius: 100, border: '1px solid rgba(124,58,237,0.3)', background: 'transparent', color: '#c4b5fd', textDecoration: 'none', fontSize: 10, fontFamily: 'Space Mono, monospace', letterSpacing: '0.2em', textTransform: 'uppercase', display: 'inline-flex', alignItems: 'center', gap: 10 }}
+            >
+              See All Projects
+            </motion.a>
+            <motion.a
+              href="mailto:webfixxies@gmail.com"
+              whileHover={{ scale: 1.04, boxShadow: '0 0 60px rgba(124,58,237,0.5)' }}
+              whileTap={{ scale: 0.97 }}
+              className="btn-primary"
+              style={{ textDecoration: 'none', fontSize: 10, padding: '14px 36px', letterSpacing: '0.2em', display: 'inline-flex', alignItems: 'center', gap: 10 }}
+            >
+              <motion.span animate={{ opacity: [1, 0.4, 1] }} transition={{ duration: 1.5, repeat: Infinity }}>✦</motion.span>
+              Start a Project
+              <motion.span animate={{ x: [0, 4, 0] }} transition={{ duration: 1.2, repeat: Infinity }}>→</motion.span>
+            </motion.a>
+          </div>
         </motion.div>
       </div>
     </section>

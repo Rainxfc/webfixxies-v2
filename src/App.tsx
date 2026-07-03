@@ -7,6 +7,7 @@ import AboutSection from './components/AboutSection';
 import ProjectsSection from './components/ProjectsSection';
 import PricingSection from './components/PricingSection';
 import ContactSection from './components/ContactSection';
+import AllProjectsPage from './components/AllProjectsPage';
 
 function CursorGlow() {
   const ref = useRef<HTMLDivElement>(null);
@@ -63,12 +64,12 @@ function Navbar() {
   return (
     <>
       <header style={{ position: 'fixed', top: 0, left: 0, right: 0, height: 72, zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 clamp(16px, 4vw, 32px)', background: scrolled ? 'rgba(7,8,10,0.9)' : 'transparent', backdropFilter: scrolled ? 'blur(24px)' : 'none', borderBottom: scrolled ? '1px solid rgba(99,102,241,0.1)' : '1px solid transparent', transition: 'all 0.4s ease' }}>
-        <button onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })} style={{ background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 10 }}>
+        <a href="#" onClick={(e) => { if (window.location.hash === '#all-projects') { window.location.hash = ''; } else { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); } }} style={{ textDecoration: 'none', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 10 }}>
           <img src="logo.png" alt="Web Fixxies logo" style={{ width: 32, height: 32, objectFit: 'contain', filter: 'drop-shadow(0 0 6px rgba(99,102,241,0.45))' }} />
           <span style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 900, fontSize: 18, letterSpacing: '-0.02em', textTransform: 'uppercase', backgroundImage: 'linear-gradient(135deg, #e2e8f0, #a5b4fc, #818cf8)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', filter: 'drop-shadow(0 0 10px rgba(99,102,241,0.3))' }}>
             WEB FIXXIES
           </span>
-        </button>
+        </a>
 
         <nav className="nav-desktop">
           {navItems.map(item => (
@@ -124,6 +125,18 @@ function GridBackground() {
 }
 
 function App() {
+  const [currentPage, setCurrentPage] = useState<'home' | 'all-projects'>(() => {
+    return window.location.hash === '#all-projects' ? 'all-projects' : 'home';
+  });
+
+  useEffect(() => {
+    const handleHashChange = () => {
+      setCurrentPage(window.location.hash === '#all-projects' ? 'all-projects' : 'home');
+    };
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  }, []);
+
   useEffect(() => {
     const lenis = new Lenis({
       duration: 1.1,
@@ -147,12 +160,18 @@ function App() {
       <CursorGlow />
       <Navbar />
       <main style={{ position: 'relative', zIndex: 2 }}>
-        <Hero3D />
-        <MissionSection />
-        <AboutSection />
-        <ProjectsSection />
-        <PricingSection />
-        <ContactSection />
+        {currentPage === 'all-projects' ? (
+          <AllProjectsPage />
+        ) : (
+          <>
+            <Hero3D />
+            <MissionSection />
+            <AboutSection />
+            <ProjectsSection />
+            <PricingSection />
+            <ContactSection />
+          </>
+        )}
       </main>
     </div>
   );
