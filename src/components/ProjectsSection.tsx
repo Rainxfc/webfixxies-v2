@@ -77,11 +77,13 @@ function SitePreview({
   title,
   accent,
   height = 620,
+  loading = 'lazy',
 }: {
   src: string;
   title: string;
   accent: string;
   height?: number;
+  loading?: 'lazy' | 'eager';
 }) {
   const [status, setStatus] = useState<'loading' | 'ready' | 'blocked'>('loading');
   const [interacted, setInteracted] = useState(false);
@@ -342,7 +344,7 @@ function SitePreview({
           onError={() => setStatus('blocked')}
           sandbox="allow-scripts allow-same-origin allow-forms allow-popups allow-pointer-lock allow-top-navigation-by-user-activation allow-modals"
           allowFullScreen
-          loading="lazy"
+          loading={loading}
           style={{
             width: '100%', height: '100%', border: 'none', display: 'block',
             opacity: status === 'ready' ? 1 : 0,
@@ -484,29 +486,29 @@ function StatsBar({ stats, accent }: { stats: typeof projects[0]['stats']; accen
 }
 
 // ─── Single project card ───────────────────────────────────────────────────────
-function ProjectCard({ project, index }: { project: typeof projects[0]; index: number }) {
+export function ProjectCard({ project, index, compact = false }: { project: typeof projects[0]; index: number; compact?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: '-60px' });
   const [hovered, setHovered] = useState(false);
   const [showPreview, setShowPreview] = useState(false);
 
-  // Lazy-load iframes: show after card comes into view (500ms delay)
+  // Only the full archive cards load the live iframe preview.
   useEffect(() => {
-    if (!inView) return;
+    if (!inView || compact) return;
     const t = setTimeout(() => setShowPreview(true), 600 + index * 200);
     return () => clearTimeout(t);
-  }, [inView, index]);
+  }, [inView, compact, index]);
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 80 }}
+      initial={{ opacity: 0, y: compact ? 48 : 80 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.9, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
+      transition={{ duration: compact ? 0.75 : 0.9, delay: index * 0.12, ease: [0.22, 1, 0.36, 1] }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       style={{
-        borderRadius: 24,
+        borderRadius: compact ? 28 : 24,
         border: `1px solid ${hovered ? project.accent + '45' : 'rgba(139,92,246,0.12)'}`,
         background: `linear-gradient(145deg, rgba(6,0,18,0.98), ${project.glowSoft}, rgba(4,0,12,0.98))`,
         backdropFilter: 'blur(20px)',
@@ -557,8 +559,8 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
       />
 
       {/* ── Header section ── */}
-      <div style={{ padding: '32px 36px 20px', position: 'relative', zIndex: 1 }}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
+      <div style={{ padding: compact ? '28px 28px 18px' : '32px 36px 20px', position: 'relative', zIndex: 1 }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: compact ? 18 : 16 }}>
           <div style={{ flex: 1, minWidth: 200 }}>
             {/* By line */}
             <motion.div
@@ -566,7 +568,7 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
               animate={inView ? { opacity: 1, x: 0 } : {}}
               transition={{ delay: index * 0.12 + 0.2 }}
               className="font-mono"
-              style={{ fontSize: 9, letterSpacing: '0.28em', textTransform: 'uppercase', color: `${project.accent}88`, marginBottom: 10, display: 'flex', alignItems: 'center', gap: 8 }}
+              style={{ fontSize: compact ? 8 : 9, letterSpacing: '0.28em', textTransform: 'uppercase', color: `${project.accent}88`, marginBottom: 10, display: 'flex', alignItems: 'center', gap: 8 }}
             >
               <span style={{ width: 20, height: 1, background: `${project.accent}60`, display: 'inline-block' }} />
               {project.by} · {project.byDetail}
@@ -579,7 +581,7 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
               transition={{ delay: index * 0.12 + 0.3, duration: 0.6 }}
               className="font-display"
               style={{
-                fontSize: 'clamp(24px, 3.8vw, 38px)', fontWeight: 900,
+                fontSize: compact ? 'clamp(22px, 3.2vw, 32px)' : 'clamp(24px, 3.8vw, 38px)', fontWeight: 900,
                 letterSpacing: '-0.02em', lineHeight: 1.05, color: '#f5f0ff',
                 marginBottom: 6, display: 'flex', alignItems: 'center', gap: 12,
               }}
@@ -619,24 +621,26 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
                 Live Site ↗
               </motion.a>
             )}
-            <motion.a
-              href={project.repoUrl} target="_blank" rel="noopener noreferrer"
-              whileHover={{ scale: 1.04, y: -2, borderColor: `${project.accent}55` }}
-              whileTap={{ scale: 0.97 }}
-              style={{
-                display: 'inline-flex', alignItems: 'center', gap: 7,
-                padding: '9px 18px', borderRadius: 100,
-                border: `1px solid ${project.accent}28`, color: `${project.accentAlt}bb`,
-                fontSize: 9.5, fontFamily: 'Space Mono, monospace',
-                letterSpacing: '0.14em', textTransform: 'uppercase', textDecoration: 'none',
-                transition: 'border-color 0.3s, color 0.3s',
-              }}
-            >
-              <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z" />
-              </svg>
-              Source
-            </motion.a>
+            {project.id !== 'nike' && (
+              <motion.a
+                href={project.repoUrl} target="_blank" rel="noopener noreferrer"
+                whileHover={{ scale: 1.04, y: -2, borderColor: `${project.accent}55` }}
+                whileTap={{ scale: 0.97 }}
+                style={{
+                  display: 'inline-flex', alignItems: 'center', gap: 7,
+                  padding: '9px 18px', borderRadius: 100,
+                  border: `1px solid ${project.accent}28`, color: `${project.accentAlt}bb`,
+                  fontSize: 9.5, fontFamily: 'Space Mono, monospace',
+                  letterSpacing: '0.14em', textTransform: 'uppercase', textDecoration: 'none',
+                  transition: 'border-color 0.3s, color 0.3s',
+                }}
+              >
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0 1 12 6.844a9.59 9.59 0 0 1 2.504.337c1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.02 10.02 0 0 0 22 12.017C22 6.484 17.522 2 12 2z" />
+                </svg>
+                Source
+              </motion.a>
+            )}
           </div>
         </div>
 
@@ -645,9 +649,9 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
           transition={{ delay: index * 0.12 + 0.4 }}
-          style={{ marginTop: 18, display: 'flex', flexWrap: 'wrap', alignItems: 'flex-start', justifyContent: 'space-between', gap: 14 }}
+          style={{ marginTop: compact ? 16 : 18, display: 'flex', flexWrap: 'wrap', alignItems: 'flex-start', justifyContent: 'space-between', gap: 14 }}
         >
-          <p style={{ fontSize: 13.5, color: '#7c6a99', lineHeight: 1.8, fontWeight: 300, maxWidth: 560 }}>
+          <p style={{ fontSize: compact ? 13 : 13.5, color: '#7c6a99', lineHeight: 1.8, fontWeight: 300, maxWidth: 560 }}>
             {project.description}
           </p>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
@@ -681,14 +685,14 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
         animate={hovered ? { opacity: 0.8 } : { opacity: 0.3 }}
         transition={{ duration: 0.4 }}
         style={{
-          height: 1, margin: '0 36px',
+          height: 1, margin: compact ? '0 28px' : '0 36px',
           background: `linear-gradient(90deg, transparent, ${project.accent}50, transparent)`,
           position: 'relative', zIndex: 1,
         }}
       />
 
       {/* ── Preview label ── */}
-      <div style={{ padding: '16px 36px 6px', position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', gap: 10 }}>
+      <div style={{ padding: compact ? '16px 28px 8px' : '16px 36px 6px', position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', gap: 10 }}>
         <motion.div
           animate={{ opacity: [0.5, 1, 0.5] }}
           transition={{ duration: 2, repeat: Infinity }}
@@ -700,13 +704,24 @@ function ProjectCard({ project, index }: { project: typeof projects[0]; index: n
       </div>
 
       {/* ── Iframe preview ── */}
-      <div style={{ padding: '6px 36px 36px', position: 'relative', zIndex: 1 }}>
-        {showPreview && project.iframeSrc ? (
+      <div style={{ padding: compact ? '8px 28px 28px' : '6px 36px 36px', position: 'relative', zIndex: 1 }}>
+        {compact ? (
+          <div style={{ borderRadius: 18, overflow: 'hidden' }}>
+            <SitePreview
+              src={project.iframeSrc}
+              title={project.name}
+              accent={project.accent}
+              height={360}
+              loading="eager"
+            />
+          </div>
+        ) : showPreview && project.iframeSrc ? (
           <SitePreview
             src={project.iframeSrc}
             title={project.name}
             accent={project.accent}
-            height={index === 2 ? 700 : 640}
+            height={compact ? 420 : index === 2 ? 700 : 640}
+            loading={compact ? 'eager' : 'lazy'}
           />
         ) : !project.iframeSrc ? (
           // Should not happen now that NovaBites has a URL, but keep as fallback
@@ -855,6 +870,7 @@ function ConnectorLine({ accent }: { accent: string }) {
 export default function ProjectsSection() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: '-80px' });
+  const featuredProjects = [projects[1], projects[3]]; // Pizza Hut and Nike
 
   return (
     <section
@@ -879,15 +895,48 @@ export default function ProjectsSection() {
         {/* Header */}
         <SectionHeader inView={inView} />
 
-        {/* Cards with connector lines */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-          {projects.map((project, i) => (
-            <div key={project.id}>
-              <ProjectCard project={project} index={i} />
-              {i < projects.length - 1 && <ConnectorLine accent={project.accent} />}
-            </div>
+        {/* Featured projects */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
+          {featuredProjects.map((project, i) => (
+            <ProjectCard key={project.id} project={project} index={i} compact />
           ))}
         </div>
+
+        {/* View All Projects Button */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={inView ? { opacity: 1, y: 0 } : {}}
+          transition={{ delay: 0.5, duration: 0.7 }}
+          style={{ textAlign: 'center', marginTop: 80 }}
+        >
+          <motion.a
+            href="#all-projects"
+            whileHover={{ scale: 1.05, boxShadow: '0 0 40px rgba(129,140,248,0.4)' }}
+            whileTap={{ scale: 0.98 }}
+            style={{
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 12,
+              padding: '14px 40px', borderRadius: 100,
+              background: 'linear-gradient(135deg, rgba(79,70,229,0.2), rgba(99,102,241,0.12))',
+              border: '1px solid rgba(129,140,248,0.4)',
+              color: '#818cf8',
+              fontSize: 12,
+              fontFamily: 'Space Mono, monospace',
+              letterSpacing: '0.15em',
+              textTransform: 'uppercase',
+              textDecoration: 'none',
+              cursor: 'pointer',
+              boxShadow: '0 0 24px rgba(79,70,229,0.2)',
+              transition: 'all 0.3s ease',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(165,180,252,0.6)'; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(129,140,248,0.4)'; }}
+          >
+            <span>View All Projects</span>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <path d="M7 17l9.2-9.2M17 17V7m0 0H7" />
+            </svg>
+          </motion.a>
+        </motion.div>
 
         {/* Bottom CTA */}
         <motion.div
@@ -907,17 +956,6 @@ export default function ProjectsSection() {
               style={{ padding: '14px 36px', borderRadius: 100, border: '1px solid rgba(124,58,237,0.3)', background: 'transparent', color: '#c4b5fd', textDecoration: 'none', fontSize: 10, fontFamily: 'Space Mono, monospace', letterSpacing: '0.2em', textTransform: 'uppercase', display: 'inline-flex', alignItems: 'center', gap: 10 }}
             >
               See All Projects
-            </motion.a>
-            <motion.a
-              href="mailto:webfixxies@gmail.com"
-              whileHover={{ scale: 1.04, boxShadow: '0 0 60px rgba(124,58,237,0.5)' }}
-              whileTap={{ scale: 0.97 }}
-              className="btn-primary"
-              style={{ textDecoration: 'none', fontSize: 10, padding: '14px 36px', letterSpacing: '0.2em', display: 'inline-flex', alignItems: 'center', gap: 10 }}
-            >
-              <motion.span animate={{ opacity: [1, 0.4, 1] }} transition={{ duration: 1.5, repeat: Infinity }}>✦</motion.span>
-              Start a Project
-              <motion.span animate={{ x: [0, 4, 0] }} transition={{ duration: 1.2, repeat: Infinity }}>→</motion.span>
             </motion.a>
           </div>
         </motion.div>
