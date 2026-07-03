@@ -5,6 +5,7 @@ import Hero3D from './components/Hero3D';
 import MissionSection from './components/MissionSection';
 import AboutSection from './components/AboutSection';
 import ProjectsSection from './components/ProjectsSection';
+import FitSection from './components/FitSection';
 import PricingSection from './components/PricingSection';
 import ContactSection from './components/ContactSection';
 import AllProjectsPage from './components/AllProjectsPage';
@@ -168,6 +169,7 @@ function App() {
             <MissionSection />
             <AboutSection />
             <ProjectsSection />
+            <FitSection />
             <PricingSection />
             <ContactSection />
           </>
