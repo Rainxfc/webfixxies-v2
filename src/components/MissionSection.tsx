@@ -387,16 +387,16 @@ export default function MissionSection() {
               <span className="dot" />Mission
             </div>
             <h2 className="font-display" style={{ fontSize: 'clamp(36px, 5vw, 58px)', fontWeight: 800, lineHeight: 1.05, letterSpacing: '-0.03em', marginBottom: 24, color: '#f1f5f9' }}>
-              We build the web so it feels{' '}
+              Web Experiences That{' '}
               <span style={{ background: 'linear-gradient(135deg, #818cf8, #a5b4fc)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
-                immediate, premium & effortless.
+                Actually Convert.
               </span>
             </h2>
             <p style={{ color: '#64748b', fontSize: 15, lineHeight: 1.8, marginBottom: 16, fontWeight: 300 }}>
-              Web Fixxies exists to raise the standard of the modern web experience. We engineer visually striking, high-performance digital platforms for brands that demand more than a template.
+              We craft blazing-fast, stunning websites designed to captivate users and drive real business results. No templates. No compromises.
             </p>
             <p style={{ color: '#475569', fontSize: 14, lineHeight: 1.8, fontWeight: 300 }}>
-              Our mission is to make advanced digital presence accessible at a fraction of enterprise cost — giving local businesses and ambitious teams the level of polish that was once exclusive to large agency budgets.
+              Premium web experiences at startup-friendly pricing. We combine cutting-edge design with proven conversion strategies so your brand stands out.
             </p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 32 }}>
               {['Performance First', 'Spatial Storytelling', 'Accessible Premium'].map(tag => (

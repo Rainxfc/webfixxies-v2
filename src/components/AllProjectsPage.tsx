@@ -59,7 +59,7 @@ export default function AllProjectsPage() {
         {/* Grid */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 28 }}>
           {projects.map((project, i) => (
-            <ProjectCard key={project.id} project={project} index={i} />
+            <ProjectCard key={project.id} project={project} index={i} compact />
           ))}
         </div>
 
