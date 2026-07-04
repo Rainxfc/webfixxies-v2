@@ -141,7 +141,14 @@ export default function AllProjectsPage() {
           <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
             <motion.a
               href="#"
-              onClick={(e) => { e.preventDefault(); window.location.hash = 'contact'; setTimeout(() => { document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' }); window.location.hash = ''; }, 50); }}
+              onClick={(e) => {
+                e.preventDefault();
+                window.location.hash = '';
+                // Give the home page time to mount, then scroll to contact
+                setTimeout(() => {
+                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
+                }, 200);
+              }}
               whileHover={{ scale: 1.04, boxShadow: '0 0 50px rgba(79,70,229,0.35)' }}
               whileTap={{ scale: 0.97 }}
               style={{

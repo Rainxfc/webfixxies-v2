@@ -498,8 +498,9 @@ export function ProjectCard({ project, index, compact = false }: { project: type
   // Stagger preview loading to avoid hammering all iframes at once
   useEffect(() => {
     if (!inView) return;
-    // compact (archive page): slightly longer stagger so they load one at a time
-    const delay = compact ? 400 + index * 600 : 600 + index * 300;
+    // Archive page (compact): short 250ms stagger — all start quickly
+    // Homepage (non-compact): longer stagger so 2 featured cards don't fire together
+    const delay = compact ? index * 250 : 500 + index * 400;
     const t = setTimeout(() => setShowPreview(true), delay);
     return () => clearTimeout(t);
   }, [inView, compact, index]);
