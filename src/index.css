@@ -488,16 +488,11 @@ html { scroll-behavior: smooth; }
 }
 
 /* ─── Preview iframe wrapper responsive ────────────────────────────────────── */
+/* Iframes use overflow: hidden on the container — no transform hacks needed.  */
+/* The iframe fills the container height set in JS (420px compact, 600px full) */
 @media (max-width: 640px) {
-  /* On small screens, let the iframe container scroll horizontally inside a
-     clipped wrapper so the content is visible and not clipped at the bottom */
-  .iframe-preview-container {
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
   iframe[title] {
-    min-width: 375px;
+    width: 100% !important;
   }
 }
 
@@ -529,18 +524,10 @@ html { scroll-behavior: smooth; }
   to   { transform: rotate(360deg) translateX(20px) rotate(-360deg); }
 }
 
-/* ─── Projects grid responsive ─────────────────────────────────────────────── */
+/* ─── Projects section mobile ──────────────────────────────────────────────── */
 @media (max-width: 900px) {
-  /* Reduce card padding on tablet */
-  #projects section {
-    padding: 80px 16px 100px;
-  }
-}
-
-@media (max-width: 480px) {
-  /* Reduce preview height on mobile */
-  #projects iframe {
-    height: 360px !important;
+  #projects {
+    padding: 80px 16px 100px !important;
   }
 }
 
@@ -553,7 +540,7 @@ html { scroll-behavior: smooth; }
   }
 }
 
-/* ─── General mobile improvements ─────────────────────────────────────────── */
+/* ─── General mobile button sizing ────────────────────────────────────────── */
 @media (max-width: 480px) {
   .btn-primary, .btn-outline {
     padding: 12px 22px;
