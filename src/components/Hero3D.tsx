@@ -155,7 +155,7 @@ function Scene() {
 export default function Hero3D() {
   return (
     <div style={{
-      position: 'relative', width: '100vw', height: '100vh',
+      position: 'relative', width: '100vw', minHeight: '100svh', height: '100svh',
       overflow: 'hidden',
       background: 'radial-gradient(ellipse 120% 80% at 50% -10%, #111827 0%, #080c14 40%, #07080a 100%)',
     }}>
@@ -179,7 +179,7 @@ export default function Hero3D() {
       <div style={{
         position: 'absolute', inset: 0, zIndex: 2,
         display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-        textAlign: 'center', padding: '0 24px', pointerEvents: 'none',
+        textAlign: 'center', padding: 'clamp(16px, 5vw, 24px) clamp(16px, 5vw, 24px)', pointerEvents: 'none',
         background: 'linear-gradient(to bottom, transparent 50%, #07080a 100%)',
       }}>
         {/* Logo badge */}
@@ -192,20 +192,22 @@ export default function Hero3D() {
           className="font-display glitch no-select"
           data-text="WEB FIXXIES"
           style={{
-            fontSize: 'clamp(52px, 12vw, 130px)', fontWeight: 900,
+            fontSize: 'clamp(36px, 10vw, 130px)', fontWeight: 900,
             lineHeight: 0.9, letterSpacing: '-0.03em', textTransform: 'uppercase',
             background: 'linear-gradient(135deg, #f1f5f9 0%, #a5b4fc 35%, #818cf8 65%, #6366f1 100%)',
             WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-            marginBottom: 28,
+            marginBottom: 'clamp(16px, 3vw, 28px)',
             filter: 'drop-shadow(0 0 40px rgba(99,102,241,0.35))',
+            maxWidth: '100%', wordBreak: 'break-word',
           }}
         >
           WEB FIXXIES
         </h1>
 
         <p style={{
-          maxWidth: 620, fontSize: 'clamp(14px, 2vw, 18px)', fontWeight: 300,
-          lineHeight: 1.75, color: '#94a3b8', marginBottom: 44, letterSpacing: '0.02em',
+          maxWidth: 620, fontSize: 'clamp(13px, 2vw, 18px)', fontWeight: 300,
+          lineHeight: 1.75, color: '#94a3b8', marginBottom: 'clamp(24px, 4vw, 44px)', letterSpacing: '0.02em',
+          padding: '0 8px',
         }}>
           We engineer high-performance, visually immersive web experiences that
           command attention and drive measurable business results. Built for brands

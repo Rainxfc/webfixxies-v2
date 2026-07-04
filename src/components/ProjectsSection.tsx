@@ -850,27 +850,11 @@ function SectionHeader({ inView }: { inView: boolean }) {
   );
 }
 
-// ─── Connector line between cards ─────────────────────────────────────────────
-function ConnectorLine({ accent }: { accent: string }) {
-  return (
-    <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: 20, position: 'relative' }}>
-      <motion.div
-        animate={{ scaleY: [0, 1], opacity: [0, 0.6] }}
-        transition={{ duration: 0.8, ease: 'easeOut' }}
-        style={{
-          width: 1, height: 20,
-          background: `linear-gradient(180deg, ${accent}00, ${accent}60, rgba(139,92,246,0.4))`,
-        }}
-      />
-    </div>
-  );
-}
-
 // ─── Section ───────────────────────────────────────────────────────────────────
 export default function ProjectsSection() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: '-80px' });
-  const featuredProjects = [projects[1], projects[3]]; // Pizza Hut and Nike
+  const featuredProjects = projects; // Show all 4 projects
 
   return (
     <section

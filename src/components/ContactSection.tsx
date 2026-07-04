@@ -39,7 +39,7 @@ export default function ContactSection() {
 
             <a
               href="mailto:webfixxies@gmail.com"
-              style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 12, padding: '18px 40px', borderRadius: 100, border: '1px solid rgba(129,140,248,0.25)', background: 'linear-gradient(135deg, rgba(79,70,229,0.12), rgba(99,102,241,0.06))', color: '#a5b4fc', fontSize: 'clamp(13px, 2vw, 17px)', fontFamily: 'Space Mono, monospace', letterSpacing: '0.08em', textDecoration: 'none', position: 'relative', overflow: 'hidden', boxShadow: '0 0 40px rgba(79,70,229,0.18)', transition: 'all 0.3s ease', cursor: 'pointer', marginBottom: 40, maxWidth: '100%', textAlign: 'center', flexWrap: 'wrap' }}
+              style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 12, padding: 'clamp(14px, 3vw, 18px) clamp(16px, 5vw, 40px)', borderRadius: 100, border: '1px solid rgba(129,140,248,0.25)', background: 'linear-gradient(135deg, rgba(79,70,229,0.12), rgba(99,102,241,0.06))', color: '#a5b4fc', fontSize: 'clamp(12px, 3.5vw, 17px)', fontFamily: 'Space Mono, monospace', letterSpacing: '0.05em', textDecoration: 'none', position: 'relative', overflow: 'hidden', boxShadow: '0 0 40px rgba(79,70,229,0.18)', transition: 'all 0.3s ease', cursor: 'pointer', marginBottom: 40, maxWidth: '100%', width: '100%', textAlign: 'center', flexWrap: 'wrap', wordBreak: 'break-all' }}
               onMouseEnter={(e) => { const el = e.currentTarget; el.style.borderColor = 'rgba(129,140,248,0.5)'; el.style.boxShadow = '0 0 60px rgba(79,70,229,0.35)'; el.style.color = '#f1f5f9'; }}
               onMouseLeave={(e) => { const el = e.currentTarget; el.style.borderColor = 'rgba(129,140,248,0.25)'; el.style.boxShadow = '0 0 40px rgba(79,70,229,0.18)'; el.style.color = '#a5b4fc'; }}
             >
@@ -64,14 +64,14 @@ export default function ContactSection() {
           Professional partnerships with transparent agreements. No surprises—just results.
         </motion.p>
 
-        <motion.div initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}} transition={{ delay: 0.8, duration: 0.6 }} style={{ marginTop: 60, paddingTop: 40, borderTop: '1px solid rgba(99,102,241,0.07)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, flex: '1 1 220px' }}>
+        <motion.div initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}} transition={{ delay: 0.8, duration: 0.6 }} style={{ marginTop: 60, paddingTop: 40, borderTop: '1px solid rgba(99,102,241,0.07)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 20 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, flex: '1 1 200px', minWidth: 0 }}>
             <img src="logo.png" alt="Web Fixxies" style={{ width: 28, height: 28, objectFit: 'contain', filter: 'drop-shadow(0 0 4px rgba(99,102,241,0.4))' }} />
             <span className="font-display" style={{ fontSize: 18, fontWeight: 800, letterSpacing: '-0.02em', background: 'linear-gradient(135deg, #4f46e5, #6366f1)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
               WEB FIXXIES
             </span>
           </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 20, alignItems: 'center', flex: '2 1 320px' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 20, alignItems: 'center', flex: '2 1 280px', minWidth: 0 }}>
             <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap', justifyContent: 'center', rowGap: 10 }}>
               {['Mission', 'About', 'Projects', 'Pricing', 'Contact'].map(item => (
                 <a key={item} href={`#${item.toLowerCase()}`} className="font-mono" style={{ fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#334155', textDecoration: 'none', transition: 'color 0.3s' }}
@@ -100,7 +100,7 @@ export default function ContactSection() {
               })}
             </div>
           </div>
-          <span className="font-mono" style={{ fontSize: 9, color: '#1e293b', letterSpacing: '0.15em', textAlign: 'center', flex: '1 1 220px' }}>© 2026 WEB FIXXIES</span>
+          <span className="font-mono" style={{ fontSize: 9, color: '#1e293b', letterSpacing: '0.15em', textAlign: 'center', flex: '1 1 200px', minWidth: 0 }}>© 2026 WEB FIXXIES</span>
         </motion.div>
       </div>
     </section>

@@ -489,12 +489,15 @@ html { scroll-behavior: smooth; }
 
 /* ─── Preview iframe wrapper responsive ────────────────────────────────────── */
 @media (max-width: 640px) {
-  /* Scale down iframes on small screens to avoid overflow */
+  /* On small screens, let the iframe container scroll horizontally inside a
+     clipped wrapper so the content is visible and not clipped at the bottom */
+  .iframe-preview-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
   iframe[title] {
-    transform-origin: top left;
-    transform: scale(0.65);
-    width: 153.8% !important;
-    height: 153.8% !important;
+    min-width: 375px;
   }
 }
 
@@ -538,5 +541,22 @@ html { scroll-behavior: smooth; }
   /* Reduce preview height on mobile */
   #projects iframe {
     height: 360px !important;
+  }
+}
+
+/* ─── Contact section footer mobile centering ────────────────────────────── */
+@media (max-width: 600px) {
+  #contact .contact-footer-row {
+    flex-direction: column !important;
+    align-items: center !important;
+    text-align: center !important;
+  }
+}
+
+/* ─── General mobile improvements ─────────────────────────────────────────── */
+@media (max-width: 480px) {
+  .btn-primary, .btn-outline {
+    padding: 12px 22px;
+    font-size: 10px;
   }
 }
