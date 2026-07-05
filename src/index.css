@@ -547,3 +547,14 @@ html { scroll-behavior: smooth; }
     font-size: 10px;
   }
 }
+
+/* ─── Mobile scroll-down button (hero) ────────────────────────────────────── */
+/* Only shown on touch/mobile — desktop keeps the decorative line */
+@media (hover: none) and (pointer: coarse) {
+  .scroll-line {
+    display: none !important;
+  }
+  .scroll-down-btn {
+    display: inline-flex !important;
+  }
+}

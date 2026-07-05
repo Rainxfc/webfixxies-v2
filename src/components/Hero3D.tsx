@@ -1,4 +1,4 @@
-import { useRef, Suspense, useMemo, useEffect } from 'react';
+import { useRef, Suspense, useMemo } from 'react';
 import { navTo } from '../utils/navigation';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Environment, Float, MeshDistortMaterial, Sphere, Torus, Octahedron } from '@react-three/drei';
@@ -148,52 +148,17 @@ function Scene() {
         enableZoom={false} enablePan={false} enableRotate={true}
         rotateSpeed={0.4} autoRotate={true} autoRotateSpeed={0.5}
         maxPolarAngle={Math.PI * 0.7} minPolarAngle={Math.PI * 0.3}
-        touches={{ ONE: 0, TWO: 0 }}
       />
     </>
   );
 }
 
 export default function Hero3D() {
-  const canvasWrapRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const wrapper = canvasWrapRef.current;
-    if (!wrapper) return;
-
-    // Wait a tick for R3F to mount the <canvas> element
-    const id = setTimeout(() => {
-      const canvas = wrapper.querySelector('canvas');
-      if (!canvas) return;
-
-      // Force touch-action on the canvas element itself
-      canvas.style.touchAction = 'pan-y';
-
-      // R3F/Three.js registers non-passive touchstart/touchmove on the canvas.
-      // We counter this by listening (passive) and manually scrolling the window.
-      let startY = 0;
-
-      const onTouchStart = (e: TouchEvent) => {
-        startY = e.touches[0].clientY;
-      };
-
-      const onTouchMove = (e: TouchEvent) => {
-        const dy = startY - e.touches[0].clientY;
-        window.scrollBy({ top: dy, behavior: 'auto' });
-        startY = e.touches[0].clientY;
-      };
-
-      canvas.addEventListener('touchstart', onTouchStart, { passive: true });
-      canvas.addEventListener('touchmove', onTouchMove, { passive: true });
-
-      return () => {
-        canvas.removeEventListener('touchstart', onTouchStart);
-        canvas.removeEventListener('touchmove', onTouchMove);
-      };
-    }, 200);
-
-    return () => clearTimeout(id);
-  }, []);
+  const scrollDown = () => {
+    const next = document.getElementById('mission');
+    if (next) next.scrollIntoView({ behavior: 'smooth' });
+    else window.scrollBy({ top: window.innerHeight, behavior: 'smooth' });
+  };
 
   return (
     <div style={{
@@ -202,7 +167,7 @@ export default function Hero3D() {
       background: 'radial-gradient(ellipse 120% 80% at 50% -10%, #111827 0%, #080c14 40%, #07080a 100%)',
     }}>
       {/* 3D Canvas */}
-      <div ref={canvasWrapRef} style={{ position: 'absolute', inset: 0, zIndex: 1, touchAction: 'pan-y' }}>
+      <div style={{ position: 'absolute', inset: 0, zIndex: 1 }}>
         <Canvas camera={{ position: [0, -1.2, 9], fov: 42 }} gl={{ antialias: true, alpha: true }} dpr={[1, 1.5]} style={{ background: 'transparent' }}>
           <Scene />
         </Canvas>
@@ -279,13 +244,41 @@ export default function Hero3D() {
         </div>
       </div>
 
-      {/* Bottom scroll indicator */}
+      {/* Bottom scroll indicator — desktop: decorative line; mobile: tappable button */}
       <div style={{
         position: 'absolute', bottom: 40, left: '50%', transform: 'translateX(-50%)',
-        zIndex: 3, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, pointerEvents: 'none',
+        zIndex: 3, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
       }}>
-        <div style={{ width: 1.5, height: 56, background: 'linear-gradient(to bottom, transparent, rgba(129,140,248,0.6), transparent)', animation: 'float 2s ease-in-out infinite' }} />
-        <span className="font-mono" style={{ fontSize: 9, letterSpacing: '0.35em', color: 'rgba(99,102,241,0.7)', textTransform: 'uppercase' }}>Scroll ↓</span>
+        {/* Decorative line — hidden on mobile */}
+        <div className="scroll-line" style={{ width: 1.5, height: 56, background: 'linear-gradient(to bottom, transparent, rgba(129,140,248,0.6), transparent)', animation: 'float 2s ease-in-out infinite' }} />
+
+        {/* Mobile tap button — shown only on touch screens via CSS */}
+        <button
+          onClick={scrollDown}
+          className="scroll-down-btn"
+          aria-label="Scroll down"
+          style={{
+            display: 'none', // overridden by CSS on mobile
+            alignItems: 'center', gap: 6,
+            background: 'rgba(79,70,229,0.12)',
+            border: '1px solid rgba(99,102,241,0.3)',
+            borderRadius: 100,
+            padding: '10px 20px',
+            cursor: 'pointer',
+            color: '#a5b4fc',
+            fontFamily: 'Space Mono, monospace',
+            fontSize: 10,
+            letterSpacing: '0.2em',
+            textTransform: 'uppercase',
+            backdropFilter: 'blur(10px)',
+            WebkitBackdropFilter: 'blur(10px)',
+          }}
+        >
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ animation: 'float 1.5s ease-in-out infinite' }}>
+            <path d="M12 5v14M5 12l7 7 7-7"/>
+          </svg>
+          Scroll down
+        </button>
       </div>
 
     </div>
