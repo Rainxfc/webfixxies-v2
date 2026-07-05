@@ -449,6 +449,28 @@ export const projects = [
       { label: 'Score', value: 95, suffix: '' },
     ],
   },
+  {
+    id: 'baikonur',
+    name: 'Baikonur Streetwear',
+    subtitle: 'Cinematic Brand Experience',
+    by: 'Ibrahim Harun',
+    byDetail: 'Developer',
+    description: 'A cinematic single-page brand experience for a Kazakhstani streetwear label — full-screen video hero with ambient music, functional cart via React Context, slide-in overlay panels, and scroll-triggered animations. Zero UI libraries.',
+    liveUrl: 'https://bakinourstreetweardemo.vercel.app/',
+    repoUrl: '',
+    iframeSrc: 'https://bakinourstreetweardemo.vercel.app/',
+    accent: '#d4a853',
+    accentAlt: '#e8c07a',
+    glow: 'rgba(212,168,83,0.18)',
+    glowSoft: 'rgba(212,168,83,0.05)',
+    tags: ['React 19', 'TypeScript', 'Video Hero', 'Cart System', 'PWA-Ready'],
+    icon: '🧥',
+    stats: [
+      { label: 'Tech Stack', value: 4 },
+      { label: 'Panels', value: 4 },
+      { label: 'Score', value: 97, suffix: '' },
+    ],
+  },
 ];
 
 // ─── Stats bar ─────────────────────────────────────────────────────────────────
@@ -627,7 +649,7 @@ export function ProjectCard({ project, index, compact = false }: { project: type
                 Live Site ↗
               </motion.a>
             )}
-            {project.id !== 'nike' && (
+            {project.id !== 'nike' && project.repoUrl && (
               <motion.a
                 href={project.repoUrl} target="_blank" rel="noopener noreferrer"
                 whileHover={{ scale: 1.04, y: -2, borderColor: `${project.accent}55` }}
@@ -893,7 +915,7 @@ export default function ProjectsSection() {
           style={{ textAlign: 'center', marginTop: 80 }}
         >
           <div className="font-mono" style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(167,139,250,0.3)', marginBottom: 20 }}>
-            + 2 more projects — KFC · NovaBites
+            + 3 more projects — KFC · NovaBites · Baikonur
           </div>
           <motion.a
             href="#all-projects"

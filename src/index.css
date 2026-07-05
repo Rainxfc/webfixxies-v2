@@ -558,3 +558,42 @@ html { scroll-behavior: smooth; }
     display: inline-flex !important;
   }
 }
+
+/* ─── Project card mobile polish ───────────────────────────────────────────── */
+@media (max-width: 520px) {
+  /* Tighter card padding on small phones */
+  .project-card-header {
+    padding: 20px 16px 14px !important;
+  }
+
+  /* Let the title + CTA buttons stack cleanly */
+  .project-card-title-row {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 14px !important;
+  }
+
+  /* Tags scroll horizontally instead of wrapping messily */
+  .project-tags-row {
+    flex-wrap: nowrap !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 4px;
+  }
+  .project-tags-row::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Reduce iframe preview height on phones */
+  .project-preview-wrap iframe {
+    min-height: 340px !important;
+  }
+}
+
+@media (max-width: 400px) {
+  /* Stats bar: equal columns, smaller numbers */
+  .project-stats-bar > div {
+    padding: 8px 10px !important;
+  }
+}
