@@ -1,4 +1,5 @@
-import { useRef, Suspense, useMemo } from 'react';
+import { useRef, Suspense, useMemo, useEffect } from 'react';
+import { navTo } from '../utils/navigation';
 import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, Environment, Float, MeshDistortMaterial, Sphere, Torus, Octahedron } from '@react-three/drei';
 import * as THREE from 'three';
@@ -147,6 +148,7 @@ function Scene() {
         enableZoom={false} enablePan={false} enableRotate={true}
         rotateSpeed={0.4} autoRotate={true} autoRotateSpeed={0.5}
         maxPolarAngle={Math.PI * 0.7} minPolarAngle={Math.PI * 0.3}
+        touches={{ ONE: 0, TWO: 0 }}
       />
     </>
   );
@@ -160,8 +162,9 @@ export default function Hero3D() {
       background: 'radial-gradient(ellipse 120% 80% at 50% -10%, #111827 0%, #080c14 40%, #07080a 100%)',
     }}>
       {/* 3D Canvas */}
-      <div style={{ position: 'absolute', inset: 0, zIndex: 1 }}>
-        <Canvas camera={{ position: [0, -1.2, 9], fov: 42 }} gl={{ antialias: true, alpha: true }} dpr={[1, 1.5]} style={{ background: 'transparent' }}>
+      <div style={{ position: 'absolute', inset: 0, zIndex: 1, touchAction: 'pan-y' }}>
+        <Canvas camera={{ position: [0, -1.2, 9], fov: 42 }} gl={{ antialias: true, alpha: true }} dpr={[1, 1.5]} style={{ background: 'transparent', touchAction: 'pan-y' }}
+          onCreated={({ gl }) => { gl.domElement.style.touchAction = 'pan-y'; }}>
           <Scene />
         </Canvas>
       </div>
@@ -215,13 +218,23 @@ export default function Hero3D() {
         </p>
 
         <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', justifyContent: 'center', pointerEvents: 'auto' }}>
-          <a href="#mission" className="btn-primary" style={{ textDecoration: 'none' }}>
+          <a
+            href="#mission"
+            onClick={(e) => { e.preventDefault(); navTo('mission'); }}
+            className="btn-primary"
+            style={{ textDecoration: 'none' }}
+          >
             Explore Our Work
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M7 17L17 7M17 7H7M17 7V17"/>
             </svg>
           </a>
-          <a href="#contact" className="btn-outline" style={{ textDecoration: 'none' }}>
+          <a
+            href="#contact"
+            onClick={(e) => { e.preventDefault(); navTo('contact'); }}
+            className="btn-outline"
+            style={{ textDecoration: 'none' }}
+          >
             Get In Touch
           </a>
         </div>
