@@ -155,6 +155,46 @@ function Scene() {
 }
 
 export default function Hero3D() {
+  const canvasWrapRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const wrapper = canvasWrapRef.current;
+    if (!wrapper) return;
+
+    // Wait a tick for R3F to mount the <canvas> element
+    const id = setTimeout(() => {
+      const canvas = wrapper.querySelector('canvas');
+      if (!canvas) return;
+
+      // Force touch-action on the canvas element itself
+      canvas.style.touchAction = 'pan-y';
+
+      // R3F/Three.js registers non-passive touchstart/touchmove on the canvas.
+      // We counter this by listening (passive) and manually scrolling the window.
+      let startY = 0;
+
+      const onTouchStart = (e: TouchEvent) => {
+        startY = e.touches[0].clientY;
+      };
+
+      const onTouchMove = (e: TouchEvent) => {
+        const dy = startY - e.touches[0].clientY;
+        window.scrollBy({ top: dy, behavior: 'auto' });
+        startY = e.touches[0].clientY;
+      };
+
+      canvas.addEventListener('touchstart', onTouchStart, { passive: true });
+      canvas.addEventListener('touchmove', onTouchMove, { passive: true });
+
+      return () => {
+        canvas.removeEventListener('touchstart', onTouchStart);
+        canvas.removeEventListener('touchmove', onTouchMove);
+      };
+    }, 200);
+
+    return () => clearTimeout(id);
+  }, []);
+
   return (
     <div style={{
       position: 'relative', width: '100vw', minHeight: '100svh', height: '100svh',
@@ -162,9 +202,8 @@ export default function Hero3D() {
       background: 'radial-gradient(ellipse 120% 80% at 50% -10%, #111827 0%, #080c14 40%, #07080a 100%)',
     }}>
       {/* 3D Canvas */}
-      <div style={{ position: 'absolute', inset: 0, zIndex: 1, touchAction: 'pan-y' }}>
-        <Canvas camera={{ position: [0, -1.2, 9], fov: 42 }} gl={{ antialias: true, alpha: true }} dpr={[1, 1.5]} style={{ background: 'transparent', touchAction: 'pan-y' }}
-          onCreated={({ gl }) => { gl.domElement.style.touchAction = 'pan-y'; }}>
+      <div ref={canvasWrapRef} style={{ position: 'absolute', inset: 0, zIndex: 1, touchAction: 'pan-y' }}>
+        <Canvas camera={{ position: [0, -1.2, 9], fov: 42 }} gl={{ antialias: true, alpha: true }} dpr={[1, 1.5]} style={{ background: 'transparent' }}>
           <Scene />
         </Canvas>
       </div>
