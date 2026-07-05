@@ -4,28 +4,28 @@ import Tilt from 'react-parallax-tilt';
 
 const team = [
   {
-    name: 'VEX', realName: 'Ibrahim',
+    name: 'Ibrahim Harun', realName: 'Bangladesh',
     role: 'Design Principal & UI/UX Architect',
-    copy: 'The creative lead of Web Fixxies. Vex drives the macro UI/UX vision, crafting layouts built to maximise user engagement and enterprise retention. Expert in structural typography, component scaling, and high-fidelity design systems.',
-    img: 'vexpfp.png',
+    copy: 'The creative lead of Web Fixxies. Ibrahim drives the macro UI/UX vision, crafting layouts built to maximise user engagement and enterprise retention. Expert in structural typography, component scaling, and high-fidelity design systems.',
+    img: 'ibrahim_vex_new_pfp.png',
     accent: '#818cf8', accentDark: '#4f46e5',
     glow: 'rgba(79,70,229,0.3)', glowSoft: 'rgba(79,70,229,0.08)',
     tag: 'DESIGN', icon: '◈', index: 0,
   },
   {
-    name: 'RAIN', realName: 'Ibrahim',
+    name: 'Ibrahim', realName: 'Pakistan',
     role: 'Technical Director & Front-End Engineer',
-    copy: 'The technical backbone of the studio. Rain bridges visionary design with browser performance, building robust React architectures, physics-driven animations, and three-dimensional web environments optimised for high frame rates.',
+    copy: 'The technical backbone of the studio. Ibrahim bridges visionary design with browser performance, building robust React architectures, physics-driven animations, and three-dimensional web environments optimised for high frame rates.',
     img: 'rainpfp.jpg',
     accent: '#6366f1', accentDark: '#4338ca',
     glow: 'rgba(67,56,202,0.3)', glowSoft: 'rgba(67,56,202,0.08)',
     tag: 'ENGINEERING', icon: '⬡', index: 1,
   },
   {
-    name: 'ARSENIC', realName: 'Ahnaf',
+    name: 'Ahnaf Tahmid', realName: 'Bangladesh',
     role: 'Growth Strategist & Client Relations',
-    copy: 'The strategic partner. Arsenic aligns our engineering capabilities with measurable business outcomes. Experienced in international project deployment, cross-border client operations, and ensuring every engagement is delivered to the highest professional standard.',
-    img: 'arsenicpfp.png',
+    copy: 'The strategic partner. Ahnaf aligns our engineering capabilities with measurable business outcomes. Experienced in international project deployment, cross-border client operations, and ensuring every engagement is delivered to the highest professional standard.',
+    img: 'ahnaf_new_pic.jpg',
     accent: '#a5b4fc', accentDark: '#6366f1',
     glow: 'rgba(99,102,241,0.3)', glowSoft: 'rgba(99,102,241,0.08)',
     tag: 'STRATEGY', icon: '◆', index: 2,
@@ -63,7 +63,7 @@ function TeamCard({ member, index }: { member: TeamMember; index: number }) {
             <div style={{ flex: 1, minWidth: 0 }}>
               <div className="team-member-name-row">
                 <h3 className="font-display" style={{ fontSize: 32, fontWeight: 800, letterSpacing: '-0.02em', color: '#f1f5f9', lineHeight: 1 }}>{member.name}</h3>
-                <span className="font-mono" style={{ fontSize: 11, color: '#334155', letterSpacing: '0.05em' }}>{member.realName}</span>
+                <span className="font-mono" style={{ fontSize: 10, color: member.accent, letterSpacing: '0.12em', textTransform: 'uppercase', background: `${member.accentDark}22`, border: `1px solid ${member.accent}33`, padding: '2px 8px', borderRadius: 4 }}>📍 {member.realName}</span>
               </div>
               <div style={{ fontSize: 11, color: member.accent, fontFamily: 'Space Mono, monospace', letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: 16 }}>{member.role}</div>
               <div style={{ height: 1, background: `linear-gradient(90deg, ${member.accent}22, transparent)`, marginBottom: 16 }} />
