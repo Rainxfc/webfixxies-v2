@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { navTo, consumeScrollTarget } from './utils/navigation';
 import Lenis from 'lenis';
 import ParticleField from './components/ParticleField';
 import Hero3D from './components/Hero3D';
@@ -46,17 +47,36 @@ function Navbar() {
   }, []);
 
   useEffect(() => {
-  const sections = ['mission', 'about', 'projects', 'pricing', 'contact'];
-    const observer = new IntersectionObserver(
-      (entries) => { entries.forEach(entry => { if (entry.isIntersecting) setActiveSection(entry.target.id); }); },
-      { threshold: 0.3 }
-    );
-    sections.forEach(id => { const el = document.getElementById(id); if (el) observer.observe(el); });
-    return () => observer.disconnect();
+    const sections = ['mission', 'about', 'projects', 'pricing', 'contact'];
+
+    // Re-run whenever the hash changes (home ↔ all-projects) so we
+    // always observe whichever sections are currently in the DOM.
+    const setupObserver = () => {
+      const observer = new IntersectionObserver(
+        (entries) => { entries.forEach(entry => { if (entry.isIntersecting) setActiveSection(entry.target.id); }); },
+        { threshold: 0.3 }
+      );
+      sections.forEach(id => { const el = document.getElementById(id); if (el) observer.observe(el); });
+      return observer;
+    };
+
+    let observer = setupObserver();
+
+    const onHashChange = () => {
+      observer.disconnect();
+      // Give React a tick to mount the new page's sections
+      setTimeout(() => { observer = setupObserver(); }, 200);
+    };
+
+    window.addEventListener('hashchange', onHashChange);
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('hashchange', onHashChange);
+    };
   }, []);
 
   const scrollTo = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
+    navTo(id);
     setMenuOpen(false);
   };
 
@@ -132,7 +152,13 @@ function App() {
 
   useEffect(() => {
     const handleHashChange = () => {
-      setCurrentPage(window.location.hash === '#all-projects' ? 'all-projects' : 'home');
+      const page = window.location.hash === '#all-projects' ? 'all-projects' : 'home';
+      setCurrentPage(page);
+      // If we just switched back to home, honour any pending scroll target
+      if (page === 'home') {
+        // Give React a frame to mount the sections before scrolling
+        setTimeout(consumeScrollTarget, 200);
+      }
     };
     window.addEventListener('hashchange', handleHashChange);
     return () => window.removeEventListener('hashchange', handleHashChange);
