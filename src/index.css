@@ -1258,3 +1258,23 @@ h1, h2, h3 {
 .hero-tagline-light {
   color: #2a2050 !important;
 }
+
+/* ═══════════════════════════════════════════════════
+   TEAM CARD NUMBERS — hide on mobile, subtle on desktop
+═══════════════════════════════════════════════════ */
+.team-card-number {
+  opacity: 1;
+}
+@media (max-width: 680px) {
+  .team-card-number {
+    display: none !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   PROJECT TAGS — ensure proper wrapping on mobile
+═══════════════════════════════════════════════════ */
+.project-tags-row {
+  flex-wrap: wrap !important;
+  gap: 6px !important;
+}

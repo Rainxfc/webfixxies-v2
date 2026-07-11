@@ -486,9 +486,9 @@ export function ProjectCard({ project, index, compact = false }: { project: type
               animate={inView ? { opacity: 1, x: 0 } : {}}
               transition={{ delay: index * 0.12 + 0.2 }}
               className="font-mono"
-              style={{ fontSize: compact ? 8 : 9, letterSpacing: '0.28em', textTransform: 'uppercase', color: `${project.accent}88`, marginBottom: 10, display: 'flex', alignItems: 'center', gap: 8 }}
+              style={{ fontSize: compact ? 9 : 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: `${project.accent}cc`, marginBottom: 10, display: 'flex', alignItems: 'center', gap: 8, fontWeight: 700 }}
             >
-              <span style={{ width: 20, height: 1, background: `${project.accent}60`, display: 'inline-block' }} />
+              <span style={{ width: 20, height: 1.5, background: `${project.accent}80`, display: 'inline-block', borderRadius: 1 }} />
               {project.by} · {project.byDetail}
             </motion.div>
 
@@ -528,15 +528,16 @@ export function ProjectCard({ project, index, compact = false }: { project: type
                 whileTap={{ scale: 0.97 }}
                 style={{
                   display: 'inline-flex', alignItems: 'center', gap: 8,
-                  padding: '10px 22px', borderRadius: 100,
+                  padding: '11px 26px', borderRadius: 100,
                   background: `linear-gradient(135deg, ${project.accent}, ${project.accentAlt})`,
-                  color: '#fff', fontSize: 9.5, fontFamily: 'Space Mono, monospace',
-                  letterSpacing: '0.14em', textTransform: 'uppercase', textDecoration: 'none',
-                  boxShadow: `0 0 24px ${project.glow}`,
+                  color: '#fff', fontSize: 11, fontFamily: 'Space Mono, monospace',
+                  letterSpacing: '0.12em', textTransform: 'uppercase', textDecoration: 'none',
+                  boxShadow: `0 0 28px ${project.glow}`,
+                  fontWeight: 700,
                 }}
               >
                 <motion.span animate={{ opacity: [1, 0.5, 1] }} transition={{ duration: 1.5, repeat: Infinity }}>●</motion.span>
-                Live Site ↗
+                View Live Site ↗
               </motion.a>
             )}
             {project.id !== 'nike' && project.repoUrl && (
@@ -581,11 +582,12 @@ export function ProjectCard({ project, index, compact = false }: { project: type
                 transition={{ delay: index * 0.12 + 0.5 + ti * 0.06 }}
                 className="font-mono"
                 style={{
-                  padding: '4px 12px', borderRadius: 100,
-                  border: `1px solid ${project.accent}22`,
-                  background: `${project.accent}0a`,
-                  fontSize: 8, letterSpacing: '0.14em', textTransform: 'uppercase',
-                  color: `${project.accentAlt}bb`,
+                  padding: '5px 14px', borderRadius: 100,
+                  border: `1px solid ${project.accent}33`,
+                  background: `${project.accent}12`,
+                  fontSize: 9.5, letterSpacing: '0.12em', textTransform: 'uppercase',
+                  color: `${project.accentAlt}ee`,
+                  fontWeight: 700,
                 }}
               >
                 {t}

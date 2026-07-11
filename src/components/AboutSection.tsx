@@ -71,7 +71,7 @@ function TeamCard({ member, index }: { member: TeamMember; index: number }) {
             </div>
           </div>
 
-          <div style={{ position: 'absolute', bottom: 20, right: 24, fontFamily: 'Outfit, sans-serif', fontSize: 64, fontWeight: 900, color: `${member.accent}07`, lineHeight: 1, userSelect: 'none', letterSpacing: '-0.05em' }}>
+          <div className="team-card-number" style={{ position: 'absolute', bottom: 20, right: 24, fontFamily: 'Outfit, sans-serif', fontSize: 64, fontWeight: 900, color: `${member.accent}06`, lineHeight: 1, userSelect: 'none', letterSpacing: '-0.05em', pointerEvents: 'none' }}>
             0{member.index + 1}
           </div>
         </div>
