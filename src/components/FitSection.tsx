@@ -1,5 +1,6 @@
 import { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
+import { useTheme } from '../App';
 
 const FOR_US = [
   {
@@ -45,17 +46,18 @@ const NOT_FOR_US = [
 export default function FitSection() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: '-80px' });
+  const { dark } = useTheme();
 
   return (
     <section
       id="fit"
       ref={ref}
+      className="section-bg"
       style={{
         position: 'relative',
         width: '100%',
         padding: '140px 24px 140px',
         overflow: 'hidden',
-        background: 'linear-gradient(180deg, #07080a 0%, #0a0b10 50%, #07080a 100%)',
       }}
     >
       {/* Ambient glows */}
@@ -79,15 +81,15 @@ export default function FitSection() {
             style={{
               fontSize: 'clamp(38px, 6vw, 72px)',
               fontWeight: 900,
-              letterSpacing: '-0.04em',
+              letterSpacing: '-0.03em',
               lineHeight: 0.95,
               marginBottom: 24,
             }}
           >
-            <span style={{ display: 'block', background: 'linear-gradient(135deg, #f8fafc 0%, #c4b5fd 50%, #818cf8 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+            <span className={`section-heading-grad ${!dark ? 'section-heading-light' : ''}`} style={{ display: 'block' }}>
               Are We The Right
             </span>
-            <span style={{ display: 'block', background: 'linear-gradient(135deg, #818cf8, #a78bfa, #e879f9)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+            <span className={`section-heading-grad-alt ${!dark ? 'section-heading-alt-light' : ''}`} style={{ display: 'block' }}>
               Fit For You?
             </span>
           </h2>
@@ -95,7 +97,7 @@ export default function FitSection() {
             initial={{ opacity: 0, y: 16 }}
             animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: 0.3, duration: 0.6 }}
-            style={{ maxWidth: 540, margin: '0 auto', fontSize: 15, color: '#64748b', lineHeight: 1.85, fontWeight: 300 }}
+            style={{ maxWidth: 540, margin: '0 auto', fontSize: 16, color: 'var(--text-muted)', lineHeight: 1.9, fontWeight: 400 }}
           >
             We work with a select number of clients at any one time. Knowing who we build for — and who we don't — saves everyone time.
           </motion.p>
@@ -105,15 +107,15 @@ export default function FitSection() {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
             gap: 24,
             alignItems: 'start',
           }}
         >
           {/* FOR column */}
           <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
+            initial={{ opacity: 0, y: 30 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.2, ease: [0.22, 1, 0.36, 1] }}
           >
             <div
@@ -149,8 +151,7 @@ export default function FitSection() {
                     borderRadius: 16,
                     padding: '22px 24px',
                     border: '1px solid rgba(99,102,241,0.15)',
-                    background: 'linear-gradient(135deg, rgba(99,102,241,0.06) 0%, rgba(4,0,13,0.9) 100%)',
-                    backdropFilter: 'blur(12px)',
+                    background: 'var(--grad-fit-card)',
                     transition: 'border-color 0.3s, box-shadow 0.3s',
                     cursor: 'default',
                   }}
@@ -166,10 +167,10 @@ export default function FitSection() {
                   <div style={{ display: 'flex', alignItems: 'flex-start', gap: 14 }}>
                     <span style={{ fontSize: 18, color: '#6366f1', flexShrink: 0, marginTop: 1 }}>{item.icon}</span>
                     <div>
-                      <div className="font-display" style={{ fontSize: 15, fontWeight: 700, color: '#e2e8f0', marginBottom: 6, letterSpacing: '-0.01em' }}>
+                      <div className="font-display" style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-primary)', marginBottom: 8, letterSpacing: '-0.01em' }}>
                         {item.title}
                       </div>
-                      <div style={{ fontSize: 13, color: '#64748b', lineHeight: 1.7, fontWeight: 300 }}>
+                      <div className="fit-card-detail" style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.8, fontWeight: 400 }}>
                         {item.detail}
                       </div>
                     </div>
@@ -181,8 +182,8 @@ export default function FitSection() {
 
           {/* NOT FOR column */}
           <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            animate={inView ? { opacity: 1, x: 0 } : {}}
+            initial={{ opacity: 0, y: 30 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
           >
             <div
@@ -217,8 +218,7 @@ export default function FitSection() {
                     borderRadius: 16,
                     padding: '22px 24px',
                     border: '1px solid rgba(239,68,68,0.1)',
-                    background: 'linear-gradient(135deg, rgba(239,68,68,0.04) 0%, rgba(4,0,13,0.9) 100%)',
-                    backdropFilter: 'blur(12px)',
+                    background: 'var(--grad-fit-not)',
                     transition: 'border-color 0.3s',
                     cursor: 'default',
                   }}
@@ -226,10 +226,10 @@ export default function FitSection() {
                   <div style={{ display: 'flex', alignItems: 'flex-start', gap: 14 }}>
                     <span style={{ fontSize: 16, color: '#ef4444', flexShrink: 0, marginTop: 2 }}>{item.icon}</span>
                     <div>
-                      <div className="font-display" style={{ fontSize: 15, fontWeight: 700, color: '#94a3b8', marginBottom: 6, letterSpacing: '-0.01em' }}>
+                      <div className="font-display" style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-muted)', marginBottom: 8, letterSpacing: '-0.01em' }}>
                         {item.title}
                       </div>
-                      <div style={{ fontSize: 13, color: '#475569', lineHeight: 1.7, fontWeight: 300 }}>
+                      <div className="fit-card-detail" style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.8, fontWeight: 400 }}>
                         {item.detail}
                       </div>
                     </div>
@@ -251,10 +251,10 @@ export default function FitSection() {
                 border: '1px solid rgba(124,58,237,0.2)',
               }}
             >
-              <div className="font-display" style={{ fontSize: 15, fontWeight: 700, color: '#c4b5fd', marginBottom: 8 }}>
+              <div className="font-display" style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-secondary)', marginBottom: 10 }}>
                 Still unsure?
               </div>
-              <div style={{ fontSize: 13, color: '#64748b', lineHeight: 1.7, marginBottom: 16 }}>
+              <div style={{ fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.8, marginBottom: 18 }}>
                 Drop us an email. No pitch, no pressure — just an honest conversation about what you actually need.
               </div>
               <a
@@ -285,19 +285,21 @@ export default function FitSection() {
           style={{ textAlign: 'center', marginTop: 90 }}
         >
           <div
+            className="fit-pull-quote"
             style={{
               display: 'inline-block',
-              padding: '32px 48px',
+              padding: 'clamp(20px, 4vw, 32px) clamp(16px, 5vw, 48px)',
               borderRadius: 20,
               border: '1px solid rgba(124,58,237,0.15)',
               background: 'rgba(99,102,241,0.04)',
               maxWidth: 680,
+              width: '100%',
             }}
           >
-            <div style={{ fontSize: 'clamp(16px, 2vw, 21px)', color: '#c4b5fd', fontStyle: 'italic', lineHeight: 1.6, fontWeight: 300, marginBottom: 20 }}>
+            <div style={{ fontSize: 'clamp(17px, 2.2vw, 22px)', color: 'var(--text-secondary)', fontStyle: 'italic', lineHeight: 1.65, fontWeight: 400, marginBottom: 20 }}>
               "We don't build websites. We build the first impression your brand will never get back."
             </div>
-            <div className="font-mono" style={{ fontSize: 9, letterSpacing: '0.25em', textTransform: 'uppercase', color: 'rgba(167,139,250,0.4)' }}>
+            <div className="font-mono" style={{ fontSize: 10, letterSpacing: '0.25em', textTransform: 'uppercase', color: 'var(--text-muted)' }}>
               — Web Fixxies
             </div>
           </div>

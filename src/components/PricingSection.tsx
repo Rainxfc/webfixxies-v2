@@ -1,32 +1,34 @@
 import { useState, useRef } from 'react';
+import { navTo } from '../utils/navigation';
 import { motion, useInView } from 'framer-motion';
+import { useTheme } from '../App';
 
 const tiers = [
   {
-    name: 'Core Web Experience', price: 'Custom Scope',
-    desc: 'High-performance, interactive single-page web experiences tailored for businesses looking to establish a distinct digital presence and increase user retention.',
+    name: 'Starter Website', price: 'Custom Quote',
+    desc: 'Perfect if you need a great-looking website that loads fast and works on all devices. Ideal for small businesses, portfolios, or anyone stepping up their online presence.',
     features: [
-      'Custom 3D Art Direction & Scene Configuration',
-      'High-Performance Interface Animations (Framer Motion)',
-      'Optimised CSS Architecture for Faster Load Times',
-      'Single-Page Structure Built for User Conversion',
+      'Custom Design — not a template copy',
+      'Smooth Animations & Modern Look',
+      'Fast Load Times on Any Device',
+      'One Page, Built to Convert Visitors',
     ],
-    accent: '#4f46e5', accentAlt: '#818cf8',
-    glow: 'rgba(79,70,229,0.2)', glowSoft: 'rgba(79,70,229,0.07)',
+    accent: '#7c3aed', accentAlt: '#a78bfa',
+    glow: 'rgba(124,58,237,0.2)', glowSoft: 'rgba(124,58,237,0.07)',
     badge: null, icon: '⬡',
   },
   {
-    name: 'Enterprise Web Platform', price: 'Enterprise Scope',
-    desc: 'Full-scale web platforms featuring immersive product simulations, custom interactive environments, and complex UI/UX architectures built for global scalability.',
+    name: 'Full Business Platform', price: 'Enterprise Quote',
+    desc: 'For businesses ready to go big. A complete, multi-page website with advanced features, interactive elements, and everything needed to compete globally.',
     features: [
-      'Production-Ready 3D Asset Integration (Optimised GLTF / GLB)',
-      'Real-Time Interactive Cursor & Pointer Tracking',
-      'Multi-Page Architecture with Advanced User-Flow Logic',
-      'Fully Secure Delivery with Formal Project Agreements',
+      'Multi-Page Site with Full Navigation',
+      'Interactive 3D Elements & Animations',
+      'Real-Time User Experience Features',
+      'Secure Delivery with Written Agreement',
     ],
-    accent: '#6366f1', accentAlt: '#a5b4fc',
-    glow: 'rgba(99,102,241,0.2)', glowSoft: 'rgba(99,102,241,0.07)',
-    badge: 'INTERNATIONAL READY', icon: '◆',
+    accent: '#8b5cf6', accentAlt: '#c4b5fd',
+    glow: 'rgba(139,92,246,0.2)', glowSoft: 'rgba(139,92,246,0.07)',
+    badge: 'READY WORLDWIDE', icon: '◆',
   },
 ];
 
@@ -34,22 +36,23 @@ export default function PricingSection() {
   const [hovered, setHovered] = useState<number | null>(null);
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: '-80px' });
+  const { dark } = useTheme();
 
   return (
-    <section id="pricing" ref={ref} style={{ position: 'relative', width: '100%', padding: '120px 24px', overflow: 'hidden', background: 'linear-gradient(180deg, #07080a 0%, #0d0f12 60%, #07080a 100%)' }}>
+    <section id="pricing" ref={ref} className="section-bg" style={{ position: 'relative', width: '100%', padding: '120px 24px', overflow: 'hidden' }}>
       <div className="grid-overlay" style={{ position: 'absolute', inset: 0, opacity: 0.5 }} />
-      <div style={{ position: 'absolute', top: '50%', left: '-10%', width: '120%', height: 200, background: 'linear-gradient(90deg, transparent, rgba(79,70,229,0.04), rgba(99,102,241,0.04), transparent)', transform: 'translateY(-50%) rotate(-1deg)', filter: 'blur(40px)', pointerEvents: 'none' }} />
+      <div style={{ position: 'absolute', top: '50%', left: '-10%', width: '120%', height: 200, background: 'linear-gradient(90deg, transparent, rgba(124,58,237,0.05), rgba(139,92,246,0.05), transparent)', transform: 'translateY(-50%) rotate(-1deg)', filter: 'blur(40px)', pointerEvents: 'none' }} />
 
       <div style={{ position: 'relative', zIndex: 1, maxWidth: 1100, margin: '0 auto' }}>
         <motion.div initial={{ opacity: 0, y: 30 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.7 }} style={{ textAlign: 'center', marginBottom: 80 }}>
           <div className="section-tag" style={{ margin: '0 auto 24px' }}>
-            <span className="dot" />Investment
+            <span className="dot" />Pricing
           </div>
-          <h2 className="font-display" style={{ fontSize: 'clamp(40px, 6vw, 72px)', fontWeight: 900, letterSpacing: '-0.04em', lineHeight: 0.95, marginBottom: 20, background: 'linear-gradient(135deg, #f1f5f9 0%, #a5b4fc 50%, #818cf8 100%)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
-            Service Tiers
+          <h2 className={`font-display section-heading-grad ${!dark ? 'section-heading-light' : ''}`} style={{ fontSize: 'clamp(40px, 6vw, 72px)', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: 0.95, marginBottom: 20 }}>
+            What's Included
           </h2>
-          <p style={{ maxWidth: 500, margin: '0 auto', fontSize: 15, color: '#64748b', lineHeight: 1.8, fontWeight: 300 }}>
-            Every engagement is scoped to your exact technical requirements. We deliver maximum impact at exceptional value.
+          <p style={{ maxWidth: 520, margin: '0 auto', fontSize: 17, color: 'var(--text-muted)', lineHeight: 1.85, fontWeight: 400, letterSpacing: '0.01em' }}>
+            Every project is custom-quoted based on what you actually need. No surprise fees — just honest, fair pricing.
           </p>
         </motion.div>
 
@@ -67,11 +70,11 @@ export default function PricingSection() {
               onHoverStart={() => setHovered(idx)}
               onHoverEnd={() => setHovered(null)}
               style={{
-                padding: '40px 36px', borderRadius: 20,
-                border: `1px solid ${hovered === idx ? tier.accent + '44' : 'rgba(99,102,241,0.1)'}`,
-                background: `linear-gradient(135deg, rgba(13,15,18,0.97), ${tier.glowSoft})`,
-                backdropFilter: 'blur(30px)', position: 'relative', overflow: 'hidden', cursor: 'default',
-                boxShadow: hovered === idx ? `0 0 60px ${tier.glow}, 0 20px 60px rgba(0,0,0,0.5)` : '0 8px 40px rgba(0,0,0,0.4)',
+                padding: 'clamp(24px, 5vw, 40px) clamp(20px, 4vw, 36px)', borderRadius: 20,
+                border: `1px solid ${hovered === idx ? tier.accent + '44' : 'var(--border-subtle)'}`,
+                background: `linear-gradient(135deg, var(--bg-mid), ${tier.glowSoft})`,
+                position: 'relative', overflow: 'hidden', cursor: 'default',
+                boxShadow: hovered === idx ? `0 0 60px ${tier.glow}, 0 20px 60px rgba(0,0,0,0.3)` : 'var(--shadow-card)',
                 transition: 'border-color 0.4s, box-shadow 0.4s',
               }}
             >
@@ -89,35 +92,39 @@ export default function PricingSection() {
                 <div style={{ width: 48, height: 48, borderRadius: 12, flexShrink: 0, background: `${tier.accent}15`, border: `1px solid ${tier.accent}33`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, color: tier.accent }}>
                   {tier.icon}
                 </div>
-                <h3 className="font-display" style={{ fontSize: 22, fontWeight: 700, color: '#f1f5f9', lineHeight: 1.3 }}>{tier.name}</h3>
+                <h3 className="font-display" style={{ fontSize: 22, fontWeight: 700, color: 'var(--text-primary)', lineHeight: 1.3 }}>{tier.name}</h3>
               </div>
 
-              <p style={{ fontSize: 13, color: '#64748b', lineHeight: 1.75, fontWeight: 300, marginBottom: 28 }}>{tier.desc}</p>
+              <p style={{ fontSize: 15, color: 'var(--text-muted)', lineHeight: 1.85, fontWeight: 400, marginBottom: 28, letterSpacing: '0.01em' }}>{tier.desc}</p>
               <div style={{ height: 1, background: `linear-gradient(90deg, ${tier.accent}22, transparent)`, marginBottom: 28 }} />
 
               <ul style={{ display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 40 }}>
                 {tier.features.map((f, i) => (
                   <motion.li key={i} initial={{ opacity: 0, x: -10 }} animate={inView ? { opacity: 1, x: 0 } : {}} transition={{ delay: idx * 0.2 + i * 0.07 + 0.4 }} style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
-                    <div style={{ marginTop: 5, flexShrink: 0, width: 6, height: 6, borderRadius: '50%', background: `linear-gradient(135deg, ${tier.accent}, ${tier.accentAlt})`, boxShadow: `0 0 8px ${tier.glow}` }} />
-                    <span style={{ fontSize: 13, color: '#94a3b8', lineHeight: 1.6, fontWeight: 300 }}>{f}</span>
+                    <div style={{ marginTop: 6, flexShrink: 0, width: 6, height: 6, borderRadius: '50%', background: `linear-gradient(135deg, ${tier.accent}, ${tier.accentAlt})`, boxShadow: `0 0 8px ${tier.glow}` }} />
+                    <span style={{ fontSize: 15, color: 'var(--text-muted)', lineHeight: 1.7, fontWeight: 400 }}>{f}</span>
                   </motion.li>
                 ))}
               </ul>
 
-              <div style={{ paddingTop: 28, borderTop: `1px solid ${tier.accent}15`, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span className="font-display" style={{ fontSize: 24, fontWeight: 800, letterSpacing: '-0.02em', background: `linear-gradient(135deg, ${tier.accent}, ${tier.accentAlt})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+              <div style={{ paddingTop: 28, borderTop: `1px solid ${tier.accent}15`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
+                <span className="font-display" style={{ fontSize: 22, fontWeight: 800, letterSpacing: '-0.02em', background: `linear-gradient(135deg, ${tier.accent}, ${tier.accentAlt})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
                   {tier.price}
                 </span>
-                <a href="#contact" style={{ padding: '10px 22px', borderRadius: 100, background: `linear-gradient(135deg, ${tier.accent}, ${tier.accentAlt === '#a5b4fc' ? '#6366f1' : '#4f46e5'})`, border: 'none', color: '#fff', fontSize: 10, fontFamily: 'Space Mono, monospace', letterSpacing: '0.15em', textTransform: 'uppercase', cursor: 'pointer', textDecoration: 'none', boxShadow: `0 0 20px ${tier.glow}`, transition: 'all 0.3s', display: 'inline-block' }}>
-                  Enquire →
+                <a
+                  href="#contact"
+                  onClick={(e) => { e.preventDefault(); navTo('contact'); }}
+                  style={{ padding: '10px 22px', borderRadius: 100, background: `linear-gradient(135deg, ${tier.accent}, ${tier.accentAlt === '#a5b4fc' ? '#6366f1' : '#4f46e5'})`, border: 'none', color: '#fff', fontSize: 11, fontFamily: 'Space Mono, monospace', letterSpacing: '0.15em', textTransform: 'uppercase', cursor: 'pointer', textDecoration: 'none', boxShadow: `0 0 20px ${tier.glow}`, transition: 'all 0.3s', display: 'inline-block' }}
+                >
+                  Get a Quote →
                 </a>
               </div>
             </motion.div>
           ))}
         </div>
 
-        <motion.p initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}} transition={{ delay: 0.6, duration: 0.6 }} className="font-mono" style={{ textAlign: 'center', marginTop: 48, fontSize: 10, letterSpacing: '0.2em', color: '#334155', textTransform: 'uppercase', lineHeight: 1.8 }}>
-          All engagements are custom-scoped. Delivered under professionally structured project agreements.
+        <motion.p initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}} transition={{ delay: 0.6, duration: 0.6 }} style={{ textAlign: 'center', marginTop: 48, fontSize: 14, color: 'var(--text-muted)', lineHeight: 1.8, fontWeight: 400 }}>
+          Not sure which option is right for you? Just reach out — we'll figure it out together.
         </motion.p>
       </div>
     </section>

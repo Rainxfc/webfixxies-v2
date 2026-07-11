@@ -1,10 +1,12 @@
 import { useRef, Suspense, useMemo } from 'react';
 import { navTo } from '../utils/navigation';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { OrbitControls, Environment, Float, MeshDistortMaterial, Sphere, Torus, Octahedron } from '@react-three/drei';
+import { OrbitControls, Float, MeshDistortMaterial, Sphere, Torus, Octahedron } from '@react-three/drei';
+import { motion } from 'framer-motion';
 import * as THREE from 'three';
+import { useTheme } from '../App';
 
-function CrystalCore() {
+function CrystalCore({ dark }: { dark: boolean }) {
   const meshRef = useRef<THREE.Mesh>(null);
   const innerRef = useRef<THREE.Mesh>(null);
 
@@ -23,39 +25,32 @@ function CrystalCore() {
 
   return (
     <group>
-      <Sphere ref={meshRef} args={[1.8, 80, 80]}>
+      <Sphere ref={meshRef} args={[1.8, 64, 64]}>
         <MeshDistortMaterial
-          color="#4f46e5"
-          distort={0.38}
-          speed={2.2}
-          roughness={0}
-          metalness={0.1}
-          transmission={0.92}
-          thickness={2.5}
-          ior={1.6}
+          color={dark ? '#5b4fcf' : '#8b5cf6'}
+          distort={0.38} speed={2.2}
+          roughness={0.05}
+          metalness={0.4}
           transparent
-          opacity={0.85}
-          envMapIntensity={1.5}
+          opacity={dark ? 0.9 : 0.88}
+          envMapIntensity={0}
         />
       </Sphere>
       <Octahedron ref={innerRef} args={[0.9, 0]}>
         <meshStandardMaterial
-          color="#6366f1"
-          emissive="#4338ca"
-          emissiveIntensity={1.8}
-          metalness={0.9}
-          roughness={0.05}
-          transparent
-          opacity={0.9}
+          color={dark ? '#6366f1' : '#a78bfa'}
+          emissive={dark ? '#4338ca' : '#8b5cf6'}
+          emissiveIntensity={dark ? 1.8 : 1.2}
+          metalness={0.9} roughness={0.05} transparent opacity={0.9}
         />
       </Octahedron>
-      <pointLight color="#4f46e5" intensity={6} distance={6} />
-      <pointLight color="#6366f1" intensity={3} distance={4} position={[0, 1, 0]} />
+      <pointLight color={dark ? '#4f46e5' : '#8b5cf6'} intensity={dark ? 6 : 5} distance={6} />
+      <pointLight color={dark ? '#6366f1' : '#c4b5fd'} intensity={dark ? 3 : 2.5} distance={4} position={[0, 1, 0]} />
     </group>
   );
 }
 
-function OrbitRings() {
+function OrbitRings({ dark }: { dark: boolean }) {
   const ring1 = useRef<THREE.Mesh>(null);
   const ring2 = useRef<THREE.Mesh>(null);
   const ring3 = useRef<THREE.Mesh>(null);
@@ -68,24 +63,25 @@ function OrbitRings() {
 
   return (
     <group>
-      <Torus ref={ring1} args={[2.8, 0.025, 16, 120]} rotation={[Math.PI / 3, 0, 0]}>
-        <meshStandardMaterial color="#818cf8" emissive="#4f46e5" emissiveIntensity={2.5} metalness={1} roughness={0} transparent opacity={0.7} />
+      <Torus ref={ring1} args={[2.8, 0.025, 16, 100]} rotation={[Math.PI / 3, 0, 0]}>
+        <meshStandardMaterial color={dark ? '#818cf8' : '#9333ea'} emissive={dark ? '#4f46e5' : '#7c3aed'} emissiveIntensity={dark ? 2.5 : 1.8} metalness={1} roughness={0} transparent opacity={dark ? 0.7 : 0.75} />
       </Torus>
-      <Torus ref={ring2} args={[3.5, 0.018, 16, 120]} rotation={[0, Math.PI / 5, Math.PI / 4]}>
-        <meshStandardMaterial color="#a5b4fc" emissive="#6366f1" emissiveIntensity={2} metalness={1} roughness={0} transparent opacity={0.55} />
+      <Torus ref={ring2} args={[3.5, 0.018, 16, 100]} rotation={[0, Math.PI / 5, Math.PI / 4]}>
+        <meshStandardMaterial color={dark ? '#a5b4fc' : '#a78bfa'} emissive={dark ? '#6366f1' : '#8b5cf6'} emissiveIntensity={dark ? 2 : 1.5} metalness={1} roughness={0} transparent opacity={dark ? 0.55 : 0.6} />
       </Torus>
-      <Torus ref={ring3} args={[4.2, 0.012, 16, 120]} rotation={[Math.PI / 6, Math.PI / 3, 0]}>
-        <meshStandardMaterial color="#94a3b8" emissive="#4338ca" emissiveIntensity={1.5} metalness={1} roughness={0} transparent opacity={0.4} />
+      <Torus ref={ring3} args={[4.2, 0.012, 16, 100]} rotation={[Math.PI / 6, Math.PI / 3, 0]}>
+        <meshStandardMaterial color={dark ? '#94a3b8' : '#c4b5fd'} emissive={dark ? '#4338ca' : '#7c3aed'} emissiveIntensity={dark ? 1.5 : 1.2} metalness={1} roughness={0} transparent opacity={dark ? 0.4 : 0.5} />
       </Torus>
     </group>
   );
 }
 
-function CrystalShard({ position, scale, speed, rotAxis }: {
+function CrystalShard({ position, scale, speed, rotAxis, dark }: {
   position: [number, number, number];
   scale: number;
   speed: number;
   rotAxis: [number, number, number];
+  dark: boolean;
 }) {
   const ref = useRef<THREE.Mesh>(null);
   useFrame((_, delta) => {
@@ -98,51 +94,67 @@ function CrystalShard({ position, scale, speed, rotAxis }: {
   return (
     <Octahedron ref={ref} args={[1, 0]} position={position} scale={scale}>
       <meshPhysicalMaterial
-        color="#818cf8" emissive="#4f46e5" emissiveIntensity={0.8}
-        metalness={0.8} roughness={0.1} transmission={0.6} thickness={0.5}
-        transparent opacity={0.85}
+        color={dark ? '#818cf8' : '#9333ea'}
+        emissive={dark ? '#4f46e5' : '#7c3aed'}
+        emissiveIntensity={dark ? 0.8 : 0.5}
+        metalness={0.8}
+        roughness={0.1}
+        transparent
+        opacity={0.85}
       />
     </Octahedron>
   );
 }
 
-function CrystalShards() {
+function CrystalShards({ dark }: { dark: boolean }) {
   const shards = useMemo(() => [
-    { position: [4.5, 1.5, -1] as [number,number,number],  scale: 0.22, speed: 0.4, rotAxis: [1,0.5,0.2] as [number,number,number] },
-    { position: [-4, 2, 0.5] as [number,number,number],    scale: 0.16, speed: 0.6, rotAxis: [0.3,1,0.5] as [number,number,number] },
-    { position: [2, -3.5, -2] as [number,number,number],   scale: 0.28, speed: 0.35, rotAxis: [0.5,0.3,1] as [number,number,number] },
-    { position: [-3.5, -2, 1] as [number,number,number],   scale: 0.12, speed: 0.8, rotAxis: [1,1,0.2] as [number,number,number] },
-    { position: [0.5, 4, -1.5] as [number,number,number],  scale: 0.18, speed: 0.5, rotAxis: [0.2,0.5,1] as [number,number,number] },
-    { position: [-1, -4, 0.5] as [number,number,number],   scale: 0.14, speed: 0.7, rotAxis: [1,0.2,0.5] as [number,number,number] },
-    { position: [5, -1, 0] as [number,number,number],      scale: 0.1,  speed: 0.9, rotAxis: [0.5,1,0.3] as [number,number,number] },
-    { position: [-5, 0.5, -0.5] as [number,number,number], scale: 0.2,  speed: 0.45, rotAxis: [0.3,0.7,1] as [number,number,number] },
+    { position: [4.5, 1.5, -1]   as [number,number,number], scale: 0.22, speed: 0.4,  rotAxis: [1,0.5,0.2]   as [number,number,number] },
+    { position: [-4, 2, 0.5]     as [number,number,number], scale: 0.16, speed: 0.6,  rotAxis: [0.3,1,0.5]   as [number,number,number] },
+    { position: [2, -3.5, -2]    as [number,number,number], scale: 0.28, speed: 0.35, rotAxis: [0.5,0.3,1]   as [number,number,number] },
+    { position: [-3.5, -2, 1]    as [number,number,number], scale: 0.12, speed: 0.8,  rotAxis: [1,1,0.2]     as [number,number,number] },
+    { position: [0.5, 4, -1.5]   as [number,number,number], scale: 0.18, speed: 0.5,  rotAxis: [0.2,0.5,1]   as [number,number,number] },
+    { position: [-1, -4, 0.5]    as [number,number,number], scale: 0.14, speed: 0.7,  rotAxis: [1,0.2,0.5]   as [number,number,number] },
+    { position: [5, -1, 0]       as [number,number,number], scale: 0.1,  speed: 0.9,  rotAxis: [0.5,1,0.3]   as [number,number,number] },
+    { position: [-5, 0.5, -0.5]  as [number,number,number], scale: 0.2,  speed: 0.45, rotAxis: [0.3,0.7,1]   as [number,number,number] },
   ], []);
 
   return (
     <>
       {shards.map((s, i) => (
         <Float key={i} speed={1.5 + i * 0.2} rotationIntensity={0} floatIntensity={0.8} floatingRange={[-0.3, 0.3]}>
-          <CrystalShard {...s} />
+          <CrystalShard {...s} dark={dark} />
         </Float>
       ))}
     </>
   );
 }
 
-function Scene() {
+function Scene({ dark, isMobile }: { dark: boolean; isMobile: boolean }) {
   return (
     <>
-      <ambientLight intensity={0.2} color="#0d1a40" />
-      <directionalLight position={[5, 5, 5]} intensity={0.8} color="#818cf8" />
-      <directionalLight position={[-5, -3, -5]} intensity={0.5} color="#6366f1" />
-      <pointLight position={[0, 6, 0]} intensity={2} color="#4f46e5" distance={12} />
-      <Environment preset="night" />
+      {dark ? (
+        <>
+          <ambientLight intensity={0.4} color="#1a1040" />
+          <directionalLight position={[5, 5, 5]} intensity={1.2} color="#818cf8" />
+          <directionalLight position={[-5, -3, -5]} intensity={0.6} color="#6366f1" />
+          <pointLight position={[0, 6, 0]} intensity={3} color="#4f46e5" distance={14} />
+          <pointLight position={[3, -3, 3]} intensity={2} color="#7c3aed" distance={10} />
+        </>
+      ) : (
+        <>
+          <ambientLight intensity={1.4} color="#f0eaff" />
+          <directionalLight position={[6, 8, 5]} intensity={2.0} color="#ffffff" />
+          <directionalLight position={[-4, -2, -4]} intensity={0.6} color="#ddd0ff" />
+          <pointLight position={[2, 4, 3]} intensity={4} color="#9333ea" distance={14} />
+          <pointLight position={[-3, -2, 2]} intensity={2} color="#7c3aed" distance={10} />
+        </>
+      )}
       <Suspense fallback={null}>
         <Float speed={1.2} rotationIntensity={0.1} floatIntensity={0.5} floatingRange={[-0.15, 0.15]}>
-          <CrystalCore />
+          <CrystalCore dark={dark} />
         </Float>
-        <OrbitRings />
-        <CrystalShards />
+        <OrbitRings dark={dark} />
+        {!isMobile && <CrystalShards dark={dark} />}
       </Suspense>
       <OrbitControls
         enableZoom={false} enablePan={false} enableRotate={true}
@@ -153,125 +165,209 @@ function Scene() {
   );
 }
 
+const stats = [
+  { value: '100%', label: 'Custom Built' },
+  { value: '3D',   label: 'Immersive Design' },
+  { value: '<48h', label: 'First Draft' },
+];
+
 export default function Hero3D() {
+  const { dark } = useTheme();
+  // Reduce geometry on mobile for performance
+  const isMobile = window.innerWidth < 768;
+
   const scrollDown = () => {
-    const next = document.getElementById('mission');
+    const next = document.getElementById('about');
     if (next) next.scrollIntoView({ behavior: 'smooth' });
     else window.scrollBy({ top: window.innerHeight, behavior: 'smooth' });
   };
 
   return (
-    <div style={{
+    <div id="home" style={{
       position: 'relative', width: '100vw', minHeight: '100svh', height: '100svh',
       overflow: 'hidden',
-      background: 'radial-gradient(ellipse 120% 80% at 50% -10%, #111827 0%, #080c14 40%, #07080a 100%)',
+      background: dark
+        ? 'radial-gradient(ellipse 130% 90% at 50% -5%, #130d24 0%, #0a0710 45%, #08080c 100%)'
+        : 'radial-gradient(ellipse 120% 85% at 62% 25%, rgba(147,51,234,0.12) 0%, rgba(109,40,217,0.04) 45%, #fafafa 70%)',
     }}>
-      {/* 3D Canvas */}
+
+      {/* Light mode violet bloom orbs */}
+      {!dark && (
+        <>
+          <div style={{ position: 'absolute', top: '-10%', right: '5%', width: 700, height: 700, borderRadius: '50%', background: 'radial-gradient(circle, rgba(147,51,234,0.12) 0%, transparent 60%)', filter: 'blur(90px)', pointerEvents: 'none', zIndex: 0 }} />
+          <div style={{ position: 'absolute', bottom: '-5%', left: '-5%', width: 520, height: 520, borderRadius: '50%', background: 'radial-gradient(circle, rgba(109,40,217,0.09) 0%, transparent 60%)', filter: 'blur(80px)', pointerEvents: 'none', zIndex: 0 }} />
+          <div style={{ position: 'absolute', top: '35%', left: '8%', width: 340, height: 340, borderRadius: '50%', background: 'radial-gradient(circle, rgba(139,92,246,0.07) 0%, transparent 60%)', filter: 'blur(70px)', pointerEvents: 'none', zIndex: 0 }} />
+        </>
+      )}
+
+      {/* 3D Canvas — keyed on dark so WebGL context remounts cleanly on theme switch */}
       <div style={{ position: 'absolute', inset: 0, zIndex: 1 }}>
-        <Canvas camera={{ position: [0, -1.2, 9], fov: 42 }} gl={{ antialias: true, alpha: true }} dpr={[1, 1.5]} style={{ background: 'transparent' }}>
-          <Scene />
+        <Canvas
+          key={dark ? 'dark' : 'light'}
+          camera={{ position: [0, -1.2, 9], fov: 42 }}
+          gl={{ antialias: !isMobile, alpha: true, powerPreference: 'high-performance' }}
+          dpr={isMobile ? [1, 1] : [1, 1.5]}
+          performance={{ min: 0.5 }}
+          style={{ background: 'transparent' }}
+        >
+          <Scene dark={dark} isMobile={isMobile} />
         </Canvas>
       </div>
 
-      {/* Radial glow behind crystal */}
+      {/* Radial glow */}
       <div style={{
         position: 'absolute', left: '50%', top: '50%',
         transform: 'translate(-50%, -50%)',
-        width: 600, height: 600, borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(79,70,229,0.2) 0%, rgba(99,102,241,0.06) 40%, transparent 70%)',
-        filter: 'blur(40px)', zIndex: 0, pointerEvents: 'none',
+        width: 700, height: 700, borderRadius: '50%',
+        background: dark
+          ? 'radial-gradient(circle, rgba(124,58,237,0.28) 0%, rgba(139,92,246,0.08) 40%, transparent 70%)'
+          : 'radial-gradient(circle, rgba(139,92,246,0.12) 0%, rgba(109,40,217,0.04) 50%, transparent 70%)',
+        filter: 'blur(50px)', zIndex: 0, pointerEvents: 'none',
       }} />
 
-      {/* Hero text overlay */}
-      <div style={{
-        position: 'absolute', inset: 0, zIndex: 2,
-        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-        textAlign: 'center', padding: 'clamp(16px, 5vw, 24px) clamp(16px, 5vw, 24px)', pointerEvents: 'none',
-        background: 'linear-gradient(to bottom, transparent 50%, #07080a 100%)',
-      }}>
-        {/* Logo badge */}
-        <div style={{ marginBottom: 24, pointerEvents: 'auto', display: 'flex', alignItems: 'center', gap: 12, padding: '8px 20px', borderRadius: 100, border: '1px solid rgba(99,102,241,0.22)', background: 'rgba(79,70,229,0.08)' }}>
-          <img src="logo.png" alt="Web Fixxies" style={{ width: 20, height: 20, objectFit: 'contain' }} />
-          <span style={{ fontFamily: 'Space Mono, monospace', fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: '#818cf8' }}>Premium Web Development Studio</span>
-        </div>
+      {/* Bottom gradient fade */}
+      <div className="hero-bottom-fade" />
 
-        <h1
-          className="font-display glitch no-select"
-          data-text="WEB FIXXIES"
+      {/* ── Hero Content ── */}
+      <div style={{
+        position: 'absolute', inset: 0, zIndex: 3,
+        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+        textAlign: 'center', padding: 'clamp(16px, 5vw, 24px)', pointerEvents: 'none',
+      }}>
+
+        {/* Badge */}
+        <motion.div
+          initial={{ opacity: 0, y: -16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           style={{
-            fontSize: 'clamp(36px, 10vw, 130px)', fontWeight: 900,
-            lineHeight: 0.9, letterSpacing: '-0.03em', textTransform: 'uppercase',
-            background: 'linear-gradient(135deg, #f1f5f9 0%, #a5b4fc 35%, #818cf8 65%, #6366f1 100%)',
-            WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
-            marginBottom: 'clamp(16px, 3vw, 28px)',
-            filter: 'drop-shadow(0 0 40px rgba(99,102,241,0.35))',
-            maxWidth: '100%', wordBreak: 'break-word',
+            marginBottom: 'clamp(18px, 4vw, 28px)', pointerEvents: 'auto',
+            display: 'inline-flex', alignItems: 'center', gap: 8,
+            padding: 'clamp(6px, 1.5vw, 8px) clamp(12px, 3vw, 18px)',
+            borderRadius: 100,
+            border: dark ? '1px solid rgba(139,92,246,0.25)' : '1px solid rgba(109,40,217,0.2)',
+            background: dark ? 'rgba(124,58,237,0.12)' : 'rgba(255,255,255,0.9)',
+            maxWidth: '90vw',
           }}
         >
-          WEB FIXXIES
-        </h1>
+          <img src="logo.png" alt="Web Fixxies" style={{ width: 18, height: 18, objectFit: 'contain', flexShrink: 0 }} />
+          <span style={{
+            fontFamily: 'Space Mono, monospace',
+            fontSize: 'clamp(7px, 2vw, 9px)',
+            letterSpacing: '0.2em',
+            textTransform: 'uppercase',
+            color: dark ? '#a78bfa' : '#6d28d9',
+            whiteSpace: 'nowrap',
+          }}>
+            Web Design &amp; Development Studio
+          </span>
+        </motion.div>
 
-        <p style={{
-          maxWidth: 620, fontSize: 'clamp(13px, 2vw, 18px)', fontWeight: 300,
-          lineHeight: 1.75, color: '#94a3b8', marginBottom: 'clamp(24px, 4vw, 44px)', letterSpacing: '0.02em',
-          padding: '0 8px',
-        }}>
-          We engineer high-performance, visually immersive web experiences that
-          command attention and drive measurable business results. Built for brands
-          that refuse to blend in.
-        </p>
+        {/* Main heading — plain div wrapper for drop-shadow, motion div above it */}
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+          style={{ marginBottom: 'clamp(18px, 3vw, 32px)' }}
+        >
+          <div style={{ filter: dark ? 'drop-shadow(0 0 50px rgba(139,92,246,0.35))' : 'none' }}>
+            <h1 className={`font-display no-select hero-title ${dark ? 'hero-title--dark' : 'hero-title--light'}`}>
+              WEB FIXXIES
+            </h1>
+          </div>
+        </motion.div>
 
-        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', justifyContent: 'center', pointerEvents: 'auto' }}>
-          <a
-            href="#mission"
-            onClick={(e) => { e.preventDefault(); navTo('mission'); }}
-            className="btn-primary"
-            style={{ textDecoration: 'none' }}
-          >
-            Explore Our Work
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+        {/* Tagline */}
+        <motion.p
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.22, ease: [0.22, 1, 0.36, 1] }}
+          style={{
+            maxWidth: 580, fontSize: 'clamp(16px, 2vw, 20px)', fontWeight: 400,
+            lineHeight: 1.8, color: dark ? '#9b9ab8' : '#3d3558',
+            marginBottom: 'clamp(28px, 4vw, 48px)',
+            letterSpacing: '0.01em', padding: '0 8px',
+          }}
+        >
+          We build beautiful, fast websites that help businesses
+          stand out online — without the technical jargon or the big agency prices.
+        </motion.p>
+
+        {/* CTAs */}
+        <motion.div
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.34, ease: [0.22, 1, 0.36, 1] }}
+          style={{ display: 'flex', gap: 14, flexWrap: 'wrap', justifyContent: 'center', pointerEvents: 'auto' }}
+        >
+          <button onClick={() => navTo('about')} className="btn-primary">
+            See Our Work
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2">
               <path d="M7 17L17 7M17 7H7M17 7V17"/>
             </svg>
-          </a>
-          <a
-            href="#contact"
-            onClick={(e) => { e.preventDefault(); navTo('contact'); }}
-            className="btn-outline"
-            style={{ textDecoration: 'none' }}
-          >
-            Get In Touch
-          </a>
-        </div>
+          </button>
+          <button onClick={() => navTo('contact')} className="btn-outline">
+            Get a Free Quote
+          </button>
+        </motion.div>
+
+        {/* Stats */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.52, ease: [0.22, 1, 0.36, 1] }}
+          style={{
+            marginTop: 'clamp(40px, 6vw, 72px)',
+            display: 'flex', gap: 'clamp(24px, 5vw, 64px)',
+            alignItems: 'center', justifyContent: 'center',
+            flexWrap: 'wrap', pointerEvents: 'auto',
+          }}
+        >
+          {stats.map((s, i) => (
+            <div key={i} style={{ textAlign: 'center' }}>
+              <div style={{ lineHeight: 1, fontSize: 'clamp(22px, 3.5vw, 36px)' }}>
+                <span
+                  className={dark ? 'stat-value-dark' : 'stat-value-light'}
+                  style={{ fontFamily: 'Outfit, sans-serif', fontWeight: 800 }}
+                >
+                  {s.value}
+                </span>
+              </div>
+              <div style={{
+                fontFamily: 'Space Mono, monospace', fontSize: 9,
+                letterSpacing: '0.22em', textTransform: 'uppercase',
+                color: dark ? '#5c5b72' : '#5b4a7a', marginTop: 6,
+              }}>{s.label}</div>
+            </div>
+          ))}
+        </motion.div>
       </div>
 
-      {/* Bottom scroll indicator — desktop: decorative line; mobile: tappable button */}
+      {/* Scroll indicator */}
       <div style={{
-        position: 'absolute', bottom: 40, left: '50%', transform: 'translateX(-50%)',
-        zIndex: 3, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
+        position: 'absolute', bottom: 36, left: '50%', transform: 'translateX(-50%)',
+        zIndex: 4, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
       }}>
-        {/* Decorative line — hidden on mobile */}
-        <div className="scroll-line" style={{ width: 1.5, height: 56, background: 'linear-gradient(to bottom, transparent, rgba(129,140,248,0.6), transparent)', animation: 'float 2s ease-in-out infinite' }} />
-
-        {/* Mobile tap button — shown only on touch screens via CSS */}
+        <div className="scroll-line" style={{
+          width: 1.5, height: 52,
+          background: dark
+            ? 'linear-gradient(to bottom, transparent, rgba(129,140,248,0.6), transparent)'
+            : 'linear-gradient(to bottom, transparent, rgba(79,70,229,0.4), transparent)',
+          animation: 'float 2s ease-in-out infinite',
+        }} />
         <button
           onClick={scrollDown}
           className="scroll-down-btn"
           aria-label="Scroll down"
           style={{
-            display: 'none', // overridden by CSS on mobile
+            display: 'none',
             alignItems: 'center', gap: 6,
-            background: 'rgba(79,70,229,0.12)',
-            border: '1px solid rgba(99,102,241,0.3)',
-            borderRadius: 100,
-            padding: '10px 20px',
-            cursor: 'pointer',
-            color: '#a5b4fc',
-            fontFamily: 'Space Mono, monospace',
-            fontSize: 10,
-            letterSpacing: '0.2em',
-            textTransform: 'uppercase',
-            backdropFilter: 'blur(10px)',
-            WebkitBackdropFilter: 'blur(10px)',
+            background: dark ? 'rgba(79,70,229,0.15)' : 'rgba(255,255,255,0.92)',
+            border: dark ? '1px solid rgba(99,102,241,0.3)' : '1px solid rgba(79,70,229,0.2)',
+            borderRadius: 100, padding: '10px 20px', cursor: 'pointer',
+            color: dark ? '#a5b4fc' : '#4f46e5',
+            fontFamily: 'Space Mono, monospace', fontSize: 10,
+            letterSpacing: '0.2em', textTransform: 'uppercase',
           }}
         >
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" style={{ animation: 'float 1.5s ease-in-out infinite' }}>

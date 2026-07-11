@@ -1,5 +1,7 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
+import { useTheme } from '../App';
+import { projects } from '../data/projectsData';
 
 // ─── WF Logo ──────────────────────────────────────────────────────────────────
 function WFLogo({ size = 24 }: { size?: number }) {
@@ -85,6 +87,7 @@ function SitePreview({
   height?: number;
   loading?: 'lazy' | 'eager';
 }) {
+  const { dark } = useTheme();
   const [status, setStatus] = useState<'loading' | 'ready' | 'blocked'>('loading');
   const [interacted, setInteracted] = useState(false);
   const [showHint, setShowHint] = useState(false);
@@ -122,15 +125,17 @@ function SitePreview({
         borderRadius: 14,
         overflow: 'hidden',
         border: `1px solid ${accent}33`,
-        background: '#06000f',
-        boxShadow: `0 8px 60px rgba(0,0,0,0.7), 0 0 0 1px ${accent}15, inset 0 1px 0 ${accent}20`,
+        background: dark ? '#06000f' : '#f8f9fc',
+        boxShadow: dark
+          ? `0 8px 60px rgba(0,0,0,0.7), 0 0 0 1px ${accent}15, inset 0 1px 0 ${accent}20`
+          : `0 4px 24px rgba(124,58,237,0.1), 0 0 0 1px ${accent}15`,
       }}
     >
       {/* ── Browser chrome bar ── */}
       <div style={{
         display: 'flex', alignItems: 'center', gap: 10,
         padding: '10px 16px',
-        background: `linear-gradient(90deg, rgba(4,0,12,0.98), rgba(10,0,24,0.98))`,
+        background: `linear-gradient(90deg, ${dark ? 'rgba(4,0,12,0.98), rgba(10,0,24,0.98)' : 'rgba(241,243,249,0.98), rgba(235,238,250,0.98)'})`,
         borderBottom: `1px solid ${accent}20`,
       }}>
         {/* Traffic lights */}
@@ -152,7 +157,7 @@ function SitePreview({
         {/* URL bar */}
         <div style={{
           flex: 1, display: 'flex', alignItems: 'center', gap: 8,
-          background: 'rgba(8,0,20,0.8)',
+          background: dark ? 'rgba(8,0,20,0.8)' : 'rgba(235,238,250,0.9)',
           border: `1px solid ${accent}25`,
           borderRadius: 8, padding: '5px 14px', overflow: 'hidden',
         }}>
@@ -214,7 +219,7 @@ function SitePreview({
               style={{
                 position: 'absolute', inset: 0, zIndex: 3,
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 18,
-                background: '#06000f', pointerEvents: 'none',
+                background: dark ? '#06000f' : '#f1f3f9', pointerEvents: 'none',
               }}
             >
               {/* Spinner */}
@@ -268,7 +273,7 @@ function SitePreview({
                 position: 'absolute', inset: 0, zIndex: 3,
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                 gap: 18, padding: 40, textAlign: 'center',
-                background: `radial-gradient(ellipse 70% 60% at 50% 40%, ${accent}14 0%, transparent 70%), #06000f`,
+                background: `radial-gradient(ellipse 70% 60% at 50% 40%, ${accent}14 0%, transparent 70%), ${dark ? '#06000f' : '#f1f3f9'}`,
               }}
             >
               <motion.div
@@ -322,7 +327,7 @@ function SitePreview({
               style={{
                 position: 'absolute', bottom: 16, left: '50%', transform: 'translateX(-50%)',
                 zIndex: 4, pointerEvents: 'none',
-                background: `rgba(4,0,13,0.9)`, backdropFilter: 'blur(12px)',
+                background: dark ? `rgba(4,0,13,0.9)` : `rgba(248,249,252,0.92)`, backdropFilter: 'blur(12px)',
                 border: `1px solid ${accent}40`, borderRadius: 100,
                 padding: '8px 18px', display: 'flex', alignItems: 'center', gap: 8,
               }}
@@ -359,119 +364,6 @@ function SitePreview({
   );
 }
 
-// ─── Project data ──────────────────────────────────────────────────────────────
-export const projects = [
-  {
-    id: 'kfc',
-    name: 'KFC Bangladesh Demo',
-    subtitle: 'Interactive Brand Site',
-    by: 'VEX / Ibrahim',
-    byDetail: 'Design Principal',
-    description: 'Cinematic landing page, animated menu flow, location browsing, and brand-history storytelling for a Bangladesh-focused KFC concept demo.',
-    liveUrl: 'https://kfc-webfixxies-demo.vercel.app/',
-    repoUrl: 'https://github.com/Mcethereal/KFC_Webfixxies_Demo',
-    iframeSrc: 'https://kfc-webfixxies-demo.vercel.app/',
-    accent: '#dc2626',
-    accentAlt: '#f87171',
-    glow: 'rgba(220,38,38,0.18)',
-    glowSoft: 'rgba(220,38,38,0.05)',
-    tags: ['Live Deploy', 'Food Brand', 'Animated UI', 'Responsive'],
-    icon: '🍗',
-    stats: [
-      { label: 'Animations', value: 40, suffix: '+' },
-      { label: 'Screens', value: 8 },
-      { label: 'Score', value: 98, suffix: '' },
-    ],
-  },
-  {
-    id: 'pizzahut',
-    name: 'Pizza Hut Bangladesh Demo',
-    subtitle: '3D Pizza Customizer',
-    by: 'ARSENIC / Ahnaf Tahmid',
-    byDetail: 'Growth Strategist',
-    description: 'Interactive 3D pizza building experience for Pizza Hut Bangladesh, featuring mobile-responsive menus, dynamic sound effects, and real-time topping rendering.',
-    liveUrl: 'https://pizzahut-demo-page.vercel.app/',
-    repoUrl: 'https://github.com/AlexWoods6351/Pizzahut-demo-page',
-    iframeSrc: 'https://pizzahut-demo-page.vercel.app/',
-    accent: '#e11d48',
-    accentAlt: '#fb7185',
-    glow: 'rgba(225,29,72,0.18)',
-    glowSoft: 'rgba(225,29,72,0.05)',
-    tags: ['Live Deploy', 'Food Brand', '3D Customizer', 'Responsive'],
-    icon: '🍕',
-    stats: [
-      { label: '3D Models', value: 12 },
-      { label: 'Toppings', value: 24, suffix: '+' },
-      { label: 'Score', value: 96, suffix: '' },
-    ],
-  },
-  {
-    id: 'novabites',
-    name: 'NovaBites',
-    subtitle: 'Fast Food Brand Experience',
-    by: 'RAIN / Ibrahim',
-    byDetail: 'Technical Director',
-    description: 'A full fast food brand concept engineered from scratch — Three.js hero scene, live cart system, countdown deals, nutrition tabs, and a rewards programme. Pure HTML/CSS/JS.',
-    liveUrl: 'https://nova-bites.vercel.app/',
-    repoUrl: 'https://github.com/Rainxfc/NovaBites',
-    iframeSrc: 'https://nova-bites.vercel.app/',
-    accent: '#f97316',
-    accentAlt: '#fb923c',
-    glow: 'rgba(249,115,22,0.18)',
-    glowSoft: 'rgba(249,115,22,0.05)',
-    tags: ['Three.js Hero', 'Live Cart', 'Countdown Deals', 'Rewards'],
-    icon: '🍔',
-    stats: [
-      { label: 'Sections', value: 10, suffix: '+' },
-      { label: 'JS Lines', value: 2400, suffix: '+' },
-      { label: 'Score', value: 94, suffix: '' },
-    ],
-  },
-  {
-    id: 'nike',
-    name: 'Nike Shoe Demo',
-    subtitle: 'Premium E-Commerce Viewer',
-    by: 'VEX / Ibrahim',
-    byDetail: 'Design Principal',
-    description: 'A dedicated showcase of Nike shoes featuring real-time 3D models and interactive UI.',
-    liveUrl: 'https://nike-shoe-hazel.vercel.app/',
-    repoUrl: 'https://github.com/Rainxfc/webfixxies-v2',
-    iframeSrc: 'https://nike-shoe-hazel.vercel.app/',
-    accent: '#3b82f6',
-    accentAlt: '#60a5fa',
-    glow: 'rgba(59,130,246,0.18)',
-    glowSoft: 'rgba(59,130,246,0.05)',
-    tags: ['Live Deploy', '3D E-Commerce', 'Nike', 'Responsive'],
-    icon: '👟',
-    stats: [
-      { label: '3D Models', value: 3 },
-      { label: 'Animations', value: 15, suffix: '+' },
-      { label: 'Score', value: 95, suffix: '' },
-    ],
-  },
-  {
-    id: 'baikonur',
-    name: 'Baikonur Streetwear',
-    subtitle: 'Cinematic Brand Experience',
-    by: 'Ibrahim Harun',
-    byDetail: 'Developer',
-    description: 'A cinematic single-page brand experience for a Kazakhstani streetwear label — full-screen video hero with ambient music, functional cart via React Context, slide-in overlay panels, and scroll-triggered animations. Zero UI libraries.',
-    liveUrl: 'https://bakinourstreetweardemo.vercel.app/',
-    repoUrl: '',
-    iframeSrc: 'https://bakinourstreetweardemo.vercel.app/',
-    accent: '#d4a853',
-    accentAlt: '#e8c07a',
-    glow: 'rgba(212,168,83,0.18)',
-    glowSoft: 'rgba(212,168,83,0.05)',
-    tags: ['React 19', 'TypeScript', 'Video Hero', 'Cart System', 'PWA-Ready'],
-    icon: '🧥',
-    stats: [
-      { label: 'Tech Stack', value: 4 },
-      { label: 'Panels', value: 4 },
-      { label: 'Score', value: 97, suffix: '' },
-    ],
-  },
-];
 
 // ─── Stats bar ─────────────────────────────────────────────────────────────────
 function StatsBar({ stats, accent }: { stats: typeof projects[0]['stats']; accent: string }) {
@@ -537,15 +429,13 @@ export function ProjectCard({ project, index, compact = false }: { project: type
       onMouseLeave={() => setHovered(false)}
       style={{
         borderRadius: compact ? 28 : 24,
-        border: `1px solid ${hovered ? project.accent + '45' : 'rgba(139,92,246,0.12)'}`,
-        background: `linear-gradient(145deg, rgba(6,0,18,0.98), ${project.glowSoft}, rgba(4,0,12,0.98))`,
+        border: `1px solid ${hovered ? project.accent + '45' : 'var(--border-card)'}`,
+        background: `linear-gradient(145deg, var(--bg-card-dark,#06000f) calc(0%), var(--bg-deepest) 100%)`,
         backdropFilter: 'blur(20px)',
         overflow: 'hidden',
         position: 'relative',
         transition: 'border-color 0.4s, box-shadow 0.4s, transform 0.4s',
-        boxShadow: hovered
-          ? `0 0 80px ${project.glow}, 0 30px 80px rgba(0,0,0,0.6)`
-          : '0 8px 40px rgba(0,0,0,0.4)',
+        boxShadow: hovered ? `0 0 80px ${project.glow}, 0 30px 80px rgba(0,0,0,0.6)` : 'var(--shadow-project)',
         transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
       }}
     >
@@ -607,10 +497,10 @@ export function ProjectCard({ project, index, compact = false }: { project: type
               initial={{ opacity: 0, y: 10 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: index * 0.12 + 0.3, duration: 0.6 }}
-              className="font-display"
+              className="font-display project-title-text"
               style={{
                 fontSize: compact ? 'clamp(22px, 3.2vw, 32px)' : 'clamp(24px, 3.8vw, 38px)', fontWeight: 900,
-                letterSpacing: '-0.02em', lineHeight: 1.05, color: '#f5f0ff',
+                letterSpacing: '-0.02em', lineHeight: 1.05,
                 marginBottom: 6, display: 'flex', alignItems: 'center', gap: 12,
               }}
             >
@@ -679,7 +569,7 @@ export function ProjectCard({ project, index, compact = false }: { project: type
           transition={{ delay: index * 0.12 + 0.4 }}
           style={{ marginTop: compact ? 16 : 18, display: 'flex', flexWrap: 'wrap', alignItems: 'flex-start', justifyContent: 'space-between', gap: 14 }}
         >
-          <p style={{ fontSize: compact ? 13 : 13.5, color: '#7c6a99', lineHeight: 1.8, fontWeight: 300, maxWidth: 560 }}>
+          <p className="project-desc-text" style={{ fontSize: compact ? 14 : 15, lineHeight: 1.85, fontWeight: 400, maxWidth: 560 }}>
             {project.description}
           </p>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
@@ -800,7 +690,7 @@ function SectionHeader({ inView }: { inView: boolean }) {
             transition={{ delay: wi * 0.15, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
             style={{
               display: 'inline-block', marginRight: 18,
-              background: 'linear-gradient(135deg, #f5f0ff 0%, #c4b5fd 50%, #e879f9 100%)',
+              background: 'linear-gradient(135deg, var(--text-primary) 0%, #c4b5fd 50%, #e879f9 100%)',
               WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text',
             }}
           >
@@ -813,10 +703,10 @@ function SectionHeader({ inView }: { inView: boolean }) {
         initial={{ opacity: 0, y: 16 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ delay: 0.35, duration: 0.6 }}
-        style={{ maxWidth: 560, margin: '0 auto 24px', fontSize: 15, color: '#7c6a99', lineHeight: 1.85, fontWeight: 300 }}
+        style={{ maxWidth: 560, margin: '0 auto 24px', fontSize: 17, color: 'var(--text-desc)', lineHeight: 1.9, fontWeight: 400, letterSpacing: '0.01em' }}
       >
         Live projects by the Web Fixxies collective — each preview is{' '}
-        <span style={{ color: '#a78bfa', fontWeight: 500 }}>fully interactive</span>.
+        <span style={{ color: '#a78bfa', fontWeight: 600 }}>fully interactive</span>.
         Scroll, click, and explore the real sites below.
       </motion.p>
 
@@ -825,10 +715,10 @@ function SectionHeader({ inView }: { inView: boolean }) {
         initial={{ opacity: 0, scale: 0.8 }}
         animate={inView ? { opacity: 1, scale: 1 } : {}}
         transition={{ delay: 0.5, duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-        style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '8px 20px', borderRadius: 100, border: '1px solid rgba(167,139,250,0.2)', background: 'rgba(124,58,237,0.06)' }}
+        style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '8px 20px', borderRadius: 100, border: '1px solid var(--border-subtle)', background: 'var(--section-gradient-a)' }}
       >
         <WFLogo size={16} />
-        <span className="font-mono" style={{ fontSize: 9, letterSpacing: '0.28em', textTransform: 'uppercase', color: 'rgba(167,139,250,0.5)' }}>
+        <span className="font-mono" style={{ fontSize: 9, letterSpacing: '0.28em', textTransform: 'uppercase', color: 'var(--text-muted)' }}>
           Web Fixxies Collective
         </span>
         <motion.div
@@ -860,7 +750,7 @@ function SectionHeader({ inView }: { inView: boolean }) {
             <div className="font-display" style={{ fontSize: 32, fontWeight: 900, background: 'linear-gradient(135deg, #a78bfa, #e879f9)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', lineHeight: 1 }}>
               <Counter to={stat.value} />
             </div>
-            <div className="font-mono" style={{ fontSize: 8, letterSpacing: '0.25em', textTransform: 'uppercase', color: 'rgba(167,139,250,0.4)', marginTop: 4 }}>
+            <div className="font-mono" style={{ fontSize: 8, letterSpacing: '0.25em', textTransform: 'uppercase', color: 'var(--text-muted)', marginTop: 4 }}>
               {stat.label}
             </div>
           </motion.div>
@@ -881,11 +771,11 @@ export default function ProjectsSection() {
     <section
       id="projects"
       ref={ref}
+      className="section-bg-projects"
       style={{
         position: 'relative', width: '100%',
         padding: '140px 24px 160px',
         overflow: 'hidden',
-        background: 'linear-gradient(180deg, #04000d 0%, #080016 50%, #04000d 100%)',
       }}
     >
       {/* Grid */}
@@ -914,30 +804,30 @@ export default function ProjectsSection() {
           transition={{ delay: 0.6, duration: 0.7 }}
           style={{ textAlign: 'center', marginTop: 80 }}
         >
-          <div className="font-mono" style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'rgba(167,139,250,0.3)', marginBottom: 20 }}>
+          <div className="font-mono" style={{ fontSize: 9, letterSpacing: '0.3em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: 20 }}>
             + 3 more projects — KFC · NovaBites · Baikonur
           </div>
           <motion.a
             href="#all-projects"
-            whileHover={{ scale: 1.05, boxShadow: '0 0 50px rgba(129,140,248,0.45)' }}
+            whileHover={{ scale: 1.05, boxShadow: '0 0 50px rgba(139,92,246,0.4)' }}
             whileTap={{ scale: 0.97 }}
             style={{
               display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 14,
               padding: '16px 48px', borderRadius: 100,
-              background: 'linear-gradient(135deg, rgba(79,70,229,0.22), rgba(99,102,241,0.14))',
-              border: '1px solid rgba(129,140,248,0.45)',
-              color: '#a5b4fc',
+              background: 'linear-gradient(135deg, rgba(124,58,237,0.2), rgba(139,92,246,0.12))',
+              border: '1px solid rgba(167,139,250,0.4)',
+              color: '#c4b5fd',
               fontSize: 11,
               fontFamily: 'Space Mono, monospace',
               letterSpacing: '0.18em',
               textTransform: 'uppercase',
               textDecoration: 'none',
               cursor: 'pointer',
-              boxShadow: '0 0 28px rgba(79,70,229,0.22)',
+              boxShadow: '0 0 28px rgba(124,58,237,0.2)',
               transition: 'all 0.3s ease',
             }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(165,180,252,0.7)'; e.currentTarget.style.color = '#f1f5f9'; }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(129,140,248,0.45)'; e.currentTarget.style.color = '#a5b4fc'; }}
+            onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(196,181,253,0.65)'; e.currentTarget.style.color = '#f8f7ff'; }}
+            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(167,139,250,0.4)'; e.currentTarget.style.color = '#c4b5fd'; }}
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/>
