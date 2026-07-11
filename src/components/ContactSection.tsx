@@ -78,42 +78,66 @@ export default function ContactSection() {
           We work openly, communicate clearly, and always deliver what we promise.
         </motion.p>
 
-        <motion.div initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}} transition={{ delay: 0.8, duration: 0.6 }} style={{ marginTop: 60, paddingTop: 40, borderTop: '1px solid var(--border-subtle)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 28 }}>
-
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={inView ? { opacity: 1 } : {}}
+          transition={{ delay: 0.8, duration: 0.6 }}
+          style={{
+            marginTop: 60,
+            paddingTop: 40,
+            borderTop: '1px solid var(--border-subtle)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            textAlign: 'center',
+            gap: 28,
+            width: '100%',
+          }}
+        >
           {/* Logo + brand */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <img src="logo.png" alt="Web Fixxies" style={{ width: 30, height: 30, objectFit: 'contain', filter: 'drop-shadow(0 0 4px rgba(124,58,237,0.4))' }} />
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 }}>
+            <img src="logo.png" alt="Web Fixxies" style={{ width: 30, height: 30, objectFit: 'contain', filter: 'drop-shadow(0 0 4px rgba(124,58,237,0.4))', maxWidth: 'unset' }} />
             <span className="font-display" style={{ fontSize: 20, fontWeight: 800, letterSpacing: '-0.02em', background: 'linear-gradient(135deg, #7c3aed, #8b5cf6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
               WEB FIXXIES
             </span>
           </div>
 
           {/* Nav links */}
-          <div style={{ display: 'flex', gap: 'clamp(14px, 3vw, 32px)', flexWrap: 'wrap', justifyContent: 'center', rowGap: 12 }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px 20px', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
             {['About', 'Mission', 'Projects', 'Pricing', 'Contact'].map(item => (
-              <a key={item} href={`#${item.toLowerCase()}`} onClick={(e) => { e.preventDefault(); navTo(item.toLowerCase()); }} className="font-mono"
-                style={{ fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.3s', fontWeight: 600 }}
+              <a
+                key={item}
+                href={`#${item.toLowerCase()}`}
+                onClick={(e) => { e.preventDefault(); navTo(item.toLowerCase()); }}
+                className="font-mono"
+                style={{ fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.3s', fontWeight: 600, minHeight: 'unset', minWidth: 'unset', display: 'inline-block' }}
                 onMouseEnter={e => (e.currentTarget.style.color = '#a78bfa')}
-                onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-muted)')}>
+                onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-muted)')}
+              >
                 {item}
               </a>
             ))}
           </div>
 
           {/* Social icons */}
-          <div style={{ display: 'flex', gap: 16, alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ display: 'flex', gap: 14, alignItems: 'center', justifyContent: 'center' }}>
             {[
               { name: 'Facebook', url: 'https://www.facebook.com/people/Webfixxies/61591612619072/?sk=about', icon: FaFacebook },
               { name: 'Instagram', url: 'https://www.instagram.com/webfixxiesco/', icon: FaInstagram },
-              { name: 'LinkedIn', url: 'https://www.linkedin.com/company/webfixxies', icon: FaLinkedin }
+              { name: 'LinkedIn', url: 'https://www.linkedin.com/company/webfixxies', icon: FaLinkedin },
             ].map(social => {
               const Icon = social.icon;
               return (
-                <motion.a key={social.name} href={social.url} target="_blank" rel="noopener noreferrer"
+                <motion.a
+                  key={social.name}
+                  href={social.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   whileHover={{ scale: 1.15 }}
-                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 42, height: 42, borderRadius: '50%', border: '1px solid var(--border-mid)', color: 'var(--violet-bright)', textDecoration: 'none', transition: 'all 0.3s', background: 'var(--section-gradient-a)' }}
+                  style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 42, height: 42, minWidth: 'unset', minHeight: 'unset', borderRadius: '50%', border: '1px solid var(--border-mid)', color: 'var(--violet-bright)', textDecoration: 'none', transition: 'all 0.3s', background: 'var(--section-gradient-a)', flexShrink: 0 }}
                   onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--border-accent)'; e.currentTarget.style.boxShadow = '0 0 15px rgba(139,92,246,0.3)'; }}
-                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border-mid)'; e.currentTarget.style.boxShadow = 'none'; }}>
+                  onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border-mid)'; e.currentTarget.style.boxShadow = 'none'; }}
+                >
                   <Icon size={18} />
                 </motion.a>
               );
@@ -121,7 +145,7 @@ export default function ContactSection() {
           </div>
 
           {/* Copyright */}
-          <span className="font-mono" style={{ fontSize: 10, color: 'var(--text-faint)', letterSpacing: '0.15em', textAlign: 'center' }}>
+          <span className="font-mono" style={{ fontSize: 10, color: 'var(--text-faint)', letterSpacing: '0.15em', textAlign: 'center', minWidth: 'unset' }}>
             © 2026 WEB FIXXIES — ALL RIGHTS RESERVED
           </span>
 

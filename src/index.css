@@ -731,7 +731,8 @@ button, a, [role="button"] {
   min-width: 44px;
 }
 /* Override for inline/badge links that shouldn't be 44px tall */
-.section-tag, .font-mono a, nav a, nav button {
+.section-tag, .font-mono a, nav a, nav button,
+#contact a.font-mono, footer a {
   min-height: unset;
   min-width: unset;
 }
