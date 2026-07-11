@@ -306,8 +306,11 @@ export default function Hero3D() {
               <path d="M7 17L17 7M17 7H7M17 7V17"/>
             </svg>
           </button>
-          <button onClick={() => navTo('contact')} className="btn-outline">
-            Get a Free Quote
+          <button onClick={() => navTo('contact')} className="btn-primary" style={{ background: 'transparent', border: '1px solid rgba(167,139,250,0.35)', color: dark ? '#c4b5fd' : '#6d28d9', boxShadow: 'none' }}
+            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(124,58,237,0.12)'; e.currentTarget.style.borderColor = 'rgba(167,139,250,0.6)'; }}
+            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(167,139,250,0.35)'; }}
+          >
+            Contact Us
           </button>
         </motion.div>
 

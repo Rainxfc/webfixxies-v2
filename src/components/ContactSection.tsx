@@ -52,11 +52,44 @@ export default function ContactSection() {
             </a>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, maxWidth: 560, margin: '0 auto', position: 'relative' }}>
-              {[{ label: 'We Reply In', value: '< 24 hrs', icon: '⚡' }, { label: 'Pricing', value: 'Custom', icon: '⬡' }, { label: 'We Work With', value: 'Everyone', icon: '◈' }].map((item) => (
-                <div key={item.label} style={{ padding: '18px 10px', borderRadius: 12, border: '1px solid var(--border-mid)', background: 'var(--section-gradient-a)', textAlign: 'center' }}>
-                  <div style={{ fontSize: 18, marginBottom: 8 }}>{item.icon}</div>
-                  <div style={{ fontSize: 8, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: 6, fontFamily: 'Space Mono, monospace', lineHeight: 1.4 }}>{item.label}</div>
-                  <div className={`contact-stat-value ${dark ? '' : 'contact-stat-light'}`} style={{ fontSize: 'clamp(13px, 3vw, 17px)', fontWeight: 800, fontFamily: 'Outfit, sans-serif' }}>{item.value}</div>
+              {[
+                { label: 'We Reply In', value: '< 24 hrs', icon: '⚡' },
+                { label: 'Pricing',     value: 'Custom',   icon: '⬡' },
+                { label: 'We Work With',value: 'Everyone', icon: '◈' }
+              ].map((item) => (
+                <div key={item.label} style={{
+                  padding: '18px 12px 16px',
+                  borderRadius: 12,
+                  border: '1px solid var(--border-mid)',
+                  background: 'var(--section-gradient-a)',
+                  textAlign: 'center',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  gap: 6,
+                  minWidth: 0,
+                }}>
+                  <div style={{ fontSize: 20, lineHeight: 1 }}>{item.icon}</div>
+                  <div style={{
+                    fontSize: 8,
+                    letterSpacing: '0.1em',
+                    textTransform: 'uppercase',
+                    color: 'var(--text-muted)',
+                    fontFamily: 'Space Mono, monospace',
+                    lineHeight: 1.4,
+                    wordBreak: 'break-word',
+                    width: '100%',
+                  }}>
+                    {item.label}
+                  </div>
+                  <div className={`contact-stat-value ${dark ? '' : 'contact-stat-light'}`} style={{
+                    fontSize: 'clamp(14px, 2.5vw, 18px)',
+                    fontWeight: 800,
+                    fontFamily: 'Outfit, sans-serif',
+                    lineHeight: 1,
+                  }}>
+                    {item.value}
+                  </div>
                 </div>
               ))}
             </div>
@@ -80,7 +113,7 @@ export default function ContactSection() {
                 <a key={item} href={`#${item.toLowerCase()}`} onClick={(e) => { e.preventDefault(); navTo(item.toLowerCase()); }} className="font-mono"
                   style={{ fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.3s' }}
                   onMouseEnter={e => (e.currentTarget.style.color = '#8b5cf6')}
-                  onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-faint)')}>
+                  onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-muted)')}>
                   {item}
                 </a>
               ))}
