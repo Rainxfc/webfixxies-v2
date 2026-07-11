@@ -992,10 +992,11 @@ section {
   margin-right: auto;
 }
 
-/* Section intro paragraphs — set a max prose width */
-section > div > div > p,
-section .section-intro-p {
+/* Section intro paragraphs — only apply max-width to dedicated intro classes */
+.section-intro-p {
   max-width: 68ch;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* Stronger visual separator between sections */
@@ -1027,14 +1028,6 @@ section + section::before {
 /* Force body text in dark mode to be brighter than muted */
 body {
   color: var(--text-primary);
-}
-
-/* Ensure all <p> tags inherit high-contrast color */
-p {
-  color: var(--text-muted);
-  font-size: 16px;
-  line-height: 1.85;
-  max-width: 72ch;
 }
 
 /* Headings always max contrast */
@@ -1202,6 +1195,7 @@ section p {
   font-size: 16px !important;
   line-height: 1.85 !important;
   color: var(--text-muted);
+  /* Do NOT set max-width here — it breaks centring in flex containers */
 }
 
 /* Headings — always sharp */

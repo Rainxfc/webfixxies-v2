@@ -39,7 +39,7 @@ export default function ContactSection() {
               </svg>
             </motion.div>
 
-            <p style={{ fontSize: 12, color: 'var(--text-muted)', fontFamily: 'Space Mono, monospace', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 20, textAlign: 'center' }}>Direct Line</p>
+            <p style={{ fontSize: 12, color: 'var(--text-muted)', fontFamily: 'Space Mono, monospace', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 20, textAlign: 'center', width: '100%', maxWidth: '100%' }}>Direct Line</p>
 
             {/* Email button — centred, max 480px wide */}
             <a
