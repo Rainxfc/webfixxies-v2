@@ -2,18 +2,36 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/png" href="/logo.png" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- ═══════════════════════════════════════════════════
+         FAVICONS & ICONS
+    ═══════════════════════════════════════════════════ -->
+    <link rel="icon" type="image/png" sizes="32x32" href="/logo.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/logo.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/logo.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="shortcut icon" href="/logo.png" />
 
     <!-- ═══════════════════════════════════════════════════
          PRIMARY SEO
     ═══════════════════════════════════════════════════ -->
     <title>Web Fixxies — Premium 3D Web Design & Development Agency</title>
     <meta name="description" content="Web Fixxies builds high-performance, immersive 3D websites for businesses that demand more. Custom web design, spatial UI engineering, and interactive digital experiences that convert. Bangladesh · Pakistan · Global." />
-    <meta name="keywords" content="web design, web development, 3D website, interactive website, custom web design, web agency, spatial web, premium website, web fixxies, Bangladesh web design, Pakistan web design, fast website, modern website redesign, business website, landing page design, webfixxies" />
+    <meta name="keywords" content="web design, web development, 3D website, interactive website, custom web design, web agency, spatial web, premium website, web fixxies, Bangladesh web design, Pakistan web design, fast website, modern website redesign, business website, landing page design, webfixxies, 3D web agency" />
     <meta name="author" content="Web Fixxies" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="bingbot" content="index, follow" />
     <link rel="canonical" href="https://webfixxies.me/" />
+
+    <!-- Geo targeting -->
+    <meta name="geo.region" content="BD" />
+    <meta name="geo.region" content="PK" />
+    <meta name="language" content="English" />
+    <meta name="revisit-after" content="7 days" />
+    <meta name="rating" content="general" />
+    <meta name="category" content="Web Design, Web Development, Technology" />
 
     <!-- ═══════════════════════════════════════════════════
          OPEN GRAPH / FACEBOOK
@@ -25,6 +43,7 @@
     <meta property="og:image" content="https://webfixxies.me/og-preview.png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:type" content="image/png" />
     <meta property="og:image:alt" content="Web Fixxies — Premium 3D Web Design & Development Agency" />
     <meta property="og:site_name" content="Web Fixxies" />
     <meta property="og:locale" content="en_US" />
@@ -42,7 +61,7 @@
     <meta name="twitter:site" content="@webfixxies" />
 
     <!-- ═══════════════════════════════════════════════════
-         SCHEMA.ORG STRUCTURED DATA
+         SCHEMA.ORG — PROFESSIONAL SERVICE
     ═══════════════════════════════════════════════════ -->
     <script type="application/ld+json">
     {
@@ -52,18 +71,35 @@
       "alternateName": "Webfixxies",
       "description": "Premium 3D web design and development agency specialising in immersive, high-performance digital experiences for businesses globally.",
       "url": "https://webfixxies.me",
-      "logo": "https://webfixxies.me/logo.png",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://webfixxies.me/logo.png",
+        "width": 512,
+        "height": 512
+      },
       "image": "https://webfixxies.me/og-preview.png",
       "email": "webfixxies@gmail.com",
       "foundingDate": "2024",
-      "serviceType": ["Web Design", "Web Development", "3D Web Engineering", "UI/UX Design", "Landing Page Design", "Interactive Web Experience"],
+      "numberOfEmployees": { "@type": "QuantitativeValue", "value": 3 },
+      "serviceType": [
+        "Web Design",
+        "Web Development",
+        "3D Web Engineering",
+        "UI/UX Design",
+        "Landing Page Design",
+        "Interactive Web Experience",
+        "E-Commerce Development",
+        "Brand Website"
+      ],
       "areaServed": [
         { "@type": "Country", "name": "Bangladesh" },
         { "@type": "Country", "name": "Pakistan" },
         { "@type": "AdministrativeArea", "name": "Global" }
       ],
       "priceRange": "$$",
-      "knowsAbout": ["React", "Three.js", "WebGL", "3D Web Design", "Framer Motion", "UI/UX"],
+      "currenciesAccepted": "USD",
+      "paymentAccepted": "Bank Transfer, PayPal",
+      "knowsAbout": ["React", "Three.js", "WebGL", "3D Web Design", "Framer Motion", "UI/UX", "TypeScript", "Vite"],
       "sameAs": [
         "https://github.com/Mcethereal/Webfixxies-main-site",
         "https://www.facebook.com/people/Webfixxies/61591612619072/",
@@ -74,13 +110,14 @@
         "@type": "ContactPoint",
         "contactType": "customer service",
         "email": "webfixxies@gmail.com",
-        "availableLanguage": ["English"]
+        "availableLanguage": ["English"],
+        "contactOption": "TollFree"
       }
     }
     </script>
 
     <!-- ═══════════════════════════════════════════════════
-         BREADCRUMB STRUCTURED DATA
+         SCHEMA.ORG — WEBSITE + SEARCH
     ═══════════════════════════════════════════════════ -->
     <script type="application/ld+json">
     {
@@ -88,6 +125,8 @@
       "@type": "WebSite",
       "name": "Web Fixxies",
       "url": "https://webfixxies.me",
+      "description": "Premium 3D web design and development agency.",
+      "inLanguage": "en-US",
       "potentialAction": {
         "@type": "SearchAction",
         "target": "https://webfixxies.me/?q={search_term_string}",
@@ -97,19 +136,78 @@
     </script>
 
     <!-- ═══════════════════════════════════════════════════
+         SCHEMA.ORG — BREADCRUMB
+    ═══════════════════════════════════════════════════ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://webfixxies.me/" },
+        { "@type": "ListItem", "position": 2, "name": "Projects", "item": "https://webfixxies.me/#projects" },
+        { "@type": "ListItem", "position": 3, "name": "Pricing", "item": "https://webfixxies.me/#pricing" },
+        { "@type": "ListItem", "position": 4, "name": "Contact", "item": "https://webfixxies.me/#contact" }
+      ]
+    }
+    </script>
+
+    <!-- ═══════════════════════════════════════════════════
+         SCHEMA.ORG — FAQ (boosts rich results)
+    ═══════════════════════════════════════════════════ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How much does a website cost at Web Fixxies?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "All projects are custom-priced based on scope. We provide a clear quote before any work begins — no hidden fees. Contact us to discuss your project."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What kind of websites does Web Fixxies build?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "We build custom, high-performance websites including single-page sites, multi-page business platforms, 3D interactive experiences, e-commerce sites, and brand landing pages."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How long does a website take to build?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "First drafts are typically delivered within 48 hours. Full projects vary based on complexity, but we always agree on a timeline upfront."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Does Web Fixxies work with international clients?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes — we work with clients globally. Our team is based in Bangladesh and Pakistan, and we deliver projects worldwide."
+          }
+        }
+      ]
+    }
+    </script>
+
+    <!-- ═══════════════════════════════════════════════════
          THEME & APP META
     ═══════════════════════════════════════════════════ -->
     <meta name="theme-color" content="#7c3aed" />
     <meta name="msapplication-TileColor" content="#04000d" />
     <meta name="msapplication-TileImage" content="/logo.png" />
+    <meta name="msapplication-config" content="none" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <meta name="apple-mobile-web-app-title" content="Web Fixxies" />
     <meta name="application-name" content="Web Fixxies" />
     <meta name="format-detection" content="telephone=no" />
-
-    <!-- Apple touch icon -->
-    <link rel="apple-touch-icon" href="/logo.png" />
+    <meta name="mobile-web-app-capable" content="yes" />
 
     <!-- ═══════════════════════════════════════════════════
          GOOGLE SEARCH CONSOLE VERIFICATION
@@ -117,17 +215,15 @@
     <meta name="google-site-verification" content="CQ6DqOWnuZb3up94tGvP6VpCUqvCJB_X7xI1nBsaWfo" />
 
     <!-- ═══════════════════════════════════════════════════
-         PERFORMANCE HINTS
+         PERFORMANCE — PRECONNECT & DNS PREFETCH
     ═══════════════════════════════════════════════════ -->
-    <!-- DNS prefetch for external resources -->
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
-
-    <!-- Preconnect for fonts (critical path) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+    <link rel="dns-prefetch" href="https://vercel.app" />
 
-    <!-- Fonts — display=swap prevents invisible text during load -->
+    <!-- Fonts — trimmed weights for faster load -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet" />
   </head>
   <body>
@@ -139,12 +235,19 @@
       } catch(e) {}
     </script>
 
-    <!-- No-script fallback for SEO -->
+    <!-- No-script fallback for SEO crawlers -->
     <noscript>
-      <div style="font-family:sans-serif;text-align:center;padding:40px;">
+      <div style="font-family:sans-serif;text-align:center;padding:40px;max-width:600px;margin:0 auto;">
         <h1>Web Fixxies — Premium 3D Web Design &amp; Development</h1>
-        <p>We build immersive, high-performance websites. Please enable JavaScript to experience this site fully.</p>
+        <p>We build immersive, high-performance websites for businesses globally. Custom 3D design, fluid animations, zero templates.</p>
+        <p><strong>Services:</strong> Web Design · Web Development · 3D Web Engineering · UI/UX Design · Landing Pages</p>
+        <p><strong>Serving:</strong> Bangladesh · Pakistan · Global</p>
         <p>Contact us: <a href="mailto:webfixxies@gmail.com">webfixxies@gmail.com</a></p>
+        <p>
+          <a href="https://www.instagram.com/webfixxiesco/">Instagram</a> ·
+          <a href="https://www.linkedin.com/company/webfixxies">LinkedIn</a> ·
+          <a href="https://www.facebook.com/people/Webfixxies/61591612619072/">Facebook</a>
+        </p>
       </div>
     </noscript>
 

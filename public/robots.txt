@@ -1,5 +1,13 @@
 User-agent: *
 Allow: /
 
-# Sitemap location
+# Block irrelevant crawler paths
+Disallow: /src/
+Disallow: /node_modules/
+Disallow: /dist/
+
+# Crawl-delay for polite bots
+Crawl-delay: 10
+
+# Sitemap
 Sitemap: https://webfixxies.me/sitemap.xml
