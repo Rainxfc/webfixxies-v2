@@ -1129,3 +1129,150 @@ p  { margin-bottom: 0; } /* spacing via gap/flex on containers */
 html {
   scroll-behavior: auto; /* let Lenis handle it, not native */
 }
+
+/* ═══════════════════════════════════════════════════
+   NAV — MAXIMUM CONTRAST & BOLDNESS
+═══════════════════════════════════════════════════ */
+
+/* Nav desktop buttons — override for heavier weight */
+.nav-desktop button {
+  font-weight: 700 !important;
+  letter-spacing: 0.18em !important;
+  font-size: 11px !important;
+}
+
+/* Nav brand — bigger, stronger glow in dark */
+.nav-brand--dark {
+  filter: drop-shadow(0 0 14px rgba(196,181,253,0.55)) !important;
+}
+
+/* Scrolled nav background — more opaque for better contrast */
+header[style] {
+  /* handled inline — supplement with border upgrade */
+}
+
+/* Nav Contact Us button — stronger glow */
+.nav-contact-desktop.btn-primary {
+  box-shadow: 0 0 32px rgba(124,58,237,0.55), 0 4px 16px rgba(124,58,237,0.35) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+}
+.nav-contact-desktop.btn-primary:hover {
+  box-shadow: 0 0 56px rgba(124,58,237,0.8), 0 8px 24px rgba(124,58,237,0.5) !important;
+}
+
+/* ═══════════════════════════════════════════════════
+   GLOBAL TEXT — MAXIMUM CONTRAST PASS
+═══════════════════════════════════════════════════ */
+
+/* Dark mode — push all text values to near-white */
+:root {
+  --text-primary:   #f4f2ff;   /* almost pure white with violet tint */
+  --text-secondary: #d4c8ff;   /* bright lavender */
+  --text-muted:     #b8b5d8;   /* clearly legible mid-tone */
+  --text-faint:     #8c8aaa;   /* visible, not invisible */
+  --text-heading:   #f4f2ff;
+  --text-desc:      #b8b5d8;
+
+  /* Stronger borders for better visual separation */
+  --border-subtle:  rgba(255,255,255,0.08);
+  --border-mid:     rgba(200,180,255,0.15);
+}
+
+/* Light mode — deepest possible ink */
+.light {
+  --text-primary:   #090714;
+  --text-secondary: #3b0f9e;
+  --text-muted:     #18123a;
+  --text-faint:     #42367a;
+  --text-heading:   #090714;
+  --text-desc:      #18123a;
+
+  --border-subtle:  rgba(0,0,0,0.09);
+  --border-mid:     rgba(90,30,200,0.2);
+}
+
+/* All body copy — bold enough to scan, not strain */
+p, li, div {
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Section body paragraphs — consistent readable size */
+section p {
+  font-size: 16px !important;
+  line-height: 1.85 !important;
+  color: var(--text-muted);
+}
+
+/* Headings — always sharp */
+h1, h2, h3 {
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+}
+
+/* ═══════════════════════════════════════════════════
+   MOBILE — CONTACT STATS CARDS FIX
+   Force 3-equal-column grid, prevent overflow
+═══════════════════════════════════════════════════ */
+@media (max-width: 480px) {
+  /* The stats grid in ContactSection */
+  #contact .stats-grid,
+  #contact div[style*="grid-template-columns"] {
+    grid-template-columns: repeat(3, 1fr) !important;
+    gap: 8px !important;
+  }
+
+  /* Tighten card padding on very small screens */
+  #contact div[style*="grid-template-columns"] > div {
+    padding: 14px 6px !important;
+  }
+
+  /* Shrink the stat value font on tiny screens */
+  #contact .contact-stat-value {
+    font-size: 13px !important;
+  }
+
+  /* Shrink the label text */
+  #contact div[style*="grid-template-columns"] > div > div:nth-child(2) {
+    font-size: 7px !important;
+    letter-spacing: 0.08em !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   SECTION TAGS — bigger and bolder
+═══════════════════════════════════════════════════ */
+.section-tag {
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.25em !important;
+  padding: 7px 18px !important;
+}
+
+/* ═══════════════════════════════════════════════════
+   MOBILE NAV — bigger tap targets, bolder text
+═══════════════════════════════════════════════════ */
+@media (max-width: 850px) {
+  .nav-toggle-mobile svg {
+    width: 24px !important;
+    height: 24px !important;
+  }
+}
+
+/* Mobile full-screen menu items — larger, clearer */
+@media (max-width: 850px) {
+  /* The full-screen menu nav items */
+  div[style*="inset: 0"][style*="zIndex: 99"] button.font-display {
+    font-size: clamp(28px, 9vw, 42px) !important;
+  }
+}
+
+/* ═══════════════════════════════════════════════════
+   HERO TAGLINE — stronger contrast
+═══════════════════════════════════════════════════ */
+.hero-tagline-dark {
+  color: #b0adcc !important;
+}
+.hero-tagline-light {
+  color: #2a2050 !important;
+}

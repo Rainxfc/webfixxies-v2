@@ -51,12 +51,12 @@ export default function ContactSection() {
               <motion.span animate={{ x: [0, 4, 0] }} transition={{ duration: 2, repeat: Infinity }} style={{ position: 'relative', zIndex: 1 }}>→</motion.span>
             </a>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: 12, maxWidth: 560, margin: '0 auto', position: 'relative' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, maxWidth: 560, margin: '0 auto', position: 'relative' }}>
               {[{ label: 'We Reply In', value: '< 24 hrs', icon: '⚡' }, { label: 'Pricing', value: 'Custom', icon: '⬡' }, { label: 'We Work With', value: 'Everyone', icon: '◈' }].map((item) => (
-                <div key={item.label} style={{ padding: '20px 16px', borderRadius: 12, border: '1px solid var(--border-mid)', background: 'var(--section-gradient-a)', textAlign: 'center' }}>
-                  <div style={{ fontSize: 20, marginBottom: 8 }}>{item.icon}</div>
-                  <div style={{ fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: 6, fontFamily: 'Space Mono, monospace' }}>{item.label}</div>
-                  <div className={`contact-stat-value ${dark ? '' : 'contact-stat-light'}`} style={{ fontSize: 17, fontWeight: 800, fontFamily: 'Outfit, sans-serif' }}>{item.value}</div>
+                <div key={item.label} style={{ padding: '18px 10px', borderRadius: 12, border: '1px solid var(--border-mid)', background: 'var(--section-gradient-a)', textAlign: 'center' }}>
+                  <div style={{ fontSize: 18, marginBottom: 8 }}>{item.icon}</div>
+                  <div style={{ fontSize: 8, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: 6, fontFamily: 'Space Mono, monospace', lineHeight: 1.4 }}>{item.label}</div>
+                  <div className={`contact-stat-value ${dark ? '' : 'contact-stat-light'}`} style={{ fontSize: 'clamp(13px, 3vw, 17px)', fontWeight: 800, fontFamily: 'Outfit, sans-serif' }}>{item.value}</div>
                 </div>
               ))}
             </div>

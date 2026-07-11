@@ -284,7 +284,7 @@ export default function Hero3D() {
           transition={{ duration: 0.7, delay: 0.22, ease: [0.22, 1, 0.36, 1] }}
           style={{
             maxWidth: 580, fontSize: 'clamp(16px, 2vw, 20px)', fontWeight: 400,
-            lineHeight: 1.8, color: dark ? '#9b9ab8' : '#3d3558',
+            lineHeight: 1.8, color: dark ? '#b8b5d4' : '#2a2050',
             marginBottom: 'clamp(28px, 4vw, 48px)',
             letterSpacing: '0.01em', padding: '0 8px',
           }}

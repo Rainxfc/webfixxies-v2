@@ -168,25 +168,33 @@ function Navbar() {
       <header style={{ position: 'fixed', top: 0, left: 0, right: 0, height: 72, zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 clamp(16px, 4vw, 32px)', background: navBg, backdropFilter: scrolled ? 'blur(24px)' : 'none', borderBottom: navBorder, transition: 'all 0.4s ease' }}>
         <a href="#" onClick={(e) => { if (window.location.hash === '#all-projects') { window.location.hash = ''; } else { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); } }} style={{ textDecoration: 'none', background: 'none', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 10 }}>
           <img src="logo.png" alt="Web Fixxies logo" style={{ width: 32, height: 32, objectFit: 'contain', filter: dark ? 'drop-shadow(0 0 6px rgba(167,139,250,0.5))' : 'drop-shadow(0 0 4px rgba(109,40,217,0.3))' }} />
-          <span className={`font-display nav-brand ${dark ? 'nav-brand--dark' : 'nav-brand--light'}`} style={{ fontWeight: 900, fontSize: 18, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>
+          <span className={`font-display nav-brand ${dark ? 'nav-brand--dark' : 'nav-brand--light'}`} style={{ fontWeight: 900, fontSize: 20, letterSpacing: '-0.02em', textTransform: 'uppercase' }}>
             WEB FIXXIES
           </span>
         </a>
 
         <nav className="nav-desktop">
           {navItems.map(item => (
-            <button key={item} onClick={() => scrollTo(item)} className="font-mono" style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: activeSection === item ? (dark ? '#a78bfa' : '#7c3aed') : (dark ? 'rgba(148,163,184,0.8)' : 'rgba(91,33,182,0.65)'), padding: '4px 0', position: 'relative', transition: 'color 0.25s' }}
-              onMouseEnter={e => (e.currentTarget.style.color = dark ? '#a78bfa' : '#7c3aed')}
-              onMouseLeave={e => { e.currentTarget.style.color = activeSection === item ? (dark ? '#a78bfa' : '#7c3aed') : (dark ? 'rgba(148,163,184,0.8)' : 'rgba(91,33,182,0.65)'); }}>
+            <button key={item} onClick={() => scrollTo(item)} className="font-mono" style={{
+              background: 'none', border: 'none', cursor: 'pointer',
+              fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase',
+              fontWeight: 700,
+              color: activeSection === item
+                ? (dark ? '#e0d4ff' : '#5b21b6')
+                : (dark ? 'rgba(200,195,230,0.75)' : 'rgba(60,20,150,0.7)'),
+              padding: '6px 0', position: 'relative', transition: 'color 0.2s'
+            }}
+              onMouseEnter={e => (e.currentTarget.style.color = dark ? '#e0d4ff' : '#5b21b6')}
+              onMouseLeave={e => { e.currentTarget.style.color = activeSection === item ? (dark ? '#e0d4ff' : '#5b21b6') : (dark ? 'rgba(200,195,230,0.75)' : 'rgba(60,20,150,0.7)'); }}>
               {navLabels[item]}
-              {activeSection === item && <div style={{ position: 'absolute', bottom: -2, left: 0, right: 0, height: 1.5, background: dark ? 'linear-gradient(90deg, transparent, #a78bfa, transparent)' : 'linear-gradient(90deg, transparent, #7c3aed, transparent)' }} />}
+              {activeSection === item && <div style={{ position: 'absolute', bottom: -2, left: 0, right: 0, height: 2, background: dark ? 'linear-gradient(90deg, transparent, #c4b5fd, transparent)' : 'linear-gradient(90deg, transparent, #7c3aed, transparent)', borderRadius: 2 }} />}
             </button>
           ))}
         </nav>
 
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <ThemeToggle />
-          <button onClick={() => scrollTo('contact')} className="btn-primary nav-contact-desktop" style={{ textDecoration: 'none', fontSize: 10, padding: '10px 22px', letterSpacing: '0.15em', border: 'none', cursor: 'pointer' }}>
+          <button onClick={() => scrollTo('contact')} className="btn-primary nav-contact-desktop" style={{ fontSize: 11, padding: '11px 26px', letterSpacing: '0.15em', border: 'none', cursor: 'pointer', fontWeight: 700 }}>
             Contact Us
           </button>
           <button className="nav-toggle-mobile" onClick={() => setMenuOpen(true)}>
