@@ -28,21 +28,23 @@ export default function ContactSection() {
         </motion.div>
 
         <motion.div initial={{ opacity: 0, y: 40, scale: 0.97 }} animate={inView ? { opacity: 1, y: 0, scale: 1 } : {}} transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }} className="glow-border" style={{ borderRadius: 24, padding: '3px', marginBottom: 32 }}>
-          <div style={{ borderRadius: 22, padding: 'clamp(34px, 6vw, 64px) clamp(20px, 5vw, 48px)', background: 'var(--bg-contact-inner)', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
+          <div style={{ borderRadius: 22, padding: 'clamp(34px, 6vw, 64px) clamp(24px, 5vw, 56px)', background: 'var(--bg-contact-inner)', position: 'relative', overflow: 'hidden', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <motion.div animate={{ rotate: [0, 360], scale: [1, 1.1, 1] }} transition={{ duration: 20, repeat: Infinity, ease: 'linear' }} style={{ position: 'absolute', top: -80, left: -80, width: 300, height: 300, borderRadius: '50%', background: 'radial-gradient(circle, rgba(124,58,237,0.1) 0%, transparent 70%)', filter: 'blur(40px)', pointerEvents: 'none' }} />
             <motion.div animate={{ rotate: [360, 0], scale: [1, 1.15, 1] }} transition={{ duration: 15, repeat: Infinity, ease: 'linear' }} style={{ position: 'absolute', bottom: -80, right: -80, width: 280, height: 280, borderRadius: '50%', background: 'radial-gradient(circle, rgba(139,92,246,0.1) 0%, transparent 70%)', filter: 'blur(40px)', pointerEvents: 'none' }} />
 
-            <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }} style={{ width: 72, height: 72, borderRadius: '50%', margin: '0 auto 32px', background: 'radial-gradient(circle at 35% 35%, rgba(167,139,250,0.35), rgba(124,58,237,0.08))', border: '1px solid rgba(167,139,250,0.25)', boxShadow: '0 0 40px rgba(124,58,237,0.35), inset 0 0 20px rgba(124,58,237,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+            {/* Email icon */}
+            <motion.div animate={{ y: [0, -8, 0] }} transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }} style={{ width: 72, height: 72, borderRadius: '50%', marginBottom: 28, background: 'radial-gradient(circle at 35% 35%, rgba(167,139,250,0.35), rgba(124,58,237,0.08))', border: '1px solid rgba(167,139,250,0.25)', boxShadow: '0 0 40px rgba(124,58,237,0.35), inset 0 0 20px rgba(124,58,237,0.08)', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', flexShrink: 0 }}>
               <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" strokeWidth="1.5">
                 <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
               </svg>
             </motion.div>
 
-            <p style={{ fontSize: 13, color: 'var(--text-muted)', fontFamily: 'Space Mono, monospace', letterSpacing: '0.15em', textTransform: 'uppercase', marginBottom: 16 }}>Direct Line</p>
+            <p style={{ fontSize: 12, color: 'var(--text-muted)', fontFamily: 'Space Mono, monospace', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: 20, textAlign: 'center' }}>Direct Line</p>
 
+            {/* Email button — centred, max 480px wide */}
             <a
               href="mailto:webfixxies@gmail.com"
-              style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 12, padding: 'clamp(14px, 3vw, 18px) clamp(16px, 5vw, 40px)', borderRadius: 100, border: '1px solid var(--border-mid)', background: 'linear-gradient(135deg, rgba(124,58,237,0.12), rgba(139,92,246,0.06))', color: 'var(--text-secondary)', fontSize: 'clamp(12px, 3.5vw, 17px)', fontFamily: 'Space Mono, monospace', letterSpacing: '0.05em', textDecoration: 'none', position: 'relative', overflow: 'hidden', boxShadow: '0 0 40px rgba(124,58,237,0.18)', transition: 'all 0.3s ease', cursor: 'pointer', marginBottom: 40, maxWidth: '100%', width: '100%', textAlign: 'center', flexWrap: 'wrap', wordBreak: 'break-all' }}
+              style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 12, padding: '16px 36px', borderRadius: 100, border: '1px solid var(--border-mid)', background: 'linear-gradient(135deg, rgba(124,58,237,0.12), rgba(139,92,246,0.06))', color: 'var(--text-secondary)', fontSize: 'clamp(13px, 2.5vw, 17px)', fontFamily: 'Space Mono, monospace', letterSpacing: '0.05em', textDecoration: 'none', position: 'relative', overflow: 'hidden', boxShadow: '0 0 40px rgba(124,58,237,0.18)', transition: 'all 0.3s ease', cursor: 'pointer', marginBottom: 40, width: '100%', maxWidth: 480, textAlign: 'center' }}
               onMouseEnter={(e) => { const el = e.currentTarget; el.style.borderColor = 'rgba(167,139,250,0.5)'; el.style.boxShadow = '0 0 60px rgba(124,58,237,0.35)'; el.style.color = 'var(--text-primary)'; }}
               onMouseLeave={(e) => { const el = e.currentTarget; el.style.borderColor = 'var(--border-mid)'; el.style.boxShadow = '0 0 40px rgba(124,58,237,0.18)'; el.style.color = 'var(--text-secondary)'; }}
             >
@@ -51,44 +53,19 @@ export default function ContactSection() {
               <motion.span animate={{ x: [0, 4, 0] }} transition={{ duration: 2, repeat: Infinity }} style={{ position: 'relative', zIndex: 1 }}>→</motion.span>
             </a>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, width: '100%', maxWidth: '100%', margin: '0 auto', position: 'relative' }}>
+            {/* Stats cards — centred, max 540px, equal columns */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, width: '100%', maxWidth: 540 }}>
               {[
                 { label: 'We Reply In', value: '< 24 hrs', icon: '⚡' },
                 { label: 'Pricing',     value: 'Custom',   icon: '⬡' },
-                { label: 'We Work With',value: 'Everyone', icon: '◈' }
+                { label: 'We Work With', value: 'Everyone', icon: '◈' },
               ].map((item) => (
-                <div key={item.label} style={{
-                  padding: '20px 8px 18px',
-                  borderRadius: 12,
-                  border: '1px solid var(--border-mid)',
-                  background: 'var(--section-gradient-a)',
-                  textAlign: 'center',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: 7,
-                  minWidth: 0,
-                  overflow: 'hidden',
-                }}>
+                <div key={item.label} style={{ padding: '20px 10px 18px', borderRadius: 12, border: '1px solid var(--border-mid)', background: 'var(--section-gradient-a)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8, minWidth: 0 }}>
                   <div style={{ fontSize: 22, lineHeight: 1 }}>{item.icon}</div>
-                  <div style={{
-                    fontSize: 9,
-                    letterSpacing: '0.08em',
-                    textTransform: 'uppercase',
-                    color: 'var(--text-muted)',
-                    fontFamily: 'Space Mono, monospace',
-                    lineHeight: 1.4,
-                    width: '100%',
-                    textAlign: 'center',
-                  }}>
+                  <div style={{ fontSize: 9, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--text-muted)', fontFamily: 'Space Mono, monospace', lineHeight: 1.4, textAlign: 'center' }}>
                     {item.label}
                   </div>
-                  <div className={`contact-stat-value ${dark ? '' : 'contact-stat-light'}`} style={{
-                    fontSize: 'clamp(15px, 2.5vw, 20px)',
-                    fontWeight: 800,
-                    fontFamily: 'Outfit, sans-serif',
-                    lineHeight: 1,
-                  }}>
+                  <div className={`contact-stat-value ${dark ? '' : 'contact-stat-light'}`} style={{ fontSize: 'clamp(15px, 2.2vw, 19px)', fontWeight: 800, fontFamily: 'Outfit, sans-serif', lineHeight: 1, textAlign: 'center' }}>
                     {item.value}
                   </div>
                 </div>

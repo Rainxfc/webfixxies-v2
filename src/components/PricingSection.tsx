@@ -6,32 +6,32 @@ import { useTheme } from '../App';
 const tiers = [
   {
     name: 'Starter Site',
-    price: 'Let\'s Talk',
-    desc: 'You need a site that actually looks the part — something clean, fast, and built around your brand. Not a template someone else is also using.',
+    price: 'Request a Quote',
+    desc: 'Ideal for small businesses, service providers, and individuals who need a professional online presence — built specifically for their brand, not copied from a template.',
     features: [
-      'One-page custom design, built from scratch',
-      'Smooth animations that feel premium',
-      'Works perfectly on phones, tablets & desktops',
-      'Fast load times — no bloat, no shortcuts',
-      'Extras like booking, galleries & forms on request',
+      'Custom single-page design, built from scratch',
+      'Polished animations and modern visual style',
+      'Fully responsive across all screen sizes',
+      'Optimised for fast load times and performance',
+      'Optional extras: booking forms, galleries, contact integrations',
     ],
-    note: 'Things like dashboards, live data, or e-commerce? We can discuss — just mention it.',
+    note: 'Need something more specific — like a product listing, image portfolio, or client intake form? We scope that in during our initial call.',
     accent: '#7c3aed', accentAlt: '#a78bfa',
     glow: 'rgba(124,58,237,0.2)', glowSoft: 'rgba(124,58,237,0.07)',
     badge: null, icon: '⬡',
   },
   {
     name: 'Full Business Platform',
-    price: 'Let\'s Talk',
-    desc: 'A complete online presence — multiple pages, advanced features, and the kind of 3D interactive experience that makes people screenshot your site and send it to their friends.',
+    price: 'Request a Quote',
+    desc: 'Built for businesses that need more than a single page — a complete digital platform with multiple sections, advanced interactivity, and room to grow.',
     features: [
-      'Multi-page site with full navigation',
-      'Interactive 3D elements & immersive animations',
-      'Admin panels, dashboards & content editing on request',
-      'Secure handover with a written project agreement',
-      'Ongoing support available after launch',
+      'Multi-page site with structured navigation',
+      'Interactive 3D elements and immersive animations',
+      'Content management, dashboards or admin panels on request',
+      'Formal project agreement with defined deliverables',
+      'Post-launch support and updates available',
     ],
-    note: 'Add-ons like a blog, loyalty system, or product catalogue? We scope it with you — no guessing.',
+    note: 'Add-ons such as e-commerce, a blog, a loyalty programme, or a client portal can be discussed and scoped separately — no assumptions made.',
     accent: '#8b5cf6', accentAlt: '#c4b5fd',
     glow: 'rgba(139,92,246,0.2)', glowSoft: 'rgba(139,92,246,0.07)',
     badge: 'MOST POPULAR', icon: '◆',
@@ -55,10 +55,10 @@ export default function PricingSection() {
             <span className="dot" />Pricing
           </div>
           <h2 className={`font-display section-heading-grad ${!dark ? 'section-heading-light' : ''}`} style={{ fontSize: 'clamp(40px, 6vw, 72px)', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: 0.95, marginBottom: 20 }}>
-            Simple. Honest. Custom.
+            Transparent Pricing
           </h2>
           <p style={{ maxWidth: 560, margin: '0 auto', fontSize: 17, color: 'var(--text-muted)', lineHeight: 1.85, fontWeight: 400, letterSpacing: '0.01em' }}>
-            Every project is priced based on what you actually need — not a package that half-fits. Tell us what you're building and we'll give you a fair number, straight up.
+            All projects are priced individually based on scope, not pre-set packages. We provide a clear quote before any work begins — no hidden fees, no surprises.
           </p>
         </motion.div>
 
@@ -126,7 +126,7 @@ export default function PricingSection() {
 
               <div style={{ paddingTop: 24, borderTop: `1px solid ${tier.accent}18`, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 14 }}>
                 <div>
-                  <div style={{ fontSize: 12, color: 'var(--text-faint)', fontFamily: 'Space Mono, monospace', letterSpacing: '0.12em', marginBottom: 2 }}>STARTING FROM</div>
+                  <div style={{ fontSize: 12, color: 'var(--text-faint)', fontFamily: 'Space Mono, monospace', letterSpacing: '0.12em', marginBottom: 2 }}>PRICING</div>
                   <span className="font-display" style={{ fontSize: 22, fontWeight: 800, letterSpacing: '-0.02em', background: `linear-gradient(135deg, ${tier.accent}, ${tier.accentAlt})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
                     {tier.price}
                   </span>
@@ -145,7 +145,7 @@ export default function PricingSection() {
 
         <motion.div initial={{ opacity: 0, y: 16 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ delay: 0.7, duration: 0.6 }} style={{ textAlign: 'center', marginTop: 56, padding: '28px 24px', borderRadius: 16, border: '1px solid var(--border-subtle)', background: 'var(--section-gradient-a)', maxWidth: 680, margin: '56px auto 0' }}>
           <p style={{ fontSize: 15, color: 'var(--text-muted)', lineHeight: 1.8, margin: 0 }}>
-            Not sure what you need? That's fine — most of our clients aren't when they first reach out. <span style={{ color: 'var(--violet-glow)', fontWeight: 600 }}>Just drop us a message</span> and we'll figure it out together, no pressure.
+            Not sure which tier fits your project? That is completely normal — most clients aren't certain at first. <span style={{ color: 'var(--violet-glow)', fontWeight: 600 }}>Reach out and describe what you have in mind</span> and we will advise on the best approach at no obligation.
           </p>
         </motion.div>
       </div>
