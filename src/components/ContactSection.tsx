@@ -51,14 +51,14 @@ export default function ContactSection() {
               <motion.span animate={{ x: [0, 4, 0] }} transition={{ duration: 2, repeat: Infinity }} style={{ position: 'relative', zIndex: 1 }}>→</motion.span>
             </a>
 
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, maxWidth: 560, margin: '0 auto', position: 'relative' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10, width: '100%', maxWidth: '100%', margin: '0 auto', position: 'relative' }}>
               {[
                 { label: 'We Reply In', value: '< 24 hrs', icon: '⚡' },
                 { label: 'Pricing',     value: 'Custom',   icon: '⬡' },
                 { label: 'We Work With',value: 'Everyone', icon: '◈' }
               ].map((item) => (
                 <div key={item.label} style={{
-                  padding: '18px 12px 16px',
+                  padding: '20px 8px 18px',
                   borderRadius: 12,
                   border: '1px solid var(--border-mid)',
                   background: 'var(--section-gradient-a)',
@@ -66,24 +66,25 @@ export default function ContactSection() {
                   display: 'flex',
                   flexDirection: 'column',
                   alignItems: 'center',
-                  gap: 6,
+                  gap: 7,
                   minWidth: 0,
+                  overflow: 'hidden',
                 }}>
-                  <div style={{ fontSize: 20, lineHeight: 1 }}>{item.icon}</div>
+                  <div style={{ fontSize: 22, lineHeight: 1 }}>{item.icon}</div>
                   <div style={{
-                    fontSize: 8,
-                    letterSpacing: '0.1em',
+                    fontSize: 9,
+                    letterSpacing: '0.08em',
                     textTransform: 'uppercase',
                     color: 'var(--text-muted)',
                     fontFamily: 'Space Mono, monospace',
                     lineHeight: 1.4,
-                    wordBreak: 'break-word',
                     width: '100%',
+                    textAlign: 'center',
                   }}>
                     {item.label}
                   </div>
                   <div className={`contact-stat-value ${dark ? '' : 'contact-stat-light'}`} style={{
-                    fontSize: 'clamp(14px, 2.5vw, 18px)',
+                    fontSize: 'clamp(15px, 2.5vw, 20px)',
                     fontWeight: 800,
                     fontFamily: 'Outfit, sans-serif',
                     lineHeight: 1,
@@ -100,25 +101,16 @@ export default function ContactSection() {
           We work openly, communicate clearly, and always deliver what we promise.
         </motion.p>
 
-        <motion.div initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}} transition={{ delay: 0.8, duration: 0.6 }} style={{ marginTop: 60, paddingTop: 40, borderTop: '1px solid var(--border-subtle)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap', gap: 20 }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, flex: '1 1 200px', minWidth: 0 }}>
-            <img src="logo.png" alt="Web Fixxies" style={{ width: 28, height: 28, objectFit: 'contain', filter: 'drop-shadow(0 0 4px rgba(124,58,237,0.4))' }} />
-            <span className="font-display" style={{ fontSize: 18, fontWeight: 800, letterSpacing: '-0.02em', background: 'linear-gradient(135deg, #7c3aed, #8b5cf6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
-              WEB FIXXIES
-            </span>
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 20, alignItems: 'center', flex: '2 1 280px', minWidth: 0 }}>
-            <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap', justifyContent: 'center', rowGap: 10 }}>
-              {['About', 'Mission', 'Projects', 'Pricing', 'Contact'].map(item => (
-                <a key={item} href={`#${item.toLowerCase()}`} onClick={(e) => { e.preventDefault(); navTo(item.toLowerCase()); }} className="font-mono"
-                  style={{ fontSize: 10, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.3s' }}
-                  onMouseEnter={e => (e.currentTarget.style.color = '#8b5cf6')}
-                  onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-muted)')}>
-                  {item}
-                </a>
-              ))}
+        <motion.div initial={{ opacity: 0 }} animate={inView ? { opacity: 1 } : {}} transition={{ delay: 0.8, duration: 0.6 }} style={{ marginTop: 60, paddingTop: 40, borderTop: '1px solid var(--border-subtle)' }}>
+          {/* Footer top row */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 24, marginBottom: 32 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <img src="logo.png" alt="Web Fixxies" style={{ width: 30, height: 30, objectFit: 'contain', filter: 'drop-shadow(0 0 4px rgba(124,58,237,0.4))' }} />
+              <span className="font-display" style={{ fontSize: 20, fontWeight: 800, letterSpacing: '-0.02em', background: 'linear-gradient(135deg, #7c3aed, #8b5cf6)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text' }}>
+                WEB FIXXIES
+              </span>
             </div>
-            <div style={{ display: 'flex', gap: 24, alignItems: 'center', justifyContent: 'center', flexWrap: 'wrap' }}>
+            <div style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
               {[
                 { name: 'Facebook', url: 'https://www.facebook.com/people/Webfixxies/61591612619072/?sk=about', icon: FaFacebook },
                 { name: 'Instagram', url: 'https://www.instagram.com/webfixxiesco/', icon: FaInstagram },
@@ -128,7 +120,7 @@ export default function ContactSection() {
                 return (
                   <motion.a key={social.name} href={social.url} target="_blank" rel="noopener noreferrer"
                     whileHover={{ scale: 1.15 }}
-                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 40, height: 40, borderRadius: '50%', border: '1px solid var(--border-mid)', color: 'var(--violet-bright)', textDecoration: 'none', transition: 'all 0.3s', cursor: 'pointer', background: 'var(--section-gradient-a)' }}
+                    style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 42, height: 42, borderRadius: '50%', border: '1px solid var(--border-mid)', color: 'var(--violet-bright)', textDecoration: 'none', transition: 'all 0.3s', background: 'var(--section-gradient-a)' }}
                     onMouseEnter={e => { e.currentTarget.style.borderColor = 'var(--border-accent)'; e.currentTarget.style.boxShadow = '0 0 15px rgba(139,92,246,0.3)'; }}
                     onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border-mid)'; e.currentTarget.style.boxShadow = 'none'; }}>
                     <Icon size={18} />
@@ -137,7 +129,23 @@ export default function ContactSection() {
               })}
             </div>
           </div>
-          <span className="font-mono" style={{ fontSize: 10, color: 'var(--text-muted)', letterSpacing: '0.15em', textAlign: 'center', flex: '1 1 200px', minWidth: 0 }}>© 2026 WEB FIXXIES</span>
+
+          {/* Footer nav links */}
+          <div style={{ display: 'flex', gap: 'clamp(16px, 4vw, 36px)', flexWrap: 'wrap', justifyContent: 'center', marginBottom: 28 }}>
+            {['About', 'Mission', 'Projects', 'Pricing', 'Contact'].map(item => (
+              <a key={item} href={`#${item.toLowerCase()}`} onClick={(e) => { e.preventDefault(); navTo(item.toLowerCase()); }} className="font-mono"
+                style={{ fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--text-muted)', textDecoration: 'none', transition: 'color 0.3s', fontWeight: 600 }}
+                onMouseEnter={e => (e.currentTarget.style.color = '#a78bfa')}
+                onMouseLeave={e => (e.currentTarget.style.color = 'var(--text-muted)')}>
+                {item}
+              </a>
+            ))}
+          </div>
+
+          {/* Copyright */}
+          <div style={{ textAlign: 'center' }}>
+            <span className="font-mono" style={{ fontSize: 10, color: 'var(--text-faint)', letterSpacing: '0.15em' }}>© 2026 WEB FIXXIES — ALL RIGHTS RESERVED</span>
+          </div>
         </motion.div>
       </div>
     </section>
