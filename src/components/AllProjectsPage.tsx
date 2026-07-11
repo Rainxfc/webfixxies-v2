@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
+import { navTo } from '../utils/navigation';
 import { motion } from 'framer-motion';
-import { ProjectCard, projects } from './ProjectsSection';
+import { ProjectCard } from './ProjectsSection';
+import { projects } from '../data/projectsData';
 
 export default function AllProjectsPage() {
   useEffect(() => {
@@ -80,8 +82,9 @@ export default function AllProjectsPage() {
 
           <p
             style={{
-              color: '#64748b',
+              color: 'var(--text-muted)',
               fontSize: 'clamp(13px, 1.6vw, 15px)',
+              maxWidth: 520,
               maxWidth: 520,
               margin: '0 auto',
               lineHeight: 1.75,
@@ -113,7 +116,7 @@ export default function AllProjectsPage() {
                 <div className="font-display" style={{ fontSize: 28, fontWeight: 900, background: 'linear-gradient(135deg, #a78bfa, #e879f9)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', backgroundClip: 'text', lineHeight: 1 }}>
                   {s.value}
                 </div>
-                <div className="font-mono" style={{ fontSize: 8, letterSpacing: '0.25em', textTransform: 'uppercase', color: 'rgba(167,139,250,0.4)', marginTop: 4 }}>
+                <div className="font-mono" style={{ fontSize: 8, letterSpacing: '0.25em', textTransform: 'uppercase', color: 'var(--text-muted)', marginTop: 4 }}>
                   {s.label}
                 </div>
               </motion.div>
@@ -135,20 +138,13 @@ export default function AllProjectsPage() {
           transition={{ delay: 0.6 }}
           style={{ textAlign: 'center', marginTop: 100, paddingTop: 60, borderTop: '1px solid rgba(99,102,241,0.08)' }}
         >
-          <div className="font-mono" style={{ fontSize: 9, letterSpacing: '0.3em', color: 'rgba(167,139,250,0.3)', textTransform: 'uppercase', marginBottom: 24 }}>
+          <div className="font-mono" style={{ fontSize: 9, letterSpacing: '0.3em', color: 'var(--text-muted)', textTransform: 'uppercase', marginBottom: 24 }}>
             Want a site like these?
           </div>
           <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap' }}>
             <motion.a
-              href="#"
-              onClick={(e) => {
-                e.preventDefault();
-                window.location.hash = '';
-                // Give the home page time to mount, then scroll to contact
-                setTimeout(() => {
-                  document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' });
-                }, 200);
-              }}
+              href="#contact"
+              onClick={(e) => { e.preventDefault(); navTo('contact'); }}
               whileHover={{ scale: 1.04, boxShadow: '0 0 50px rgba(79,70,229,0.35)' }}
               whileTap={{ scale: 0.97 }}
               style={{
@@ -169,7 +165,7 @@ export default function AllProjectsPage() {
               style={{
                 padding: '13px 36px', borderRadius: 100,
                 border: '1px solid rgba(99,102,241,0.3)',
-                color: '#a5b4fc', fontSize: 10, fontFamily: 'Space Mono, monospace',
+                color: 'var(--text-secondary)', fontSize: 10, fontFamily: 'Space Mono, monospace',
                 letterSpacing: '0.18em', textTransform: 'uppercase',
                 textDecoration: 'none',
               }}
