@@ -83,12 +83,11 @@ export default function AllProjectsPage() {
           <p
             style={{
               color: 'var(--text-muted)',
-              fontSize: 'clamp(13px, 1.6vw, 15px)',
-              maxWidth: 520,
+              fontSize: 'clamp(14px, 1.6vw, 16px)',
               maxWidth: 520,
               margin: '0 auto',
-              lineHeight: 1.75,
-              fontWeight: 300,
+              lineHeight: 1.85,
+              fontWeight: 400,
             }}
           >
             Every project built by the Web Fixxies collective — each preview is fully interactive. Click inside any frame to explore the live site.
