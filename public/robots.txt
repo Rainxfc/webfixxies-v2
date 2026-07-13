@@ -1,10 +1,4 @@
 User-agent: *
 Allow: /
 
-Disallow: /src/
-Disallow: /node_modules/
-Disallow: /dist/
-
-Crawl-delay: 10
-
 Sitemap: https://webfixxies.studio/sitemap.xml
