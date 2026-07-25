@@ -5,6 +5,7 @@ import ParticleField from './components/ParticleField';
 import Hero3D from './components/Hero3D';
 import ThemePicker from './components/ThemePicker';
 
+const ServicesSection = lazy(() => import('./components/ServicesSection'));
 const AboutSection = lazy(() => import('./components/AboutSection'));
 const MissionSection = lazy(() => import('./components/MissionSection'));
 const ProjectsSection = lazy(() => import('./components/ProjectsSection'));
@@ -105,7 +106,7 @@ function Navbar() {
   }, []);
 
   useEffect(() => {
-    const sections = ['home', 'about', 'mission', 'projects', 'pricing', 'contact'];
+    const sections = ['home', 'services', 'about', 'mission', 'projects', 'pricing', 'contact'];
 
     const setupObserver = () => {
       const observer = new IntersectionObserver(
@@ -145,10 +146,11 @@ function Navbar() {
     setMenuOpen(false);
   };
 
-  // Nav order: Home → About → Mission → Projects → Pricing → Contact
-  const navItems = ['home', 'about', 'mission', 'projects', 'pricing', 'contact'];
+  // Nav order: Home → Services → About → Mission → Projects → Pricing → Contact
+  const navItems = ['home', 'services', 'about', 'mission', 'projects', 'pricing', 'contact'];
   const navLabels: Record<string, string> = {
     home: 'Home',
+    services: 'Services',
     about: 'About',
     mission: 'Mission',
     projects: 'Projects',
@@ -238,8 +240,8 @@ function GridBackground() {
 }
 
 function App() {
-  const [dark, setDark] = useState(() => localStorage.getItem('wf-theme-v2') !== 'light');
-  const [showPicker, setShowPicker] = useState(() => !localStorage.getItem('wf-theme-v2'));
+  const [dark, setDark] = useState(() => localStorage.getItem('wf-theme-v2') === 'dark');
+  const [showPicker, setShowPicker] = useState(false);
   const [currentPage, setCurrentPage] = useState<'home' | 'all-projects'>(() => {
     return window.location.hash === '#all-projects' ? 'all-projects' : 'home';
   });
@@ -305,6 +307,7 @@ function App() {
             ) : (
               <>
                 <Hero3D />
+                <ServicesSection />
                 <AboutSection />
                 <MissionSection />
                 <ProjectsSection />

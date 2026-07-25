@@ -306,9 +306,21 @@ export default function Hero3D() {
               <path d="M7 17L17 7M17 7H7M17 7V17"/>
             </svg>
           </button>
-          <button onClick={() => navTo('contact')} className="btn-primary" style={{ background: 'transparent', border: '1px solid rgba(167,139,250,0.35)', color: dark ? '#c4b5fd' : '#6d28d9', boxShadow: 'none' }}
-            onMouseEnter={e => { e.currentTarget.style.background = 'rgba(124,58,237,0.12)'; e.currentTarget.style.borderColor = 'rgba(167,139,250,0.6)'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.borderColor = 'rgba(167,139,250,0.35)'; }}
+          <button onClick={() => navTo('contact')} className="btn-primary" 
+            style={{ 
+              background: dark ? 'transparent' : 'rgba(109,40,217,0.06)', 
+              border: dark ? '1px solid rgba(167,139,250,0.35)' : '1px solid rgba(109,40,217,0.4)', 
+              color: dark ? '#c4b5fd' : '#5b21b6', 
+              boxShadow: 'none' 
+            }}
+            onMouseEnter={e => { 
+              e.currentTarget.style.background = dark ? 'rgba(124,58,237,0.12)' : 'rgba(109,40,217,0.15)'; 
+              e.currentTarget.style.borderColor = dark ? 'rgba(167,139,250,0.6)' : 'rgba(109,40,217,0.6)'; 
+            }}
+            onMouseLeave={e => { 
+              e.currentTarget.style.background = dark ? 'transparent' : 'rgba(109,40,217,0.06)'; 
+              e.currentTarget.style.borderColor = dark ? 'rgba(167,139,250,0.35)' : 'rgba(109,40,217,0.4)'; 
+            }}
           >
             Contact Us
           </button>
